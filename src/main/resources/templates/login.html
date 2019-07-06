@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>IT事件管理系统</title>
+    <link th:href="@{/css/layui.css}"  rel="stylesheet" type="text/css">
+
+</head>
+<body style="background-color: #f2f2f2">
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 5%; text-align: center">
+    <legend>IT事件管理系统</legend>
+</fieldset>
+<form class="layui-form" id="login">
+<div class="layui-container" style="margin-top: 5%">
+ 	<div class="layui-row">
+	    <div class="layui-form-item layui-col-md4 layui-col-md-offset4">
+	         <i class="layui-icon layui-icon-username" style="position: absolute;top:8px;right: 8px;"></i>
+	        <input type="text" name="username" id="username" lay-verify="required" placeholder="用户名" class="layui-input">
+	    </div>
+    </div>
+    <div class="layui-row" style="margin-top: 2%">
+	    <div class="layui-form-item layui-col-md4 layui-col-md-offset4">
+	         <i class="layui-icon layui-icon-password" style="position: absolute;top:8px;right: 8px;"></i>
+	        <input type="password" name="pwd" id="password" lay-verify="pwd" placeholder="密码" class="layui-input">
+	    </div>
+    </div>
+    <div class="layui-row" style="margin-top: 2%">
+	    <div class="layui-form-item layui-col-md4 layui-col-md-offset4">
+			<button  type="button" onclick="login()" class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-login-submit">登 入</button>
+	    </div>
+    </div>
+    
+</div>
+</form>
+<!-- jQuery-->
+<script th:src="@{/js/jquery-3.4.0.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/layui.js}"  type="text/javascript"></script>
+<script th:src="@{../js/ite/login.js}"></script>
+
+
+</body>
+</html>

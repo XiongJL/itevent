@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+        <div th:fragment="nav">
+            <div class="layui-side layui-bg-black">
+                <div class="layui-side-scroll">
+                    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                    <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a class="" href="javascript:;">发起事件</a>
+                            <dl class="layui-nav-child">
+                                <dd><a id="subBill" href="/itevent/subBill">提单领取</a></dd>
+                                <dd><a id="newStaff" href="javascript:;">新员工领取</a></dd>
+                                <dd><a id="oldToNew" href="javascript:;">以旧换新</a></dd>
+                                <dd><a id="leave" href="javascript:;">离职退还</a></dd>
+                                <dd><a id="borrow" href="javascript:;">借用</a></dd>
+                            </dl>
+                        </li>
+                        <li class="layui-nav-item"><a href="">新资产入库</a></li>
+                        <li class="layui-nav-item"><a href="">资产报废</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+</body>
+</html>

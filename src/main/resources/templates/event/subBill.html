@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>IT事件管理系统</title>
+    <link th:href="@{../css/layui.css}" href="../css/layui.css" rel="stylesheet" type="text/css">
+    <link th:href="@{../css/ite/common.css}" rel="stylesheet" type="text/css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div th:include="common/head :: head"></div>
+    <div th:include="common/nav :: nav"></div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 1%">
+            <legend>提单领取</legend>
+        </fieldset>
+        <form class="layui-form" id="login">
+            <div class="layui-container">
+                <div class="layui-row">
+                    <div class="layui-col-xs2">
+                        <label  class="my-inline">工号</label>
+                        <input  class="layui-input layui-col-xs9 my-inline-input" type="text" name="userid" id="userid" lay-verify="required" placeholder="" >
+                    </div>
+                    <div class="layui-col-xs2 layui-col-xs-offset1">
+                        <label  class="my-inline">姓名</label>
+                        <input  class="layui-input layui-col-xs9 my-inline-input" type="text" name="name" id="name" lay-verify="required" placeholder="" >
+                    </div>
+                    <div class="layui-col-xs2 layui-col-xs-offset1">
+                        <label  class="my-inline">部门</label>
+                        <input  class="layui-input layui-col-xs9 my-inline-input" type="text" name="department" id="department" lay-verify="required" placeholder="" >
+                    </div>
+                </div>
+<!--                <div class="layui-row" style="margin-top: 2%">-->
+<!--                    <label for="type" class="layui-col-xs1 label-inline" >类型</label>-->
+<!--                    <div class="layui-col-xs2" >-->
+<!--                            <select id="type" name="type" lay-verify=""  lay-filter="type">-->
+<!--                            </select>-->
+<!--                    </div>-->
+<!--                    <label for="brand" class="layui-col-xs2 label-inline" >型号</label>-->
+<!--                    <div class="layui-col-xs2">-->
+<!--                        <select id="brand" name="brand" lay-verify="" >-->
+<!--                           &lt;!&ndash;根据type 联动获取&ndash;&gt;-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                    <label for="brand" class="layui-col-xs2 label-inline" >数量</label>-->
+<!--                    <div class="layui-col-xs1">-->
+<!--                    </div>-->
+<!--                    <label for="brand" class="layui-col-xs2 label-inline" >单位</label>-->
+<!--                    <div class="layui-col-xs1">-->
+
+<!--                    </div>-->
+<!--                </div>-->
+
+                <div class="layui-form" style="width: 90%;">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="100">
+                            <col width="200">
+                            <col width="200">
+                            <col width="100">
+                            <col width="100">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>类型</th>
+                            <th>型号</th>
+                            <th>数量</th>
+                            <th>单位</th>
+                        </tr>
+                        </thead>
+                        <tbody id="item-table">
+                        <tr>
+                            <td>
+                                <a class="addItem" href="#" onclick="addItem()"><i class="layui-icon layui-icon-add-1" style="font-size: 30px; color: #1E9FFF;"></i></a>
+                                <a class="delItem" href="#" onclick="delItem(this)"><i class="layui-icon layui-icon-close" style="font-size: 30px; color: #1E9FFF;"></i></a>
+                            </td>
+                            <td>
+                                <select id="type1" name="type1" lay-verify=""  lay-filter="type" lay-search></select>
+                            </td>
+                            <td>
+                                <select id="brand1" name="brand1" lay-verify="" ></select>
+                            </td>
+                            <td>
+                                <input   name="count1" id="count1" class="layui-input layui-col-xs1" type="number" min="1" lay-verify="required" placeholder="" >
+                            </td>
+                            <td>
+                                <input   name="unit1" id="unit1" class="layui-input layui-col-xs1" type="text"  readonly placeholder="" >
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+
+            </div>
+        </form>
+    </div>
+
+    <div class="layui-footer" style="background-color: white">
+        <div class="layui-row" >
+            <div class="layui-form-item layui-col-md4 layui-col-md-offset4">
+                <button  type="button" onclick="login()" class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-login-submit">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery-->
+<script th:src="@{../js/jquery-3.4.0.min.js}" type="text/javascript"></script>
+<script th:src="@{../js/layui.js}"  type="text/javascript"></script>
+<!--<script th:src="@{../js/ite/index.js}"></script>-->
+<script>
+    //全局物料编码数量
+    var itemIndex = 2;
+    var token = localStorage.getItem("token");
+    //JavaScript代码区域
+    var element,form,layer = null
+    layui.use(['form','layer','element'], function(){
+            element = layui.element,
+            form = layui.form,
+            layer = layui.layer;
+            //类别改变时查询对应的品牌型号
+            form.on('select',function (data) {
+                console.log(data.elem); //得到select原始DOM对象
+                var id = data.elem.id
+                var index = id.substr(id.length-1,1)
+                // console.log(data.othis); //得到美化后的DOM对象
+                console.log(data.value); //得到被选中的值
+                changeBrand(index,data.value)
+                changeUnit(index,data.value)
+            })
+    });
+    $(function () {
+        //添加导航栏选中样式
+        $("#subBill").addClass("layui-this");
+        //查询所有类型,并重新渲染Select
+        allTypes();
+
+    })
+    //自动查询责任人工号
+    $('#userid').on('focus',function () {
+        $("#name").val("")
+        $("#department").val("")
+    })
+    $('#userid').on('blur',function () {
+        //console.log('移出输入框')
+        var data = $('#userid').val()
+        if (data!=null && data!=""){
+            $.ajax({
+                url:"/itevent/api/getNameDepart",
+                type:'get',
+                data: {userid:data},
+                beforeSend:function(XMLHttpRequest){
+                    XMLHttpRequest.setRequestHeader("token",token);
+                },
+                success:function (res) {
+                    //console.log(res)
+                    if(res==null || res==""){
+                        //弹窗提示
+                        layer.msg("未找到此工号的信息")
+                    }else{  //修改责任人的文本
+                       $("#name").val(res.name)
+                       $("#department").val(res.department)
+                    }
+                }
+            });
+        }
+
+    })
+    //查询所有类型,并重新渲染Select
+    function allTypes() {
+        console.log("开始查询所有类型")
+        $.ajax({
+            url:"/itevent/api/getTypes",
+            beforeSend:function(XMLHttpRequest){
+                XMLHttpRequest.setRequestHeader("token",token);
+            },
+            success:function (res) {
+                //console.log(res)
+                var option="";
+                var type= "";
+                if (res!=null && res!=""){
+                    for(var x in res){
+                        if (x==0){
+                            type = res[x];
+                        }
+                        option += "<option value='"+res[x]+"'>"+res[x]+"</option>"
+                    }
+                    for (var i=1 ; i<itemIndex; i++){
+                        $('#type'+i).append(option)
+                        changeBrand(i,type)
+                        changeUnit(i,type)
+                    }
+                    // 重新渲染
+                    setTimeout(function () {
+                        form.render('select');
+                    },50)
+
+                }
+            }
+        })
+
+    }
+    //类别改变时查询对应的品牌型号  index是改变哪个型号
+    function changeBrand(index,type) {
+        //清空原有内容
+        $("#brand"+index).empty();
+        $.ajax({
+            url:"/itevent/api/getBrands",
+            data: {type:type},
+            beforeSend:function(XMLHttpRequest){
+                XMLHttpRequest.setRequestHeader("token",token);
+            },
+            success:function (res) {
+                console.log(res)
+                var option="";
+                if (res!=null && res!=""){
+                    for(var x in res){
+                        option += "<option value='"+res[x]+"'>"+res[x]+"</option>"
+                    }
+                    $("#brand"+index).append(option)
+                    // 重新渲染
+                    setTimeout(function () {
+                        form.render('select');
+                    },50)
+
+                }
+            }
+        })
+    }
+    //类别改变时查询对应的计量单位
+    function changeUnit(index,type) {
+        // 用selector来传递选择器
+        $.ajax({
+            url:"/itevent/api/getUnit",
+            data: {type:type},
+            beforeSend:function(XMLHttpRequest){
+                XMLHttpRequest.setRequestHeader("token",token);
+            },
+            success:function (res) {
+                console.log(res);
+                $("#unit"+index).val(res)
+            }
+        })
+    }
+
+
+    //点击添加物料
+    function addItem() {
+        if (itemIndex>=20){
+            layer.msg("不能再添加了")
+        } else{
+            document.getElementById("item-table").insertAdjacentHTML("beforeend",' <tr>\n' +
+                '                            <td>\n' +
+                '                                <a onclick="addItem()" class="addItem" href="#"><i class="layui-icon layui-icon-add-1" style="font-size: 30px; color: #1E9FFF;"></i></a>\n' +
+                '                                <a onclick="delItem(this)" class="delItem" href="#"><i class="layui-icon layui-icon-close" style="font-size: 30px; color: #1E9FFF;"></i></a>\n' +
+                '                            </td>\n' +
+                '                            <td>\n' +
+                '                                <select id="type'+itemIndex+'" name="type'+itemIndex+'" lay-verify=""  lay-filter="type" lay-search></select>\n' +
+                '                            </td>\n' +
+                '                            <td>\n' +
+                '                                <select id="brand'+itemIndex+'" name="brand'+itemIndex+'" lay-verify="" ></select>\n' +
+                '                            </td>\n' +
+                '                            <td>\n' +
+                '                                <input id="count'+itemIndex+'" name="count'+itemIndex+'" class="layui-input layui-col-xs1" type="number" min="1"   lay-verify="required" placeholder="" >\n' +
+                '                            </td>\n' +
+                '                            <td>\n' +
+                '                                <input  id="unit'+itemIndex+'" name="unit'+itemIndex+'" class="layui-input layui-col-xs1" type="text"   readonly placeholder="" >\n' +
+                '                            </td>\n' +
+                '                        </tr>')
+            allTypes();
+            itemIndex++;
+            form.render('select');
+        }
+
+    }
+    //点击删除物料
+    function delItem(obj) {
+        if (){
+
+        }
+        $(obj).parent().parent().parent()[0].removeChild($(obj).parent().parent()[0]);
+    }
+
+</script>
+
+</body>
+</html>

@@ -11,7 +11,8 @@
         <!-- 头部区域（可配合layui已有的水平导航） -->
         <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item"><a href="/itevent/index">首页(图表)</a></li>
-            <li class="layui-nav-item"><a href="">资产使用中(Table 人员对应)</a></li>
+            <li class="layui-nav-item"><a href="/itevent/assetsTable">资产使用中(Table 人员对应)</a></li>
+            <li class="layui-nav-item"><a href="">出入记录</a></li>
             <li class="layui-nav-item">
                 <a href="javascript:;">其它系统</a>
                 <dl class="layui-nav-child">
@@ -22,16 +23,21 @@
             </li>
         </ul>
         <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item">
+            <li class="layui-nav-item" style="margin-right: 30px;">
                 <a href="javascript:;">
-                    <span th:text="${session.username}"></span>
+                    <span style="position: static" th:if="${session.msgNum > 0}" class="layui-badge-dot" ></span><span th:text="${session.username}"></span>
                 </a>
                 <dl class="layui-nav-child">
-                    <dd><a href="">基本资料</a></dd>
-                    <dd><a href="">安全设置</a></dd>
+                    <dd>
+                        <a href="">
+                            <span style="position: static" th:if="${session.msgNum > 0}" class="layui-badge" th:text="${session.msgNum}">
+                            </span>
+                            逾期通知
+                        </a></dd>
+                    <dd><a href="/itevent/logout">退出</a></dd>
                 </dl>
             </li>
-            <li class="layui-nav-item"><a href="">退出</a></li>
+
         </ul>
     </div>
 </div>

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.lang.reflect.Method;
 
 import static com.liwinon.itevent.exception.ResultEnum.*;
@@ -31,6 +32,22 @@ public class AuthenticTokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("token");// 从 http 请求头中取出 token
+        String url=request.getRequestURL().toString();
+        System.out.println("拦截器:"+url);
+        if (url.indexOf("login")>=0){  //登录页面不做验证
+            return true;
+        }
+        HttpSession session = request.getSession();
+        if (session==null){
+            response.sendRedirect("/itevent/login");
+            return true;
+        }else {
+            String admin = (String) session.getAttribute("username");
+            if (admin==null || admin ==""){
+                response.sendRedirect("/itevent/login");
+                return true;
+            }
+        }
         // 如果不是映射到方法直接通过
         if (!(handler instanceof HandlerMethod)){
             return true;

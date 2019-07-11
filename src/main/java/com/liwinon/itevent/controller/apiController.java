@@ -1,5 +1,6 @@
 package com.liwinon.itevent.controller;
 
+import com.liwinon.itevent.entity.BackModel;
 import com.liwinon.itevent.service.ApiService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,11 @@ public class apiController {
     @GetMapping(value = "/getUnit")
     public String unit(String type){
         return api.getUnit(type);
+    }
+
+    //获取使用者的所有资产
+    @GetMapping(value = "/whoAllUsed")
+    public List<BackModel> whoAllUsed(String userid){
+        return api.whoAllUsed(userid);
     }
 }

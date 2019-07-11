@@ -44,4 +44,14 @@ public class Item {
     public void setUnit(String unit) {
         this.unit = unit;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "itemid='" + itemid + '\'' +
+                ", type='" + type + '\'' +
+                ", brand='" + brand + '\'' +
+                ", unit='" + unit + '\'' +
+                '}';
+    }
 }

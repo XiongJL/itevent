@@ -15,24 +15,20 @@
     <div class="layui-body">
         <!-- 内容主体区域 -->
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 1%">
-            <legend>提单领取</legend>
+            <legend>新资产入库</legend>
         </fieldset>
         <form class="layui-form" id="event">
             <div class="layui-container">
                 <div class="layui-row">
-                    <div class="layui-col-xs2">
-                        <label  class="my-inline">工号</label>
-                        <input  class="layui-input layui-col-xs9 my-inline-input" type="text" name="userid" id="userid" lay-verify="required" placeholder="" >
+                    <div class="layui-col-xs7">
+                        <label  class="">已有,但未记录</label>
+                        <input class="layui-input layui-col-xs9 " type="checkbox" name="exist" lay-skin="switch" lay-text="是|否" value="1">
                     </div>
-                    <div class="layui-col-xs2 layui-col-xs-offset1">
-                        <label  class="my-inline">姓名</label>
-                        <input  class="layui-input layui-col-xs9 my-inline-input" type="text" name="name" id="name" lay-verify="required" placeholder="" >
-                    </div>
-                    <div class="layui-col-xs2 layui-col-xs-offset1">
-                        <label  class="my-inline">部门</label>
-                        <input  class="layui-input layui-col-xs9 my-inline-input" type="text" name="department" id="department" lay-verify="required" placeholder="" >
+                    <div class="layui-col-xs10 " style="width: 361px">
+                        <textarea  class="layui-input layui-col-xs12" name="remark" id="remark"  rows="3" placeholder="备注"></textarea>
                     </div>
                 </div>
+
                 <div class="layui-form" style="width: 90%;">
                     <table class="layui-table" >
                         <colgroup>
@@ -59,7 +55,7 @@
                                 <a class="addItem" href="#" onclick="addItem()"><i class="layui-icon layui-icon-add-1" style="font-size: 30px; color: #1E9FFF;"></i></a>
                                 <a class="delItem" href="#" onclick="delItem(this)"><i class="layui-icon layui-icon-close" style="font-size: 30px; color: #1E9FFF;"></i></a>
                             </td>
-                            <td><input   name="assetsid1" id="assetsid1"  class="layui-input layui-col-xs1" type="text"  placeholder="物料出库时有资产牌请填写" ></td>
+                            <td><input   name="assetsid1" id="assetsid1"  class="layui-input layui-col-xs1" type="text"  placeholder="有贴资产牌请填写" ></td>
 
                             <td>
                                 <select id="type1" name="type1" lay-verify=""  lay-filter="type" lay-search></select>
@@ -78,24 +74,28 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div class="layui-footer" style="background-color: white">
-                <div class="layui-row" >
-                    <div class="layui-form-item layui-col-md4 layui-col-md-offset4">
-                        <button  type="button"  class="layui-btn layui-btn-fluid" lay-submit lay-filter="sub">提交</button>
-                    </div>
-                </div>
+
+
+
+
             </div>
         </form>
     </div>
 
-
+    <div class="layui-footer" style="background-color: white">
+        <div class="layui-row" >
+            <div class="layui-form-item layui-col-md4 layui-col-md-offset4">
+                <button  type="button" onclick="startEvent()" class="layui-btn layui-btn-fluid" lay-submit="" lay-filter="LAY-user-login-submit">提交</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- jQuery-->
 <script th:src="@{../js/jquery-3.4.0.min.js}" type="text/javascript"></script>
 <script th:src="@{../js/layui.js}"  type="text/javascript"></script>
-<script th:src="@{../js/ite/subBill.js}"></script>
+<script th:src="@{../js/ite/newAssets.js}"></script>
+
 
 </body>
 </html>

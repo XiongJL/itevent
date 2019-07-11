@@ -3,6 +3,7 @@ package com.liwinon.itevent.controller;
 import com.liwinon.itevent.annotation.PasssToken;
 import com.liwinon.itevent.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -38,5 +39,13 @@ public class indexController {
     @PasssToken
     public String tologin(String username, String pwd, HttpServletRequest request){
         return index.login(username,pwd,request);
+    }
+
+    @GetMapping("/itevent/logout")
+    @PasssToken
+    public String logout(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return "/itevent/login";
     }
 }

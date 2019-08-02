@@ -1,4 +1,4 @@
-package com.liwinon.itevent.entity;
+package com.liwinon.itevent.entity.Model;
 
 /**
  *  查询退还页面的  用户正在使用中的资产javaBean
@@ -10,6 +10,7 @@ public class BackModel {
     private int aid;
     //资产牌
     private String assetsid;
+    private String itemid;
     private String type;
     private String brand;
     private String unit;
@@ -17,13 +18,22 @@ public class BackModel {
     public BackModel() {
     }
 
-    public BackModel(String userid, int aid, String assetsid, String type, String brand, String unit) {
+    public BackModel(String userid, int aid, String assetsid, String itemid, String type, String brand, String unit) {
         this.userid = userid;
         this.aid = aid;
         this.assetsid = assetsid;
+        this.itemid = itemid;
         this.type = type;
         this.brand = brand;
         this.unit = unit;
+    }
+
+    public String getItemid() {
+        return itemid;
+    }
+
+    public void setItemid(String itemid) {
+        this.itemid = itemid;
     }
 
     public String getUserid() {

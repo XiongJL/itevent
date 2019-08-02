@@ -1,4 +1,4 @@
-package com.liwinon.itevent.entity;
+package com.liwinon.itevent.entity.primary;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -15,23 +15,63 @@ public class Event {
     private int count;
     private String unit;
     private String userid;  //提单人工号
+    private String phone;  //联系方式
     private String adminuser;  //操作人账号
     private Date date;
+    private Date applydate;  //用户申请时间
+    private String oaid; //OA单单号
+    private String orderid; //请购单单号
     private String remark;
 
     public Event() {
     }
 
-    public Event(String uuid, int event, String itemid, int count, String unit, String userid, String adminuser, Date date, String remark) {
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Event(String uuid, int event, String itemid, int count, String unit, String userid, String phone, String adminuser, Date date, Date applydate, String oaid, String orderid, String remark) {
         this.uuid = uuid;
         this.event = event;
         this.itemid = itemid;
         this.count = count;
         this.unit = unit;
         this.userid = userid;
+        this.phone = phone;
         this.adminuser = adminuser;
         this.date = date;
+        this.applydate = applydate;
+        this.oaid = oaid;
+        this.orderid = orderid;
         this.remark = remark;
+    }
+
+    public Date getApplydate() {
+        return applydate;
+    }
+
+    public void setApplydate(Date applydate) {
+        this.applydate = applydate;
+    }
+
+    public String getOaid() {
+        return oaid;
+    }
+
+    public void setOaid(String oaid) {
+        this.oaid = oaid;
+    }
+
+    public String getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(String orderid) {
+        this.orderid = orderid;
     }
 
     public String getUuid() {
@@ -117,6 +157,8 @@ public class Event {
                 ", userid='" + userid + '\'' +
                 ", adminuser='" + adminuser + '\'' +
                 ", date=" + date +
+                ", oaid='" + oaid + '\'' +
+                ", orderid='" + orderid + '\'' +
                 ", remark='" + remark + '\'' +
                 '}';
     }

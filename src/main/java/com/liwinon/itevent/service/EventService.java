@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 public interface EventService {
     String startBillEvent(int index, int event, HttpServletRequest request);
 
-    String newAssetsEvent(int index, int event,int exist, HttpServletRequest request);
+    String newAssetsEvent(int index, int event, HttpServletRequest request);
 
     String addItemEvent(int index, int event,HttpServletRequest request );
 

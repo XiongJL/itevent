@@ -6,12 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/itevent")
-public class assetsTable {
-
-    @GetMapping(value = "/assetsTable")
+@RequestMapping(value = "/itevent")
+public class EventTableController {
+    @GetMapping(value = "/eventTable")
     @PasssToken
     public String assetsTable(){
-        return "data/assetsTable";
+        return "data/eventTable";
     }
 }

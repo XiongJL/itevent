@@ -1,9 +1,10 @@
 package com.liwinon.itevent.controller;
 
 import com.liwinon.itevent.annotation.PasssToken;
+import com.liwinon.itevent.service.ApiService;
 import com.liwinon.itevent.service.IndexService;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -18,6 +19,8 @@ import javax.servlet.http.HttpSession;
 public class indexController {
     @Autowired
     IndexService index;
+    @Autowired
+    ApiService api;
     @GetMapping("/itevent/login")
     @PasssToken
     public String login(){
@@ -26,12 +29,14 @@ public class indexController {
     }
     @GetMapping("/itevent/index")
     @PasssToken
-    public String index(HttpServletRequest request){
+    public String index(HttpServletRequest request, Model model){
         HttpSession session = request.getSession();
         String username = (String) session.getAttribute("username");
         if (StringUtils.isEmpty(username)){
             return "login";
         }
+        JSONObject json = api.getAssetsNums();
+        model.addAttribute("count",json);
         return "index";
     }
     @PostMapping("/itevent/tologin")
@@ -46,6 +51,6 @@ public class indexController {
     public String logout(HttpServletRequest request){
         HttpSession session = request.getSession();
         session.invalidate();
-        return "/itevent/login";
+        return "login";
     }
 }

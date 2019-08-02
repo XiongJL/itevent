@@ -1,6 +1,6 @@
-package com.liwinon.itevent.dao;
+package com.liwinon.itevent.dao.primaryRepo;
 
-import com.liwinon.itevent.entity.Item;
+import com.liwinon.itevent.entity.primary.Item;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +18,11 @@ public interface ItemDao extends JpaRepository<Item,String>, JpaSpecificationExe
     @Query(value = "SELECT DISTINCT unit FROM  ITE_Item i WHERE i.type = :type",nativeQuery = true)
     String unitByType(String type);
     //根据type,brand查找物料
-    Item findByTypeAndBrand(String type,String brand);
+    Item findByTypeAndBrand(String type, String brand);
 
     Item findByItemid(String itemid);
+
+    //计算物料种类
+    @Query(value = "select count(distinct i.type) from Item i")
+    long countItemType();
 }

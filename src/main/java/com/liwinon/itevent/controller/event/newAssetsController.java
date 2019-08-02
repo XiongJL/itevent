@@ -25,7 +25,7 @@ public class newAssetsController {
     //开始新资产入库事件
     @PostMapping(value = "/newAssets")
     @ResponseBody
-    public String newAssetsEvent(int index, int event,int exist, HttpServletRequest request){
-        return eventService.newAssetsEvent(index,event,exist,request);
+    public String newAssetsEvent(int index, int event, HttpServletRequest request){
+        return eventService.newAssetsEvent(index,event,request);
     }
 }

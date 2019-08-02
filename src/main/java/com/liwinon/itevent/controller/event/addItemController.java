@@ -19,7 +19,7 @@ public class addItemController {
     @GetMapping(value = "/Item")
     @PasssToken
     public  String item(){
-        return "/event/addItem";
+        return "event/addItem";
     }
     @PostMapping("/addItem")
     @ResponseBody

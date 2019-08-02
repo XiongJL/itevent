@@ -5,12 +5,19 @@ var arr = new Array(limit)
 var token = localStorage.getItem("token");
 //JavaScript代码区域
 var element,form,layer = null
-layui.use(['form','layer','element'], function(){
+//记录类型更改的值.
+var totaltype = "";
+layui.use(['form','layer','element','laydate'], function(){
     element = layui.element,
         form = layui.form,
+        laydate = layui.laydate,
         layer = layui.layer;
+    //日期选择器初始化
+    laydate.render({
+        elem: '#orderDate'
+    })
     //类别改变时查询对应的品牌型号
-    form.on('select',function (data) {
+    form.on('select(type)',function (data) {
         //console.log(data.elem); //得到select原始DOM对象
         var id = data.elem.id
         var index = parseInt(id.replace(/[^0-9]/ig,""));
@@ -21,8 +28,23 @@ layui.use(['form','layer','element'], function(){
             console.log(data.elem.name)
             exchange = 1;
         }
+        totaltype= data.value
         changeBrand(index,data.value,exchange)
         changeUnit(index,data.value,exchange)
+    })
+    //型号改变时查询库存数量
+    form.on('select(brand)',function (data) {
+        //console.log(data.elem); //得到select原始DOM对象
+        var id = data.elem.id
+        var index = parseInt(id.replace(/[^0-9]/ig,""));
+        // console.log(data.othis); //得到美化后的DOM对象
+        console.log(data.value); //得到被选中的值
+        var exchange = 0;  //是否切换的更为换的 tr, 默认0 不是,1时,2所有都更新
+        if (data.elem.name.indexOf("ex")!=-1){ //name存在ex
+            console.log(data.elem.name)
+            exchange = 1;
+        }
+        changeNumbers(index,totaltype,data.value,exchange)
     })
     //通过layui验证输入后提交 ,需要将提交按钮放入form内
     form.on('submit(newStaff)', function (data) {
@@ -53,6 +75,7 @@ layui.use(['form','layer','element'], function(){
                 }else{
                     layer.msg(res)
                 }
+                $("#oaid").val("")
             }
         })
 
@@ -61,7 +84,7 @@ layui.use(['form','layer','element'], function(){
 });
 $(function () {
     //添加导航栏选中样式
-    $("#newStaff").addClass("layui-this");
+    $("#oldToNew").addClass("layui-this");
     //查询所有类型,并重新渲染Select
     allTypes(1);
     //赋值初始化数值
@@ -170,11 +193,54 @@ function changeBrand(index,type,exchange) {
                     $("#brand"+index).append(option)
                     $("#exbrand"+index).append(option)
                 }
+                //查询数量,并重新渲染
+                changeNumbers(index,type,res[0],exchange);
+            }
+        }
+    })
+}
+
+//类别改变时查询对应的库存数量
+function changeNumbers(index,type,brand,exchange) {
+//清空原有内容
+    //是否为 更为换的 tr, 默认0 不是,1时,2所有都更新
+    if (exchange==0){
+        $("#all"+index).empty();
+        $("#available"+index).empty();
+    } else if (exchange==1){
+        $("#exall"+index).empty();
+        $("#exavailable"+index).empty();
+    } else{
+        $("#all"+index).empty();
+        $("#available"+index).empty();
+        $("#exall"+index).empty();
+        $("#exavailable"+index).empty();
+    }
+    $.ajax({
+        url:"/itevent/api/getNumbers",
+        data: {type:type,brand:brand},
+        beforeSend:function(XMLHttpRequest){
+            XMLHttpRequest.setRequestHeader("token",token);
+        },
+        success:function (res) {
+            if (res!=null && res!=""){
+                if (exchange==0){
+                    $("#all"+index).val(res[0])
+                    $("#available"+index).val(res[1])
+                } else if (exchange==1){
+                    $("#exall"+index).val(res[0])
+                    $("#exavailable"+index).val(res[1])
+                } else{
+                    $("#all"+index).val(res[0])
+                    $("#available"+index).val(res[1])
+                    $("#exall"+index).val(res[0])
+                    $("#exavailable"+index).val(res[1])
+                }
+
                 // 重新渲染
                 setTimeout(function () {
                     form.render('select');
                 },50)
-
             }
         }
     })
@@ -260,6 +326,12 @@ function addItem() {
             '                            <td>\n' +
             '                                <input id="count'+itemIndex+'" name="count'+itemIndex+'" value="1" class="layui-input layui-col-xs1" type="number" min="1"   lay-verify="required" placeholder="" >\n' +
             '                            </td>\n' +
+            ' <td>\n' +
+            '                                <input   name="all'+itemIndex+'" id="all'+itemIndex+'" value="" class="layui-input layui-col-xs1" type="text" min="0" readonly placeholder="" >\n' +
+            '                            </td>\n' +
+            '                            <td>\n' +
+            '                                <input   name="available'+itemIndex+'" id="available'+itemIndex+'" value="" class="layui-input layui-col-xs1" type="text" min="0" readonly placeholder="" >\n' +
+            '                            </td>' +
             '                            <td>\n' +
             '                                <input  id="unit'+itemIndex+'" name="unit'+itemIndex+'" class="layui-input layui-col-xs1" type="text"   readonly placeholder="" >\n' +
             '                            </td>\n' +
@@ -282,6 +354,12 @@ function addItem() {
             '                            <td>\n' +
             '                                <input   name="excount'+itemIndex+'" id="excount'+itemIndex+'" value="1" class="layui-input layui-col-xs1" type="number" min="1" lay-verify="required" placeholder="" >\n' +
             '                            </td>\n' +
+            ' <td>\n' +
+            '                                <input   name="exall'+itemIndex+'" id="exall'+itemIndex+'" value="" class="layui-input layui-col-xs1" type="text" readonly placeholder="" >\n' +
+            '                            </td>\n' +
+            '                            <td>\n' +
+            '                                <input   name="exavailable'+itemIndex+'" id="exavailable'+itemIndex+'" value="" class="layui-input layui-col-xs1" type="text" readonly placeholder="" >\n' +
+            '                            </td>' +
             '                            <td>\n' +
             '                                <input   name="exunit'+itemIndex+'" id="exunit'+itemIndex+'" class="layui-input layui-col-xs1" type="text"  readonly placeholder="" >\n' +
             '                            </td>\n' +

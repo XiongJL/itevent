@@ -21,16 +21,22 @@
             <div class="layui-container">
                 <div class="layui-row">
                     <div class="layui-col-xs2">
-                        <label  class="my-inline">工号</label>
-                        <input  class="layui-input layui-col-xs9 my-inline-input" type="text" name="userid" id="userid" lay-verify="required" placeholder="" >
+                        <input  class="layui-input layui-col-xs9 " type="text" name="userid" id="userid" lay-verify="required" placeholder="工号" >
                     </div>
-                    <div class="layui-col-xs2 layui-col-xs-offset1">
-                        <label  class="my-inline">姓名</label>
-                        <input  class="layui-input layui-col-xs9 my-inline-input" type="text" name="name" id="name" lay-verify="required" placeholder="" >
+                    <div class="layui-col-xs1 leftoffset">
+                        <input  class="layui-input layui-col-xs9 " type="text" name="name" id="name" lay-verify="required" placeholder="姓名" >
                     </div>
-                    <div class="layui-col-xs2 layui-col-xs-offset1">
-                        <label  class="my-inline">部门</label>
-                        <input  class="layui-input layui-col-xs9 my-inline-input" type="text" name="department" id="department" lay-verify="required" placeholder="" >
+                    <div class="layui-col-xs2 leftoffset">
+                        <input  class="layui-input layui-col-xs9 " type="text" name="department" id="department" lay-verify="required" placeholder="部门" >
+                    </div>
+                    <div class="layui-col-xs2 leftoffset">
+                        <input  class="layui-input  " type="text" name="phone" id="phone" lay-verify="required" placeholder="联系方式" >
+                    </div>
+                    <div class="layui-col-xs2 leftoffset">
+                        <input  class="layui-input" type="text" name="oaid" id="oaid" lay-verify="required" placeholder="申请单号" >
+                    </div>
+                    <div class="layui-col-xs1 leftoffset">
+                        <input type="text"lay-verify="required" class="layui-input" name="orderDate" id="orderDate" placeholder="申请日期">
                     </div>
                 </div>
                 <div class="layui-form" style="width: 94%;">
@@ -41,16 +47,20 @@
                             <col width="200">
                             <col width="200">
                             <col width="100">
-                            <col width="100">
+                            <col width="70">
+                            <col width="70">
+                            <col width="70">
                             <col width="100">
                         </colgroup>
                         <thead>
                         <tr>
                             <th></th>
                             <th>资产牌</th>
-                            <th>类型</th>
-                            <th>型号</th>
+                            <th>物料名称</th>
+                            <th>物料描述</th>
                             <th>数量</th>
+                            <th>库存现有</th>
+                            <th>库存可用</th>
                             <th>单位</th>
                             <th>是否废弃</th>
                         </tr>
@@ -67,10 +77,16 @@
                                 <select id="type1" name="type1" lay-verify=""  lay-filter="type" lay-search></select>
                             </td>
                             <td>
-                                <select id="brand1" name="brand1" lay-verify="" ></select>
+                                <select id="brand1" name="brand1" lay-verify="" lay-filter="brand"></select>
                             </td>
                             <td>
                                 <input   name="count1" id="count1" value="1" class="layui-input layui-col-xs1" type="number" min="1" lay-verify="required" placeholder="" >
+                            </td>
+                            <td>
+                                <input   name="all1" id="all1" value="" class="layui-input layui-col-xs1" type="text" min="0" readonly placeholder="" >
+                            </td>
+                            <td>
+                                <input   name="available1" id="available1" value="" class="layui-input layui-col-xs1" type="text" readonly placeholder="" >
                             </td>
                             <td>
                                 <input   name="unit1" id="unit1" class="layui-input layui-col-xs1" type="text"  readonly placeholder="" >
@@ -89,10 +105,16 @@
                                 <select id="extype1" name="extype1" lay-verify=""  lay-filter="type" lay-search></select>
                             </td>
                             <td>
-                                <select id="exbrand1" name="exbrand1" lay-verify="" ></select>
+                                <select id="exbrand1" name="exbrand1" lay-verify="" lay-filter="brand"></select>
                             </td>
                             <td>
                                 <input   name="excount1" id="excount1" value="1" class="layui-input layui-col-xs1" type="number" min="1" lay-verify="required" placeholder="" >
+                            </td>
+                            <td>
+                                <input   name="exall1" id="exall1" value="" class="layui-input layui-col-xs1" type="text" readonly placeholder="" >
+                            </td>
+                            <td>
+                                <input   name="exavailable1" id="exavailable1" value="" class="layui-input layui-col-xs1" type="text" readonly placeholder="" >
                             </td>
                             <td>
                                 <input   name="exunit1" id="exunit1" class="layui-input layui-col-xs1" type="text"  readonly placeholder="" >

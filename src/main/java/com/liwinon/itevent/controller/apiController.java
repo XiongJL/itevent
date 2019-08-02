@@ -1,6 +1,6 @@
 package com.liwinon.itevent.controller;
 
-import com.liwinon.itevent.entity.BackModel;
+import com.liwinon.itevent.entity.Model.BackModel;
 import com.liwinon.itevent.service.ApiService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +23,28 @@ public class apiController {
     //获取类型
     @GetMapping(value = "/getTypes")
     public List<String> types(){
-
         return api.getTypes();
+    }
+    //获取物料编码
+    @GetMapping(value="/getItemId")
+    public String itemid(String type,String brand){
+        return api.getItemId(type,brand);
     }
     //获取品牌型号
     @GetMapping(value = "/getBrands")
     public List<String> brands(String type){
         return api.getBrands(type);
+    }
+
+    //获取物料对应的库存数量和库存可用数量
+    @GetMapping(value = "/getNumbers")
+    public int[] getNumbers(String type,String brand){
+        return api.getNumbers(type,brand);
+    }
+    //根据物料编码获取类型和型号
+    @GetMapping(value = "/getTypeAndBrand")
+    public String[] getTypeAndBrand(String itemid){
+        return api.getTypeAndBrand(itemid);
     }
     //获取单位
     @GetMapping(value = "/getUnit")
@@ -37,9 +52,47 @@ public class apiController {
         return api.getUnit(type);
     }
 
+
     //获取使用者的所有资产
     @GetMapping(value = "/whoAllUsed")
     public List<BackModel> whoAllUsed(String userid){
         return api.whoAllUsed(userid);
+    }
+
+    //获取资产分页表格数据
+    @GetMapping(value = "/assetsTable")
+    public JSONObject assetsTable(int page,int limit,String search,String date1,String date2){
+        System.out.println("第几页:"+page);
+        System.out.println("每页条数:"+limit);
+        System.out.println("查询参数:"+search);
+        return api.assetsTable(page,limit,search,date1,date2);
+    }
+    //获取事件分页表格数据
+    @GetMapping(value = "/eventTable")
+    public JSONObject eventTable(int page,int limit,String search,String date1,String date2){
+        System.out.println("第几页:"+page);
+        System.out.println("每页条数:"+limit);
+        System.out.println("查询参数:"+search);
+        return api.eventTable(page,limit,search,date1,date2);
+    }
+    //获取事件全部表格数据
+    @GetMapping(value = "/eventAllTable")
+    public JSONObject eventAllTable(){
+        int page = 1;
+        int limit = (int)api.countEvent();
+        return api.eventTable(page,limit,null,null,null);
+    }
+    //获取事件全部表格数据
+    @GetMapping(value = "/assetsAllTable")
+    public JSONObject assetsAllTable(){
+        int page = 1;
+        int limit = (int)api.countAssets();
+        return api.assetsTable(page,limit,null,null,null);
+    }
+
+    //获取主页图表chart1 数据
+    @GetMapping(value = "/chart1")
+    public JSONObject chart1(String year){
+        return api.eventByYear(year);
     }
 }

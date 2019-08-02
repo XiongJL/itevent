@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.security.PermitAll;
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ public class borrowController {
         return "event/borrow";
     }
     @PostMapping(value = "/borrowEvent")
+    @ResponseBody
     public String borrowEvent(int index, int event, HttpServletRequest request){
         return eventService.borrowEvent(index, event, request);
     }

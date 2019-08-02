@@ -2,9 +2,9 @@ package com.liwinon.itevent.service;
 
 import com.auth0.jwt.JWT;
 import com.liwinon.itevent.Token.TokenUtil;
-import com.liwinon.itevent.dao.AdminDao;
-import com.liwinon.itevent.entity.Admin;
-import com.liwinon.itevent.entity.Assets;
+import com.liwinon.itevent.dao.primaryRepo.AdminDao;
+import com.liwinon.itevent.entity.primary.Admin;
+import com.liwinon.itevent.entity.primary.Assets;
 import com.liwinon.itevent.exception.MyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

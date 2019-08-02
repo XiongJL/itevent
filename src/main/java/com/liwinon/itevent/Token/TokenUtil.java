@@ -2,7 +2,7 @@ package com.liwinon.itevent.Token;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.liwinon.itevent.entity.Admin;
+import com.liwinon.itevent.entity.primary.Admin;
 
 import java.util.Calendar;
 import java.util.Date;

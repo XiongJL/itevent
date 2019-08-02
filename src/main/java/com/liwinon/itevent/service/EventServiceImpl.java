@@ -1,13 +1,13 @@
 package com.liwinon.itevent.service;
 
-import com.liwinon.itevent.dao.AccessDao;
-import com.liwinon.itevent.dao.AssetsDao;
-import com.liwinon.itevent.dao.EventDao;
-import com.liwinon.itevent.dao.ItemDao;
-import com.liwinon.itevent.entity.Access;
-import com.liwinon.itevent.entity.Assets;
-import com.liwinon.itevent.entity.Event;
-import com.liwinon.itevent.entity.Item;
+import com.liwinon.itevent.dao.primaryRepo.AccessDao;
+import com.liwinon.itevent.dao.primaryRepo.AssetsDao;
+import com.liwinon.itevent.dao.primaryRepo.EventDao;
+import com.liwinon.itevent.dao.primaryRepo.ItemDao;
+import com.liwinon.itevent.entity.primary.Access;
+import com.liwinon.itevent.entity.primary.Assets;
+import com.liwinon.itevent.entity.primary.Event;
+import com.liwinon.itevent.entity.primary.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -29,6 +30,7 @@ public class EventServiceImpl implements EventService {
     AssetsDao assetsDao;
     @Autowired
     AccessDao accessDao;
+
     /**
      * 开始提单领取事件
      * @param index
@@ -48,17 +50,21 @@ public class EventServiceImpl implements EventService {
      * @param index  物料有多少种
      * @param event  03
      * @param request
-     * @param exist    是否是已有但未记录的资产, 是1  ,否0
+     *  exist    是否是已有但未记录的资产, 是1  ,否0
      * @return
      */
     @Override
     @Transactional
-    public String newAssetsEvent(int index, int event,int exist, HttpServletRequest request) {
+    public String newAssetsEvent(int index, int event, HttpServletRequest request) {
         String remark = request.getParameter("remark");
         if (StringUtils.isEmpty(remark)){
             remark = "";
         }
         System.out.println("备注:"+remark);
+        int exist = 999;
+        if (request.getParameter("exist")!=null){
+            exist  = Integer.valueOf(request.getParameter("exist"));
+        }
         if (exist==1){  // 是已有资产,但未在系统中记录
             event = 8;
         }
@@ -84,6 +90,7 @@ public class EventServiceImpl implements EventService {
             uuid = uuid+"-"+eventTime;
             eventTime ++;
             String assetsid = request.getParameter("assetsid"+i);
+            String orderid = request.getParameter("orderid");
             String brand = request.getParameter("brand"+i);
             int count = Integer.valueOf(request.getParameter("count"+i));
             String unit = request.getParameter("unit"+i);
@@ -105,6 +112,7 @@ public class EventServiceImpl implements EventService {
             e.setUnit(unit);
             e.setDate(date);
             e.setAdminuser(adminuser);
+            e.setOrderid(orderid);
             e.setRemark(remark);
             System.out.println("e:"+e);
             //所有准备入的资产
@@ -244,6 +252,17 @@ public class EventServiceImpl implements EventService {
             return "EmptyUserid";
         }
         //String name = request.getParameter("name").trim();
+        String phone = request.getParameter("phone");
+        String orderid = "";//请购单为空
+        String oaid = request.getParameter("oaid");
+        String getDate = request.getParameter("orderDate");
+        Date applydate = null;
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            applydate = sdf2.parse(getDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         String remark = "";
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -284,8 +303,8 @@ public class EventServiceImpl implements EventService {
             //获取操作人员
             HttpSession session = request.getSession();
             String adminuser = (String)session.getAttribute("username");
-            Event e = new Event(uuid,event,item.getItemid(),count,unit,userid,adminuser,date,remark);
-            Event ex = new Event(uuidNew,event,exitem.getItemid(),excount,exunit,userid,adminuser,date,remark);
+            Event e = new Event(uuid,event,item.getItemid(),count,unit,userid,phone,adminuser,date,applydate,oaid,orderid,remark);
+            Event ex = new Event(uuidNew,event,exitem.getItemid(),excount,exunit,userid,phone,adminuser,date,applydate,oaid,orderid,remark);
             System.out.println("e:"+e);
             System.out.println("ex:"+e);
             //所有准备换入的资产
@@ -397,15 +416,15 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
-     * 借出资产
+     * 借用资产
      * @param index
      * @param event
      * @param request
      * @return
      */
     @Override
+    @Transactional
     public String borrowEvent(int index, int event, HttpServletRequest request) {
-
         return subBill(index, event, request);
     }
 
@@ -421,6 +440,17 @@ public class EventServiceImpl implements EventService {
         String userid =  request.getParameter("userid");
         if (StringUtils.isEmpty(userid)){
             return "工号不能为空";
+        }
+        String phone = request.getParameter("phone");
+        String oaid = request.getParameter("oaid");
+        String orderid = ""; //归还无请购单号
+        String getDate = request.getParameter("orderDate");
+        Date applydate = null;
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            applydate = sdf2.parse(getDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         HttpSession session = request.getSession();
         String adminuser = (String) session.getAttribute("username");
@@ -449,7 +479,7 @@ public class EventServiceImpl implements EventService {
             //记录事件
             String uuidtmp = uuid+"-"+eventTime;
             eventTime ++;
-            Event e = new Event(uuid,event,a.getItemid(),count,unit,userid,adminuser,date,"");
+            Event e = new Event(uuid,event,a.getItemid(),count,unit,userid,phone,adminuser,date,applydate,oaid,orderid,"");
             eventDao.save(e);
             //记录出入
             Access access = new Access();
@@ -463,7 +493,7 @@ public class EventServiceImpl implements EventService {
     /**
      * 报废事件
      * @param index
-     * @param event  2
+     * @param event 2
      * @param request
      * @return
      */
@@ -480,7 +510,17 @@ public class EventServiceImpl implements EventService {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String uuid1 = sdf.format(date)+"-"+event;
-
+        String oaid = request.getParameter("oaid");
+        String phone = request.getParameter("phone");
+        String orderid = ""; //报废无请购单号
+        String getDate = request.getParameter("orderDate");
+        Date applydate = null;
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            applydate = sdf2.parse(getDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         /**
          * 前端固定最多20个 , 循环20次的原因是, 不确定用户删除某计列后, 命名不是按照顺序的
@@ -497,6 +537,7 @@ public class EventServiceImpl implements EventService {
             String uuid = uuid1;
             uuid = uuid+"-"+eventTime;
             eventTime ++;
+
             String assetsid = request.getParameter("assetsid"+i);
             String brand = request.getParameter("brand"+i);
             int count = Integer.valueOf(request.getParameter("count"+i));
@@ -527,7 +568,7 @@ public class EventServiceImpl implements EventService {
                     if(count<=0){
                         break;
                     }
-                    if (a.getAssetsid().equals(assetsid)){
+                    if (a.getAssetsid()!=null && assetsid.equals(a.getAssetsid())){
                         //如果是上面已经指定的资产id,则跳过, 但通常不会进入此方法
                         //除非操作人员填写了资产ID,又把数量设置了 1 以上
                         break;
@@ -544,7 +585,7 @@ public class EventServiceImpl implements EventService {
             //获取操作人员
             HttpSession session = request.getSession();
             String adminuser = (String)session.getAttribute("username");
-            Event e = new Event(uuid,event,itemid,count,unit,userid,adminuser,date,remark);
+            Event e = new Event(uuid,event,itemid,count,unit,userid,phone,adminuser,date,applydate,oaid,orderid,remark);
             //保存事件
             eventDao.save(e);
             //更改资产为报废 ,记录出入记录
@@ -640,11 +681,24 @@ public class EventServiceImpl implements EventService {
         if (StringUtils.isEmpty(userid)){
             return "EmptyUserid";
         }
+
         //String name = request.getParameter("name").trim();
+        String phone = request.getParameter("phone");
+        String oaid = request.getParameter("oaid");
+        String orderid = ""; //报废无请购单号
+        String getDate = request.getParameter("orderDate");
+        Date applydate = null;
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            applydate = sdf2.parse(getDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         String remark = "";
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String uuid1 = sdf.format(date)+"-"+event;
+
         // List<Event> list = new ArrayList<>();
         /**
          * 前端固定最多20个 , 循环20次的原因是, 不确定用户删除某计列后, 命名不是按照顺序的
@@ -674,7 +728,7 @@ public class EventServiceImpl implements EventService {
             //获取操作人员
             HttpSession session = request.getSession();
             String adminuser = (String)session.getAttribute("username");
-            Event e = new Event(uuid,event,item.getItemid(),count,unit,userid,adminuser,date,remark);
+            Event e = new Event(uuid,event,item.getItemid(),count,unit,userid,phone,adminuser,date,applydate,oaid,orderid,remark);
             System.out.println("e:"+e);
             //所有准备出的资产
             List<Assets> out = new ArrayList<>(count);
@@ -716,7 +770,11 @@ public class EventServiceImpl implements EventService {
                     }
                     a.setUserid(userid);
                     a.setStore(1);  //设为费用仓
-                    a.setState(1);  //设为出库状态
+                    if (event==5){
+                        a.setState(2);  //设为出库借用状态
+                    }else{
+                        a.setState(1);  //设为出库状态
+                    }
                     assetsDao.save(a);
                     Access access = new Access();
                     access.setAid(a.getId());
@@ -729,4 +787,6 @@ public class EventServiceImpl implements EventService {
         }
         return "ok";
     }
+
+
 }

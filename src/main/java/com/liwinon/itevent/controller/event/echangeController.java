@@ -1,7 +1,6 @@
 package com.liwinon.itevent.controller.event;
 
 import com.liwinon.itevent.annotation.PasssToken;
-import com.liwinon.itevent.entity.Event;
 import com.liwinon.itevent.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

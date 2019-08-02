@@ -1,6 +1,6 @@
 package com.liwinon.itevent.service;
 
-import com.liwinon.itevent.entity.Admin;
+import com.liwinon.itevent.entity.primary.Admin;
 
 import javax.servlet.http.HttpServletRequest;
 

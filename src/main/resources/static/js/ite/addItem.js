@@ -6,10 +6,15 @@ var arr = new Array(limit)
 var token = localStorage.getItem("token");
 //JavaScript代码区域
 var element,form,layer = null
-layui.use(['form','layer','element'], function(){
+layui.use(['form','layer','element','laydate'], function(){
     element = layui.element,
         form = layui.form,
-        layer = layui.layer;
+        layer = layui.layer,
+        laydate = layui.laydate;
+    //日期选择器初始化
+    laydate.render({
+        elem: '#orderDate'
+    })
     //通过layui验证输入后提交 ,需要将提交按钮放入form内
     form.on('submit(sub)', function (data) {
         console.log($(data.form).serialize())
@@ -33,9 +38,14 @@ layui.use(['form','layer','element'], function(){
                     layer.msg(res)
                 }else if (res=="ok"){
                     layer.msg("操作成功",{icon: 1})
+                    setTimeout(function () {
+                        location.reload();
+                    },2000)
                 }else {
                     layer.msg(res)
                 }
+
+
             }
         });
         return false;

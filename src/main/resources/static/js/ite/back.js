@@ -5,10 +5,15 @@ var arr = new Array(limit)
 var token = localStorage.getItem("token");
 //JavaScript代码区域
 var element,form,layer = null
-layui.use(['form','layer','element'], function(){
+layui.use(['form','layer','element','laydate'], function(){
     element = layui.element,
         form = layui.form,
-        layer = layui.layer;
+        layer = layui.layer,
+        laydate = layui.laydate;
+    //日期选择器初始化
+    laydate.render({
+        elem: '#orderDate'
+    })
     //监听全选开关
     var all = true;
     form.on('switch(chAll)', function(data){
@@ -57,6 +62,7 @@ layui.use(['form','layer','element'], function(){
                 }else{
                     layer.msg(res)
                 }
+                $("#oaid").val("")
             }
         });
         return false;
@@ -125,6 +131,7 @@ $('#userid').on('blur',function () {
                                         //赋值
                                         $("#aid"+i).val(res[i-1].aid);
                                         $("#assetsid"+i).val(res[i-1].assetsid);
+                                        $("#itemid"+i).val(res[i-1].itemid);
                                         $("#type"+i).val(res[i-1].type);
                                         $("#brand"+i).val(res[i-1].brand);
                                         $("#unit"+i).val(res[i-1].unit);
@@ -160,6 +167,9 @@ function addItem(itemIndex) {
         '                            <td>\n' +
         '                                <input   name="assetsid'+itemIndex+'" id="assetsid'+itemIndex+'"  class="layui-input layui-col-xs1" type="text"  placeholder="无" >\n' +
         '                            </td>\n' +
+        '<td>' +
+        '                                <input item="item"  name="itemid'+itemIndex+'" id="itemid'+itemIndex+'"  class="layui-input " type="text" lay-verify="required" placeholder="" >\n' +
+        '                            </td>'+
         '                            <td>\n' +
         '                                <input readonly id="type'+itemIndex+'" name="type'+itemIndex+'" class="layui-input layui-col-xs1" type="text" />\n' +
         '                            </td>\n' +

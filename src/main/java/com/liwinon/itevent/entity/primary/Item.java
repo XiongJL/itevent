@@ -1,4 +1,4 @@
-package com.liwinon.itevent.entity;
+package com.liwinon.itevent.entity.primary;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -1,13 +1,16 @@
 spring:
   datasource:
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver  #sqlserver
-    #    url: jdbc:sqlserver://172.60.6.27;DatabaseName=HRM
-    #    username: sa
-    #    password: sa@!admin1
-    #\u6D4B\u8BD5\u73AF\u5883
-    url: jdbc:sqlserver://172.60.45.198;DatabaseName=HRM
-    username: sa
-    password: Lw123456
+    primary: #ITMS
+      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver  #sqlserver
+      #单数据源更改为url
+      jdbc-url: jdbc:sqlserver://172.60.6.115;DatabaseName=ITMS
+      username: sa
+      password: lw2019.
+    second:   #HRM
+      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver  #sqlserver
+      jdbc-url: jdbc:sqlserver://172.60.6.27;DatabaseName=HRM
+      username: sa
+      password: sa@!admin1
   jpa:
     hibernate:
       ddl-auto: none

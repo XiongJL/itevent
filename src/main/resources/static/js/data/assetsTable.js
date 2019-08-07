@@ -1,8 +1,9 @@
 var table ;
 //JavaScript代码区域
-layui.use(['table','element','laydate'], function(){
+layui.use(['table','layer','element','laydate'], function(){
         table = layui.table
         ,laydate = layui.laydate
+        ,layer = layui.layer
         ,element = layui.element;
     //创建表格实例
     //获取token令牌
@@ -39,10 +40,53 @@ layui.use(['table','element','laydate'], function(){
         ,{field: 'state', title: '状态', width:80, sort: true}
         ,{field: 'store', title: '所在仓', width:80, sort: true}
         ,{field: 'buyDate', title: '创建日期', width:125}
+        ,{fixed: 'right', title:'操作', toolbar: '#bar', width:124}
     ]]
     })
 
-
+    //监听行工具事件 , 删除
+    table.on('tool(assets)', function(obj){
+        var data = obj.data;
+        console.log(data.aid)
+        if(obj.event === 'del'){
+            layer.confirm('真的删除么', function(index){
+                $.ajax({
+                    url:"/itevent/delAssets",
+                    data:{id:data.aid},
+                    beforeSend:function(XMLHttpRequest){
+                        XMLHttpRequest.setRequestHeader("token",token);
+                    },
+                    success:function (res) {
+                        if (typeof res != "string"){
+                            if (res.code == 111){
+                                window.location.href = "/itevent/login";
+                            }
+                        }else if(res == "ok"){
+                            layer.msg("删除成功",{icon: 1})
+                            obj.del();
+                            layer.close(index);
+                        }else if(res =="Assets null"){
+                            layer.msg("资产不存在")
+                        }
+                        else{
+                            layer.msg(res)
+                        }
+                    }
+                })
+            });
+        }
+        else if(obj.event === 'edit'){
+            layer.prompt({
+                formType: 2
+                ,value: data.email
+            }, function(value, index){
+                obj.update({
+                    email: value
+                });
+                layer.close(index);
+            });
+        }
+    });
 
     //点击搜索,开始搜索 ,此处必须要使用事件委托,
     $('body').on('click','#do_search',function(){
@@ -64,19 +108,7 @@ layui.use(['table','element','laydate'], function(){
         }); //只重载数据
     });
 
-    //导出数据
-    $('body').on('click','#export',function () {
-        var data = null;
-        $.ajax({
-            url: "/itevent/api/assetsAllTable",
-            beforeSend:function(XMLHttpRequest){
-                XMLHttpRequest.setRequestHeader("token",token);
-            },
-            success: function (res) {
-                table.exportFile(tableIns.config.id,res.data);
-            }
-        })
-    })
+
 
     //获取即将逾期资产
     if (window.location.href.indexOf("yuqi")!=-1){

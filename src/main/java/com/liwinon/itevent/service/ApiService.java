@@ -7,7 +7,10 @@ import net.sf.json.JSONObject;
 import java.util.List;
 
 public interface ApiService {
-    JSONObject getNameDepart(String userid);
+    JSONObject getUserInfoById(String userid);
+    JSONObject getUserInfoByName(String name);
+    JSONObject getIdPhone(String dep, String name);
+
     List<String> getTypes();
     List<String> getBrands(String type);
     String getUnit(String type);
@@ -37,4 +40,5 @@ public interface ApiService {
     long countEvent();
     //获取资产总数
     long countAssets();
+
 }

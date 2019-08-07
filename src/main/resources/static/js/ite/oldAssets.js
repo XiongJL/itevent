@@ -27,23 +27,47 @@ layui.use(['form','layer','element','laydate'], function(){
         changeBrand(index,data.value)
         changeUnit(index,data.value)
     })
+    //部门改变时根据姓名查找信息
+    form.on('select(dep)',function (data) {
+        //console.log(data.elem); //得到select原始DOM对象
+        //console.log(data.value); //得到被选中的值
+        $.ajax({
+            url:"/itevent/api/getIdPhone",
+            data:{dep:data.value,name:$("#name").val()},
+            beforeSend:function(XMLHttpRequest){
+                XMLHttpRequest.setRequestHeader("token",token);
+            },
+            success:function (res) {
+                if(res==null || res==""){
+                    //弹窗提示
+                    layer.msg("未找到此人的信息")
+                }else{
+                    $("#userid").val(res.userid)
+                    $("#phone").val(res.telephone)
+                }
+            }
+        })
+    })
     //型号改变时查询库存数量,以及物料编码
     form.on('select(brand)',function (data) {
         //console.log(data.elem); //得到select原始DOM对象
         var id = data.elem.id
         var index = parseInt(id.replace(/[^0-9]/ig,""));
         // console.log(data.othis); //得到美化后的DOM对象
-       // console.log(data.value); //得到被选中的值
+        console.log(data.value); //得到被选中的值
+        changeNumbers(index,totaltype,data.value)
         //获取物料编码
         chagneItemid(index,totaltype,data.value)
+
     })
     form.on('submit(sub)', function (data) {
         console.log($(data.form).serialize())
         //告诉后台有多少物料
         var index = document.getElementById("item-table").rows.length
-        //console.log(data)
+        console.log(data)
+        debugger
         $.ajax({
-            url: "/itevent/scrapEvent?index="+index+"&event=2",
+            url: "/itevent/oldAssets?index="+index+"&event=8",
             data: $(data.form).serialize(),
             type: "post",
             beforeSend:function(XMLHttpRequest){
@@ -55,16 +79,16 @@ layui.use(['form','layer','element','laydate'], function(){
                     if (res.code == 111){
                         window.location.href = "/itevent/login";
                     }
-                }
-                else if (res=="EmptyUserid") {
+                } else if (res=="EmptyUserid") {
                     layer.msg("用户名不能为空")
-                }else if (res.indexOf("数量不足")!=-1) {
-                    layer.msg(res)
-                }else if (res=="ok"){
+                }else if (res=="EmptyAssetsid") {
+                    layer.msg("资产牌不能为空")
+                } else if (res=="ok"){
                     layer.msg("操作成功",{icon: 1})
                 }else{
                     layer.msg(res)
                 }
+                $("#oaid").val("")
             }
         })
         return false;
@@ -73,7 +97,7 @@ layui.use(['form','layer','element','laydate'], function(){
 });
 $(function () {
     //添加导航栏选中样式
-    $("#scrap").addClass("layui-this");
+    $("#oldAssets").addClass("layui-this");
     //查询所有类型,并重新渲染Select
     setTimeout(function () {
         allTypes(1);
@@ -99,7 +123,7 @@ function addItem() {
             '                                <a onclick="addItem()" class="addItem" href="#"><i class="layui-icon layui-icon-add-1" style="font-size: 30px; color: #1E9FFF;"></i></a>\n' +
             '                                <a onclick="delItem(this)" class="delItem" href="#"><i class="layui-icon layui-icon-close" style="font-size: 30px; color: #1E9FFF;"></i></a>\n' +
             '                            </td>\n' +
-            '<td><input  onkeyup="toUpperCase(this)" name="assetsid'+itemIndex+'" id="assetsid'+itemIndex+'"  class="layui-input layui-col-xs1" type="text"   placeholder="物料出库时有资产牌请填写" ></td>'+
+            '<td><input onkeyup="toUpperCase(this)"  name="assetsid'+itemIndex+'" id="assetsid'+itemIndex+'"  class="layui-input" type="text"   placeholder="有资产牌请填写" ></td>' +
             '<td>' +
             '                                <input onkeyup="toUpperCase(this)" item="item"  name="itemid'+itemIndex+'" id="itemid'+itemIndex+'"  class="layui-input " type="text" lay-verify="required" placeholder="" >\n' +
             '                            </td>'+
@@ -110,10 +134,16 @@ function addItem() {
             '                                <select id="brand'+itemIndex+'" name="brand'+itemIndex+'" lay-verify="" lay-filter="brand"></select>\n' +
             '                            </td>\n' +
             '                            <td>\n' +
-            '                                <input id="count'+itemIndex+'" name="count'+itemIndex+'" value="1" class="layui-input layui-col-xs1" type="number" min="1"   lay-verify="required" placeholder="" >\n' +
+            '                                <input id="count'+itemIndex+'" name="count'+itemIndex+'" value="1" readonly class="layui-input" type="number" min="1"   lay-verify="required" placeholder="" >\n' +
+            '                            </td>\n' +
+            ' <td>\n' +
+            '                                <input   name="all'+itemIndex+'" id="all'+itemIndex+'" value="" class="layui-input" type="text" readonly placeholder="" >\n' +
             '                            </td>\n' +
             '                            <td>\n' +
-            '                                <input  id="unit'+itemIndex+'" name="unit'+itemIndex+'" class="layui-input layui-col-xs1" type="text"   readonly placeholder="" >\n' +
+            '                                <input   name="available'+itemIndex+'" id="available'+itemIndex+'" value="" class="layui-input" type="text" readonly placeholder="" >\n' +
+            '                            </td>' +
+            '                            <td>\n' +
+            '                                <input  id="unit'+itemIndex+'" name="unit'+itemIndex+'" class="layui-input" type="text"   readonly placeholder="" >\n' +
             '                            </td>\n' +
             '                        </tr>')
 

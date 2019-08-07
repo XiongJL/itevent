@@ -1,5 +1,10 @@
 //公用方法,优先调用此JS
 //类别改变时查询对应的计量单位
+
+function toUpperCase(obj)
+{
+    obj.value = obj.value.toUpperCase()
+}
 function changeUnit(index,type) {
     // 用selector来传递选择器
     $.ajax({
@@ -47,8 +52,8 @@ function getParmId() {
 }
 //自动查询责任人工号
 $('#userid').on('focus',function () {
-    $("#name").val("")
-    $("#department").val("")
+    $("#department").empty();
+    $("#phone").val("")
 })
 $('#userid').on('blur',function () {
     //console.log('移出输入框')
@@ -68,13 +73,58 @@ $('#userid').on('blur',function () {
                     layer.msg("未找到此工号的信息")
                 }else{  //修改责任人的文本
                     $("#name").val(res.name)
-                    $("#department").val(res.department)
+                    var option="";
+                    option += "<option value='"+res.department+"'>"+res.department+"</option>";
+                    $("#department").append(option);
+                    $("#phone").val(res.telephone)
+                    form.render('select');
                 }
             }
         });
     }
 
 })
+//自动查询责任人姓名
+$('#name').on('focus',function () {
+    $("#userid").val("")
+    $("#phone").val("")
+    $("#department").empty();
+})
+$('#name').on('blur',function () {
+    //console.log('移出输入框')
+    var data = $('#name').val()
+    if (data!=null && data!=""){
+        $.ajax({
+            url:"/itevent/api/getIdDep",
+            type:'get',
+            data: {name:data},
+            beforeSend:function(XMLHttpRequest){
+                XMLHttpRequest.setRequestHeader("token",token);
+            },
+            success:function (res) {
+                console.log(res)
+                if(res==null || res==""){
+                    //弹窗提示
+                    layer.msg("未找到此人的信息")
+                }else{  //修改信息
+                    var option="";
+                    for (var i=0;i<res.nums;i++){
+                        option += "<option value='"+res.data[i].department+"'>"+res.data[i].department+"</option>";
+                    }
+                    $("#department").append(option);
+
+                    $("#userid").val(res.data[0].userid)
+                    $("#phone").val(res.data[0].telephone)
+                    form.render('select');
+                }
+            }
+        });
+    }
+
+})
+
+
+
 //查询所有类型,并重新渲染Select
 function allTypes(index) {
     console.log("开始查询所有类型")

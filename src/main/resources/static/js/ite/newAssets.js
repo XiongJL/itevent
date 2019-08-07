@@ -106,9 +106,9 @@ function addItem() {
             '                                <a onclick="addItem()" class="addItem" href="#"><i class="layui-icon layui-icon-add-1" style="font-size: 30px; color: #1E9FFF;"></i></a>\n' +
             '                                <a onclick="delItem(this)" class="delItem" href="#"><i class="layui-icon layui-icon-close" style="font-size: 30px; color: #1E9FFF;"></i></a>\n' +
             '                            </td>\n' +
-            '<td><input   name="assetsid'+itemIndex+'" id="assetsid'+itemIndex+'"  class="layui-input layui-col-xs1" type="text"   placeholder="有贴资产牌请填写" ></td>'+
+            '<td><input  onkeyup="toUpperCase(this)" name="assetsid'+itemIndex+'" id="assetsid'+itemIndex+'"  class="layui-input layui-col-xs1" type="text"   placeholder="有贴资产牌请填写" ></td>'+
             '<td>' +
-            '                                <input item="item"  name="itemid'+itemIndex+'" id="itemid'+itemIndex+'"  class="layui-input " type="text" lay-verify="required" placeholder="" >\n' +
+            '                                <input onkeyup="toUpperCase(this)" item="item"  name="itemid'+itemIndex+'" id="itemid'+itemIndex+'"  class="layui-input " type="text" lay-verify="required" placeholder="" >\n' +
             '                            </td>'+
             '                            <td>\n' +
             '                                <select id="type'+itemIndex+'" name="type'+itemIndex+'" lay-verify=""  lay-filter="type" lay-search></select>\n' +

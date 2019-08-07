@@ -16,7 +16,7 @@ public interface ItemDao extends JpaRepository<Item,String>, JpaSpecificationExe
     List<String> brandByType(String type);
     //查询类型对应的计量单位
     @Query(value = "SELECT DISTINCT unit FROM  ITE_Item i WHERE i.type = :type",nativeQuery = true)
-    String unitByType(String type);
+    List<String> unitByType(String type);
     //根据type,brand查找物料
     Item findByTypeAndBrand(String type, String brand);
 

@@ -23,6 +23,10 @@
         <!-- 底部固定区域 -->
         © liwinon.com
     </div>
+    <script type="text/html" id="bar">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
     <script type="text/html" id="toolbar">
         <div class="layui-container">
             <div class="layui-row">
@@ -40,7 +44,7 @@
                     <button id="do_search" class="layui-btn"><i class="layui-icon layui-icon-search"></i></button>
                 </div>
                 <div class="layui-col-xs1" >
-                    <button id="export" class="layui-btn">导出数据</i></button>
+                    <a  href="/itevent/download/using" id="export" class="layui-btn" >导出数据</i></a>
                 </div>
             </div>
 

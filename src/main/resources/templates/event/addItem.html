@@ -49,7 +49,7 @@
                                 <a class="addItem" href="#" onclick="addItem()"><i class="layui-icon layui-icon-add-1" style="font-size: 30px; color: #1E9FFF;"></i></a>
                                 <a class="delItem" href="#" onclick="delItem(this)"><i class="layui-icon layui-icon-close" style="font-size: 30px; color: #1E9FFF;"></i></a>
                             </td>
-                            <td><input   name="itemid1" id="itemid1" lay-verify="required" class="layui-input layui-col-xs1" type="text"  placeholder="必填" ></td>
+                            <td><input onkeyup="toUpperCase(this)"  name="itemid1" id="itemid1" lay-verify="required" class="layui-input layui-col-xs1" type="text"  placeholder="必填" ></td>
                             <td>
                                 <input   name="type1" id="type1" lay-verify="required" class="layui-input layui-col-xs1" type="text"  placeholder="必填" >
                             </td>

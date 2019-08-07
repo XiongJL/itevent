@@ -166,6 +166,84 @@ public class EventServiceImpl implements EventService {
     }
 
     /**
+     *  已有资产入库, 包含使用人信息
+     *  每条固定一个数量,保证资产牌一一对应
+     * @param index
+     * @param event
+     * @param request
+     * @return
+     */
+    @Override
+    public String oldAssetsEvent(int index, int event, HttpServletRequest request) {
+        String userid = request.getParameter("userid");
+        if (StringUtils.isEmpty(userid)){
+            return "EmptyUserid";
+        }
+        String phone = request.getParameter("phone");
+        String name = request.getParameter("name");
+        String location = request.getParameter("location");
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+        String uuid1 = sdf.format(date)+"-"+event;
+        // List<Event> list = new ArrayList<>();
+        /**
+         * 前端固定最多20个 , 循环20次的原因是, 不确定用户删除某计列后, 命名不是按照顺序的
+         *  例如 type1 type3 type5 用index 数量去循环 就只能得到 type1 tpye2 type3.
+         */
+        int eventTime = 1;
+        for (int i = 1; i<=20; i++){
+            String type = request.getParameter("type"+i);
+            if (StringUtils.isEmpty(type)){
+                continue;
+            }
+            String uuid = uuid1;
+            uuid = uuid+"-"+eventTime;
+            eventTime ++;
+            String assetsid = request.getParameter("assetsid"+i);
+            String itemid = request.getParameter("itemid"+i);
+            int count = Integer.valueOf(request.getParameter("count"+i));
+            String unit = request.getParameter("unit"+i);
+            //获取操作人员
+            HttpSession session = request.getSession();
+            String adminuser = (String)session.getAttribute("username");
+            Event e = new Event(uuid,event,itemid,count,unit,userid,phone,adminuser,date,null,null,null,null);
+            System.out.println("e:"+e);
+            //准备入库的资产
+            Assets a ;
+            //保存资产牌
+            if (!StringUtils.isEmpty(assetsid)){
+                Assets b = assetsDao.findByAssetsid(assetsid);
+                if (b!=null){
+                    return assetsid+"资产牌已存在";
+                }
+                a = new Assets();
+                a.setAssetsid(assetsid);
+                a.setItemid(itemid);
+                a.setLocation(location);
+                a.setUserid(userid);
+                a.setUsername(name);
+                count--;
+            }else{
+                return "EmptyAssetsid";
+            }
+            //需求数量还不为0
+            if (count>0){
+                return "资产牌只能对应一个资产!";
+            }
+            //保存事件
+            eventDao.save(e);
+            //更改出库的状态 , 并添加出入记录
+            a.setState(1);
+            a.setStore(1);
+            assetsDao.save(a);
+            Access access = new Access();
+            access.setAid(a.getId());
+            access.setEventid(uuid);
+            accessDao.save(access);
+        }
+        return "ok";
+    }
+    /**
      * 物料添加
      * @param index
      * @param event
@@ -251,7 +329,7 @@ public class EventServiceImpl implements EventService {
         if (StringUtils.isEmpty(userid)){
             return "EmptyUserid";
         }
-        //String name = request.getParameter("name").trim();
+        String name = request.getParameter("name").trim();
         String phone = request.getParameter("phone");
         String orderid = "";//请购单为空
         String oaid = request.getParameter("oaid");
@@ -375,6 +453,7 @@ public class EventServiceImpl implements EventService {
                         }
                     }
                     a.setUserid(userid);  // 添加使用者工号
+                    a.setUsername(name);//添加姓名
                     a.setStore(1);  //设为费用仓
                     a.setState(1);  //设为出库状态
                     assetsDao.save(a);
@@ -396,6 +475,7 @@ public class EventServiceImpl implements EventService {
                         }
                     }
                     a.setUserid(""); //把使用者置为空
+                    a.setUsername(""); //把使用者姓名置为空
                     a.setStore(1);  //设为费用仓
                     a.setState(0);  //设为入库状态
                     if (bad==1){  //是报废的
@@ -473,6 +553,7 @@ public class EventServiceImpl implements EventService {
             // 根据aid 去查找对应的资产
             Assets a =  assetsDao.findById(aid);
             a.setUserid("");  // 使用者置为空
+            a.setUsername(""); //使用姓名置为空
             a.setState(0); //状态置为在库
             a.setStore(1);  //置为费用仓
             assetsDao.save(a);
@@ -505,7 +586,7 @@ public class EventServiceImpl implements EventService {
         if (StringUtils.isEmpty(userid)){
             return "EmptyUserid";
         }
-        //String name = request.getParameter("name").trim();
+        String name = request.getParameter("name").trim();
         String remark = "";
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -600,6 +681,7 @@ public class EventServiceImpl implements EventService {
                         }
                     }
                     a.setUserid(userid);
+                    a.setUsername(name);
                     a.setStore(1);  //设为费用仓
                     a.setState(3);  //设为报废状态
                     assetsDao.save(a);
@@ -612,7 +694,6 @@ public class EventServiceImpl implements EventService {
         }
         return "ok";
     }
-
 
     /**
      * 优先判断准备出库的资产 在费用仓是否足够,接着再判断资产仓的
@@ -682,7 +763,7 @@ public class EventServiceImpl implements EventService {
             return "EmptyUserid";
         }
 
-        //String name = request.getParameter("name").trim();
+        String name = request.getParameter("name").trim();
         String phone = request.getParameter("phone");
         String oaid = request.getParameter("oaid");
         String orderid = ""; //报废无请购单号
@@ -769,6 +850,7 @@ public class EventServiceImpl implements EventService {
                         }
                     }
                     a.setUserid(userid);
+                    a.setUsername(name);
                     a.setStore(1);  //设为费用仓
                     if (event==5){
                         a.setState(2);  //设为出库借用状态

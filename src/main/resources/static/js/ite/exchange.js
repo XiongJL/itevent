@@ -315,7 +315,7 @@ function addItem() {
             '                                <a onclick="addItem()" class="addItem" href="#"><i class="layui-icon layui-icon-add-1" style="font-size: 30px; color: #1E9FFF;"></i></a>\n' +
             '                                <a onclick="delItem(this)" class="delItem" href="#"><i class="layui-icon layui-icon-close" style="font-size: 30px; color: #1E9FFF;"></i></a>\n' +
             '                            </td>\n' +
-            '<td><input   name="assetsid'+itemIndex+'" id="assetsid'+itemIndex+'"  class="layui-input layui-col-xs1" type="text"   placeholder="有资产牌请填写" ></td>'+
+            '<td><input  onkeyup="toUpperCase(this)" name="assetsid'+itemIndex+'" id="assetsid'+itemIndex+'"  class="layui-input layui-col-xs1" type="text"   placeholder="有资产牌请填写" ></td>'+
 
             '                            <td>\n' +
             '                                <select id="type'+itemIndex+'" name="type'+itemIndex+'" lay-verify=""  lay-filter="type" lay-search></select>\n' +
@@ -343,7 +343,7 @@ function addItem() {
             '                            <td>\n' +
             '                                <b>更换为</b>\n' +
             '                            </td>\n' +
-            '                            <td><input   name="exassetsid'+itemIndex+'" id="exassetsid'+itemIndex+'"  class="layui-input layui-col-xs1" type="text"  placeholder="有资产牌请填写" ></td>\n' +
+            '                            <td><input  onkeyup="toUpperCase(this)"  name="exassetsid'+itemIndex+'" id="exassetsid'+itemIndex+'"  class="layui-input layui-col-xs1" type="text"  placeholder="有资产牌请填写" ></td>\n' +
             '\n' +
             '                            <td>\n' +
             '                                <select id="extype'+itemIndex+'" name="extype'+itemIndex+'" lay-verify=""  lay-filter="type" lay-search></select>\n' +
@@ -395,4 +395,8 @@ function delItem(obj) {
        // $(obj).parent().parent().parent()[0].removeChild($(obj).parent().parent()[0]);//删除该tr
        // $(obj).parent().parent().parent()[0].removeChild($(obj).parent().parent()[1]);//删除兄弟该tr
     }
+}
+function toUpperCase(obj)
+{
+    obj.value = obj.value.toUpperCase()
 }

@@ -82,4 +82,15 @@ public interface AssetsDao extends JpaRepository<Assets,String>, JpaSpecificatio
     @Query(value = "select  * from ITE_Assets a,ITE_Item i where a.itemid = i.itemid " +
             "and (a.buyDate BETWEEN :date1 AND :date2)",nativeQuery = true)
     Page<Assets> findAllByDate(String date1, String date2, Pageable pageable);
+
+    /**
+     * 导出的数据
+     * @return
+     */
+    @Query(value = "SELECT  DISTINCT a.id,a.assetsid,a.username,a.userid,e.phone,a.location,a.itemid,i.type,i.brand," +
+            "(CASE a.state when 0 then '在库' when 1 then '不在库' when 2 then '不在库借用' when 3 then '废品' end) as 'state'," +
+            "(CASE a.store when 0 then '资产仓' when 1 then '费用仓' end) as 'store'," +
+            " a.buyDate" +
+            " FROM ITE_Assets a  LEFT JOIN  ITE_Item i on a.itemid = i.itemid LEFT join  ITE_Event e  on  a.userid = e.userid",nativeQuery = true)
+    List<String[]> export();
 }

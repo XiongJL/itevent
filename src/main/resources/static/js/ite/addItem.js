@@ -109,7 +109,7 @@ function addItem() {
             '                                <a class="addItem" href="#" onclick="addItem()"><i class="layui-icon layui-icon-add-1" style="font-size: 30px; color: #1E9FFF;"></i></a>\n' +
             '                                <a class="delItem" href="#" onclick="delItem(this)"><i class="layui-icon layui-icon-close" style="font-size: 30px; color: #1E9FFF;"></i></a>\n' +
             '                            </td>\n' +
-            '                            <td><input   name="itemid'+itemIndex+'" id="itemid'+itemIndex+'" lay-verify="required" class="layui-input layui-col-xs1" type="text"  placeholder="必填" ></td>\n' +
+            '                            <td><input  onkeyup="toUpperCase(this)" name="itemid'+itemIndex+'" id="itemid'+itemIndex+'" lay-verify="required" class="layui-input layui-col-xs1" type="text"  placeholder="必填" ></td>\n' +
             '                            <td>\n' +
             '                                <input   name="type'+itemIndex+'" id="type'+itemIndex+'" lay-verify="required" class="layui-input layui-col-xs1" type="text"  placeholder="必填" >\n' +
             '                            </td>\n' +
@@ -148,3 +148,7 @@ function delItem(obj) {
 }
 
 
+function toUpperCase(obj)
+{
+    obj.value = obj.value.toUpperCase()
+}

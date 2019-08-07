@@ -16,4 +16,6 @@ public interface EventService {
     String backEvent(int index,int event,HttpServletRequest request);
 
     String scrapEvent(int index, int event, HttpServletRequest request);
+
+    String oldAssetsEvent(int index, int event, HttpServletRequest request);
 }

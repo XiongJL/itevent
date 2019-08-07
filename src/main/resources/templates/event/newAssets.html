@@ -63,9 +63,9 @@
                                 <a class="addItem" href="#" onclick="addItem()"><i class="layui-icon layui-icon-add-1" style="font-size: 30px; color: #1E9FFF;"></i></a>
                                 <a class="delItem" href="#" onclick="delItem(this)"><i class="layui-icon layui-icon-close" style="font-size: 30px; color: #1E9FFF;"></i></a>
                             </td>
-                            <td><input   name="assetsid1" id="assetsid1"  class="layui-input layui-col-xs1" type="text"  placeholder="有贴资产牌请填写" ></td>
+                            <td><input  onkeyup="toUpperCase(this)" name="assetsid1" id="assetsid1"  class="layui-input layui-col-xs1" type="text"  placeholder="有贴资产牌请填写" ></td>
                             <td>
-                                <input  item="item" name="itemid1" id="itemid1"  class="layui-input " type="text" lay-verify="required" placeholder="" >
+                                <input  onkeyup="toUpperCase(this)" item="item" name="itemid1" id="itemid1"  class="layui-input " type="text" lay-verify="required" placeholder="" >
                             </td>
                             <td>
                                 <select id="type1" name="type1" lay-verify=""  lay-filter="type" lay-search></select>

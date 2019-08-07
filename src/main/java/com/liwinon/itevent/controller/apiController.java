@@ -1,6 +1,7 @@
 package com.liwinon.itevent.controller;
 
 import com.liwinon.itevent.entity.Model.BackModel;
+import com.liwinon.itevent.entity.second.Sap_Users;
 import com.liwinon.itevent.service.ApiService;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,16 @@ public class apiController {
     ApiService api;
     @GetMapping(value = "/getNameDepart")
     public JSONObject getNameDepart(String userid){
-        return api.getNameDepart(userid);
+        return api.getUserInfoById(userid);
     }
-
+    @GetMapping(value = "/getIdDep")
+    public JSONObject getIdDep(String name){
+        return api.getUserInfoByName(name);
+    }
+    @GetMapping(value = "/getIdPhone")
+    public JSONObject getIdPhone(String dep,String name){
+        return api.getIdPhone(dep,name);
+    }
     //获取类型
     @GetMapping(value = "/getTypes")
     public List<String> types(){

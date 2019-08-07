@@ -13,6 +13,8 @@ import com.liwinon.itevent.entity.primary.Access;
 import com.liwinon.itevent.entity.primary.Assets;
 import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.Item;
+import com.liwinon.itevent.entity.second.Sap_Users;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,22 +42,62 @@ public class ApiServiceImpl implements ApiService {
     @Autowired
     AccessDao accessDao;
     /**
-     * 返回JSON格式的 姓名和部门
+     * 返回JSON格式的 姓名和部门和手机
      * @param userid
      * @return
      */
     @Override
-    public JSONObject getNameDepart(String userid) {
+    public JSONObject getUserInfoById(String userid) {
         String result = sapDao.findNDByUserId(userid);
         if (!StringUtils.isEmpty(result)){
             String[] res = result.split(",");
             JSONObject json = new JSONObject();
-            if (res.length==2){
+            if (res.length==3){
                 json.accumulate("name",res[0]);
                 json.accumulate("department",res[1]);
+                json.accumulate("telephone",res[2]);
                 System.out.println(json);
                 return json;
             }
+        }
+        return null;
+    }
+    /**根据姓名查找*/
+    @Override
+    public JSONObject getUserInfoByName(String name) {
+        List<Sap_Users> result = sapDao.findNDByName(name);
+        if (result.size()>0){
+            JSONObject json = new JSONObject();
+            json.accumulate("nums",result.size());
+            JSONArray arr = new JSONArray();
+            for (Sap_Users sap : result){
+                JSONObject data = new JSONObject();
+                data.accumulate("userid",sap.getPERSONID());
+                data.accumulate("department",sap.getORGTXT());
+                data.accumulate("telephone",sap.getTELEPHONE());
+                arr.add(data);
+            }
+            json.accumulate("data",arr);
+            return json;
+        }
+        return null;
+    }
+
+    /**
+     * 根据部门,姓名查找唯一信息
+     *  如果部门一样还姓名一样,????再说
+     * @param dep
+     * @param name
+     * @return
+     */
+    @Override
+    public JSONObject getIdPhone(String dep, String name) {
+        Sap_Users result =  sapDao.findIDPhoneByDepName(dep,name);
+        if (result!=null){
+            JSONObject json = new JSONObject();
+            json.accumulate("userid",result.getPERSONID());
+            json.accumulate("telephone",result.getTELEPHONE());
+            return json;
         }
         return null;
     }
@@ -72,7 +114,7 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public String getUnit(String type) {
-        return itemDao.unitByType(type);
+        return itemDao.unitByType(type).get(0);
     }
     //获取快借用逾期的资产
     public List<Assets> colseAssets(){

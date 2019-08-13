@@ -3,7 +3,7 @@ spring:
     primary: #ITMS
       driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver  #sqlserver
       #单数据源更改为url
-      jdbc-url: jdbc:sqlserver://172.60.6.115;DatabaseName=test
+      jdbc-url: jdbc:sqlserver://172.60.6.115;DatabaseName=ITMS
       username: sa
       password: lw2019.
     second:   #HRM

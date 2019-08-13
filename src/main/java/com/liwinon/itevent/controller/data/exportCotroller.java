@@ -32,11 +32,11 @@ public class exportCotroller {
         String filepath = "D:\\ITEvent\\file\\export\\IT资产文档" + sdf.format(new Date()) + ".xlsx";
         //添加第一行
         data.add(new String[]{"ID","资产牌","使用人","工号","联系方式","物理位置",
-                "物料编码","物料名称","物料描述","状态","所在仓","购买日期"});
+                "物料编码","物料名称","物料描述","状态","所在仓","购买日期","备注"});
         List<String[]> values = assetsDao.export();
         for (String[] strs : values) {
             data.add(new String[]{strs[0], strs[1], strs[2], strs[3], strs[4], strs[5], strs[6],
-                    strs[7], strs[8], strs[9], strs[10], strs[11]});
+                    strs[7], strs[8], strs[9], strs[10], strs[11], strs[12]});
         }
         try {
             Excel.writeExcel(filepath, data);

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>IT事件管理系统</title>
-    <link th:href="@{../css/layui.css}" href="../css/layui.css" rel="stylesheet" type="text/css">
+    <link th:href="@{../css/layui.css}" href="../js/layui/css/layui.css" rel="stylesheet" type="text/css">
     <link th:href="@{../css/ite/common.css}" rel="stylesheet" type="text/css">
 </head>
 <body class="layui-layout-body">
@@ -66,7 +66,9 @@
                             <option value="H-6栋5F北">H-6栋5F北</option>
                         </select>
                     </div>
-
+                    <div class="layui-col-xs2 leftoffset">
+                        <input  class="layui-input  " type="text" name="remark" id="remark" lay-verify="" placeholder="备注" >
+                    </div>
                 </div>
                 <div class="layui-form" style="width: 96%;">
                     <table class="layui-table" >
@@ -89,8 +91,8 @@
                             <th>物料名称</th>
                             <th>物料描述</th>
                             <th>数量</th>
-                            <th>库存现有</th>
-                            <th>库存可用</th>
+                           <!--  <th>库存现有</th>
+                            <th>库存可用</th> -->
                             <th>单位</th>
                         </tr>
                         </thead>
@@ -113,12 +115,12 @@
                             <td>
                                 <input   name="count1" id="count1" value="1" class="layui-input" type="number" min="1" readonly lay-verify="required" placeholder="" >
                             </td>
-                            <td>
+                         <!--    <td>  库存现有
                                 <input   name="all1" id="all1" value="" class="layui-input" type="text" readonly placeholder="" >
                             </td>
-                            <td>
+                            <td>     库存可用
                                 <input   name="available1" id="available1" value="" class="layui-input" type="text" readonly placeholder="" >
-                            </td>
+                            </td> -->
                             <td>
                                 <input   name="unit1" id="unit1" class="layui-input" type="text"  readonly placeholder="" >
                             </td>
@@ -131,11 +133,32 @@
             <div class="layui-footer" style="background-color: white">
                 <div class="layui-row" >
                     <div class="layui-form-item layui-col-md4 layui-col-md-offset4">
-                        <button  type="button"  class="layui-btn layui-btn-fluid" lay-submit lay-filter="sub">提交</button>
+                        <button  type="button"  class="layui-btn  layui-btn-lg"  lay-submit lay-filter="sub">提交数据</button>
+                        <button type="button" id="import" data-toggle="modal"data-target="#update" class="layui-btn  layui-btn-lg" >上传数据</button>
+                        <button  type="button" id="dowexcel"  class="layui-btn  layui-btn-lg" lay-submit  >下载模板</button>
                     </div>
                 </div>
             </div>
         </form>
+        <script type="text/html" id="addModel">
+            <!-- Modal copy -->
+    <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="update">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal2" style="padding-left: 35%;">选择文件上传</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="text-align: center">
+                        <form id="upForm" method="post" action="#" enctype="multipart/form-data">
+                            <input id="uploadFile" disabled="disabled" />
+                                 <button id="upload"  type="button" >选择文件</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="uploadButton" style="margin-left: 40%;" type="button" class="layui-btn" >上传</button>
+                </div>
+    </div>
+        </script>
     </div>
 
 
@@ -143,7 +166,7 @@
 
 <!-- jQuery-->
 <script th:src="@{../js/jquery-3.4.0.min.js}" type="text/javascript"></script>
-<script th:src="@{../js/layui.js}"  type="text/javascript"></script>
+<script th:src="@{../js/layui/layui.all.js}"  type="text/javascript"></script>
 <script th:src="@{../js/ite/common.js}"></script>
 <script th:src="@{../js/ite/oldAssets.js}"></script>
 

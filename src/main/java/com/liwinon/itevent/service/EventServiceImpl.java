@@ -4,10 +4,20 @@ import com.liwinon.itevent.dao.primaryRepo.AccessDao;
 import com.liwinon.itevent.dao.primaryRepo.AssetsDao;
 import com.liwinon.itevent.dao.primaryRepo.EventDao;
 import com.liwinon.itevent.dao.primaryRepo.ItemDao;
+import com.liwinon.itevent.entity.EventEnum;
 import com.liwinon.itevent.entity.primary.Access;
 import com.liwinon.itevent.entity.primary.Assets;
 import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.Item;
+import com.liwinon.itevent.util.ExcelUtil;
+
+import net.sf.json.JSONObject;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +26,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -182,6 +194,7 @@ public class EventServiceImpl implements EventService {
         String phone = request.getParameter("phone");
         String name = request.getParameter("name");
         String location = request.getParameter("location");
+        String remark = request.getParameter("remark");
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String uuid1 = sdf.format(date)+"-"+event;
@@ -222,6 +235,7 @@ public class EventServiceImpl implements EventService {
                 a.setLocation(location);
                 a.setUserid(userid);
                 a.setUsername(name);
+                a.setRemark(remark);
                 count--;
             }else{
                 return "EmptyAssetsid";
@@ -870,5 +884,219 @@ public class EventServiceImpl implements EventService {
         return "ok";
     }
 
+    /**
+     * 解析Excel并保存数据
+     *
+     * @param columns
+     * @param filePath
+     */
+    @Override
+    @Transactional
+	public JSONObject resolveExcel(String path) {
+    	JSONObject json=new JSONObject();
+		  Workbook wb = null;
+	        Sheet sheet = null;
+	        Row row = null;
+	     //   List<Map<String, String>> list = null;
+	      //  String cellData = null;
+	        wb = ExcelUtil.readExcel(path);
+	        String cuowu1="";
+	        String cuowu2="";
+	        String cuowu3="";
+	        int a=0;
+	        int b=0;
+	    //	Event e=new Event();
+	        if (wb != null) {
+	            //用来存放表中数据
+	          //  list = new ArrayList<Map<String, String>>();
+	            //获取第一个sheet
+	            sheet = wb.getSheetAt(0);
+	            //获取最大行数
+	            int rownum = sheet.getPhysicalNumberOfRows();
+	            //获取第一行
+	            row = sheet.getRow(0);
+	            //获取最大列数
+	            int colnum = row.getPhysicalNumberOfCells();
+	            try {
+	            for (int i = 1; i < rownum; i++) {
+	            	row = sheet.getRow(i);  //获取每一行数据
+	            	Event ev=new Event();
+		   			Assets as=new Assets();
+		   			Item it=new Item();
+	            	for(int j = 0; j < colnum; j++) { //有最大列约束读取的列数
+	            		if(row.getCell(j)!=null) {
+	            			as.setId((int) Float.parseFloat(row.getCell(j++).toString()));	   
+	            		}else {
+	            			j++;
+	            		}
+	            		if(row.getCell(j)!=null) {
+	            			as.setAssetsid(row.getCell(j++).toString());
+	            		}else {
+	            			j++;
+	            		}
+	            		if(row.getCell(j)!=null) {
+	            			as.setUsername(row.getCell(j++).toString());
+	            		}else {
+	            			j++;
+	            		}
+	            		if(row.getCell(j)!=null) {
+	            			as.setUserid(row.getCell(j++).toString());
+	            		}else {
+	            			j++;
+	            		}
+	            		if(row.getCell(j)!=null) {
+	            			j++;
+	            			//ev.setPhone(row.getCell(j++).toString());
+	            		}else {
+	            			j++;
+	            		}
+	            		if(row.getCell(j)!=null) {
+	            			as.setLocation(row.getCell(j++).toString());
+	            		}else {
+	            			j++;
+	            		}
+	            		if(row.getCell(j).toString()!=null) {
+	            			as.setItemid(row.getCell(j++).toString());
+	            			//it.setItemid(as.getItemid());
+	            		}else {
+	            			j++;
+	            		}
+	            		if(row.getCell(j)!=null) {   
+	            			j++;//it.setType(row.getCell(j++).toString());
+	            		}else {
+	            			j++;
+	            		}
+	            		if(row.getCell(j)!=null) {
+	            			j++;//it.setBrand(row.getCell(j++).toString());
+	            		}else {
+	            			j++;
+	            		}
+	            		if(row.getCell(j)!=null) {
+	            			if(zhuangtai(row.getCell(j).toString())==-1) {
+	            				cuowu1="上传的文档中资产id为"+as.getId()+"对应的状态必填切按照规范填写,";
+	            				j=12;
+	            				break;
+	            			}else {
+	            				as.setState(zhuangtai(row.getCell(j++).toString()));	  
+	            			}
+	            		}else {
+	            			j++;
+	            		}
+	            		if(row.getCell(j)!=null) {
+	            			if(weizi(row.getCell(j).toString())==-1) {
+	            				cuowu2="上传的文档中资产id为"+as.getId()+"对应的位置必填切按照规范填写,";
+	            				j=12;
+	            				break;
+	            			}else {
+	            				as.setState(weizi(row.getCell(j++).toString()));	 
+	            			}
+	            		}else {
+	            			j++;
+	            		}
+	            		if(row.getCell(j)!=null) {
+	            			as.setRemark(row.getCell(j++).toString());
+	            		}else {
+	            			j++;
+	            		}
+	            	/*if(as.getUserid()!=null||!"".equals(as.getUserid())) {   //拿工号查询出来的数据不能保持唯一性，最好不做查询
+	            		Event ev2=eventDao.findByUserid(as.getUserid());    //出现重复多条数据，程序无措
+	            		ev.setUserid(ev2.getUserid());	            		
+	            		eventDao.save(ev);	            		
+	            	}else {
+	            		eventDao.findByUserid(as.getUserid());
+	            		eventDao.save(ev);	            		
+	            	}*/
+	            	
+//	            		if(assetsDao.findById(as.getId())!=null) {
+//	            			Assets as2=assetsDao.findById(as.getId());
+//		            		System.out.println(as.getId());
+//			                 //更改出库的状态 , 并添加出入记录
+//			            	 as.setId(as2.getId());
+//			                 assetsDao.save(as);   
+//	            		}else {
+	            		//}
+	            		//Assets as2=assetsDao.findById(as.getId());
+		                 //更改出库的状态 , 并添加出入记录
+		            	// as.setId(as2.getId());
+	            	/*if(itemDao.findByItemid(as.getItemid())==null) {
+	            		//itemDao.save(it);	            		
+	            	}else if(!"".equals(as.getItemid())) {
+	            		if(itemDao.findByItemid(as.getItemid())!=null) {
+	            			Item it2=itemDao.findByItemid(as.getItemid());
+		            		System.out.println(as.getId());
+			                 //更改出库的状态 , 并添加出入记录
+		            		it.setItemid(it2.getItemid());
+			                 itemDao.save(it);   
+	            		}else {
+	            			 itemDao.save(it);            			            			
+	            		}*/
+	            		//Assets as2=assetsDao.findById(as.getId());
+		                 //更改出库的状态 , 并添加出入记录
+	            	//}
+	            	/*Item it2 = itemDao.findByItemid(as.getItemid());
+	                 //更改出库的状态 , 并添加出入记录
+	                 it.setItemid(it2.getItemid());
+	                 itemDao.save(it);*/
+	            	}
+	            	Assets as2=assetsDao.findById(as.getId());
+	            	if(as2!=null) {
+	            		assetsDao.save(as); 
+	            		b++;
+	            	}else {
+	            		a++;
+	            		cuowu3="新增资产牌为"+as.getAssetsid()+"的资产数据";
+	            		assetsDao.save(as); 	  
+	            		b++;
+	            	}
+	            }
+	        }catch (Exception e) {
+	            json.accumulate("code",400);
+	            json.accumulate("msg","发现"+cuowu1+cuowu2+"解析过程中发生未知错误");
+	            json.accumulate("count",400);
+	    		return json;
+			} 
+	   }
+	        System.out.println(cuowu1);
+	        System.out.println(cuowu1);
+	        if("".equals(cuowu1)&&"".equals(cuowu2)) {
+	            json.accumulate("code",0);
+	            json.accumulate("msg","解析成功");
+	            json.accumulate("count",a);
+	            json.accumulate("countb",b);
+	    		return json;
+	        }else {
+	            json.accumulate("code",200);
+	            json.accumulate("msg",cuowu1+cuowu2);
+	            json.accumulate("count",a);
+	            json.accumulate("countb",b);
+	    		return json;
+	        }
+    }
+
+	
+	public static Integer zhuangtai(String a) {
+		//资产状态(0在库/1不在库/2不在库借用/3废品)
+		if("在库".equals(a)) {
+			return 0;
+		}else if("不在库".equals(a)) {
+			return 1;
+		}else if("不在库借用".equals(a)) {
+			return 2;
+		}else if("废品".equals(a)) {
+			return 3;
+		}else {
+			return -1;
+		}
+	}
+	public static Integer weizi(String a) {
+		//存储位置 0(资产仓),1(费用仓) 出库后默认1
+		if("资产仓".equals(a)) {
+			return 0;
+		}else if("费用仓".equals(a)) {
+			return 1;
+		}else {
+			return -1;			
+		}
+	}
 
 }

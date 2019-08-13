@@ -63,4 +63,6 @@ public interface EventDao extends JpaRepository<Event,String>, JpaSpecificationE
 
     @Query(value = "select distinct e.phone from ITE_Event e where e.userid =:userid",nativeQuery = true)
     String[] findPhoneByUserid(String userid);
+
+	Event findByUserid(String userid);
 }

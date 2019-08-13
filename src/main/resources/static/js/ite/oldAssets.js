@@ -7,7 +7,7 @@ var token = localStorage.getItem("token");
 var element,form,layer = null
 //记录类型更改的值.
 var totaltype = "";
-layui.use(['form','layer','element','laydate'], function(){
+layui.use(['form','layer','element','laydate','upload'], function(){
     element = layui.element,
         form = layui.form,
         layer = layui.layer,
@@ -93,7 +93,102 @@ layui.use(['form','layer','element','laydate'], function(){
         })
         return false;
     });
-
+    
+ // 搜索按钮点击事件
+	$("#dowexcel").click(function() {
+		 window.location.href="/itevent/oldAssets/dowexcel";
+	});
+	// 添加按钮点击事件
+	$("#import").click(function() {
+		addtree();			
+	});
+	function addtree() {  //添加组织节点名称弹出框
+		layer.open({
+			type : 1,
+			title :'上传',
+			area : '350px',
+			offset : '120px',
+			content : $("#addModel").html()
+		});
+		var upload = layui.upload;
+		upload.render({
+			elem: '#upload',
+			url: '/itevent/oldAssets/excel' ,
+			exts: 'xlsx|xls',
+			accept: 'file',
+			auto: false,//选择文件后不自动上传
+			bindAction: '#uploadButton',
+			//选择文件后的回调
+			choose: function (obj) {
+			obj.preview(function (index, file, result) {
+				$('#uploadFile').val(file.name);
+				})
+			},
+			
+			//layer.close(index); 
+			//操作成功的回调
+			done: function (res, index, upload) {
+				 if(res.code == 0){
+					 var index;
+						layer.msg('文件解析中',function(){
+						  index = layer.load(3);
+						});
+					 layer.msg("上传成功", function () {   
+						 $.ajax({
+							 async : false,
+							 type : "get",
+							 url : "/itevent/oldAssets/resolvExcel",
+							 dataType : "json",
+							 data : {"path":res.data},
+							 success : function(result) {
+								 layer.close(index);
+								 var a="";
+								 var b="";
+								 if(result.count!=0){
+									a='新增数据'+result.count+'条'; 
+									a=a+'<br>'+result.msg;
+								 }
+								 if(result.countb!=0){
+									b='成功上传'+result.countb+'条'; 
+									 b=b+result.msg;
+								 }
+								 if(result.code=="0"){
+									 layer.msg(b+'<br>'+a,function(){
+										 layer.closeAll('page');
+									 })
+								 }else if(result.code=="200"){
+									 layer.open({
+										  title: 'excel上传内容提示'
+										  ,content:b+'<br>'+a
+										}); 
+										 layer.closeAll('page');
+								 }else if(result.code=="400"){
+									 layer.open({
+										  title: 'excel解析时发生未知错误'
+										  ,content:'请重新上传提示数据<br>'+result.msg
+										}); 
+										 layer.closeAll('page');
+								 }		
+							 },
+							 error:function(error){
+								 layer.close(index);
+								 layer.alert('解析失败！');
+							 }
+						 });
+					 });
+				 }else{
+					 layer.alert('上传失败！'); 
+				 }
+			},
+			//上传错误回调
+			error: function (index, upload) {
+					layer.alert('上传失败！');
+				}
+			});
+		$("#btnCancefile").click(function() {
+			layer.closeAll('page');
+		});
+	}
 });
 $(function () {
     //添加导航栏选中样式
@@ -136,12 +231,12 @@ function addItem() {
             '                            <td>\n' +
             '                                <input id="count'+itemIndex+'" name="count'+itemIndex+'" value="1" readonly class="layui-input" type="number" min="1"   lay-verify="required" placeholder="" >\n' +
             '                            </td>\n' +
-            ' <td>\n' +
+        /*    ' <td>\n' +                      库存现有
             '                                <input   name="all'+itemIndex+'" id="all'+itemIndex+'" value="" class="layui-input" type="text" readonly placeholder="" >\n' +
             '                            </td>\n' +
-            '                            <td>\n' +
+            '                            <td>\n' +    库存可用
             '                                <input   name="available'+itemIndex+'" id="available'+itemIndex+'" value="" class="layui-input" type="text" readonly placeholder="" >\n' +
-            '                            </td>' +
+            '                            </td>' +*/
             '                            <td>\n' +
             '                                <input  id="unit'+itemIndex+'" name="unit'+itemIndex+'" class="layui-input" type="text"   readonly placeholder="" >\n' +
             '                            </td>\n' +
@@ -175,6 +270,5 @@ function delItem(obj) {
 
     }
 }
-
 
 

@@ -378,7 +378,7 @@ public class ApiServiceImpl implements ApiService {
                 state = "在外";
             }else if (a.getState()==2){
                 state = "借用中";
-            }else if (a.getState()==2){
+            }else if (a.getState()==3){
                 state = "已报废";
             }
             String store = "";

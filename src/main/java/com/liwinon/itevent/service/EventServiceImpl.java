@@ -27,6 +27,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -930,7 +931,8 @@ public class EventServiceImpl implements EventService {
 	            			j++;
 	            		}
 	            		if(row.getCell(j)!=null) {
-	            			as.setAssetsid(row.getCell(j++).toString());
+	            			BigDecimal one = new BigDecimal(row.getCell(j++).toString());
+	            			as.setAssetsid(one.toPlainString());
 	            		}else {
 	            			j++;
 	            		}
@@ -940,7 +942,8 @@ public class EventServiceImpl implements EventService {
 	            			j++;
 	            		}
 	            		if(row.getCell(j)!=null) {
-	            			as.setUserid(row.getCell(j++).toString());
+	            			BigDecimal one = new BigDecimal(row.getCell(j++).toString()); 
+	            			as.setUserid(one.toPlainString());
 	            		}else {
 	            			j++;
 	            		}

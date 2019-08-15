@@ -11,7 +11,13 @@
                     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                     <ul class="layui-nav layui-nav-tree"  lay-filter="test">
                         <li class="layui-nav-item layui-nav-itemed">
-                            <a class="" href="javascript:;">发起事件</a>
+                            <a class="" href="javascript:;">事件管理</a>
+                            <dl class="layui-nav-child">
+                                <dd><a id="startEvent" href="">发起事件</a></dd>
+                            </dl>
+                        </li>
+                        <li class="layui-nav-item layui-nav-itemed">
+                            <a class="" href="javascript:;">配件管理</a>
                             <dl class="layui-nav-child">
                                 <dd><a id="subBill" href="/itevent/subBill">提单领取</a></dd>
                                 <dd><a id="oldToNew" href="/itevent/exchange">以旧换新</a></dd>
@@ -20,7 +26,7 @@
                             </dl>
                         </li>
                         <li class="layui-nav-item layui-nav-itemed">
-                            <a class="" href="javascript:;">入库</a>
+                            <a class="" href="javascript:;">配件入库</a>
                             <dl class="layui-nav-child">
                                 <dd><a id="newItem" href="/itevent/Item">物料登记</a></dd>
                                 <dd><a id="newAssets" href="/itevent/newAssets">新资产入库</a></dd>

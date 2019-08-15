@@ -887,8 +887,6 @@ public class EventServiceImpl implements EventService {
     /**
      * 解析Excel并保存数据
      *
-     * @param columns
-     * @param filePath
      */
     @Override
     @Transactional

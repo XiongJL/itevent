@@ -25,6 +25,14 @@
         font-weight: 300;
         color: #009688;
     }
+    .myicon{
+        font-size: 40px;
+        height: 60px;
+        line-height: 60px;
+    }
+    .setCenter{
+        text-align: center;
+    }
 </style>
 </head>
 <body class="layui-layout-body">
@@ -83,8 +91,8 @@
                                 </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                    </div>
+                 </div>
                 <div class="layui-col-md9">
                     <div class="layui-card" style="margin-right: 7%">
                         <div class="layui-card-header">事件数量
@@ -108,12 +116,55 @@
                         </div>
                     </div>
                 </div>
-        </div>
+                <div class="layui-col-md4">
+                    <div class="layui-card">
+                        <div class="layui-card-header">工作台</div>
+                        <div class="layui-card-body">
+                        <div class="layui-carousel " lay-anim="" lay-indicator="inside" lay-arrow="none" style="width: 100%; height: 200px;">
+                            <div carousel-item="">
+                                <ul class="layui-row layui-col-space10 layui-this">
+                                    <li class="layui-col-xs4 setCenter">
+                                        <a lay-href="app/content/comment" class="layadmin-backlog-body">
+                                            <p><i class="layui-icon layui-icon-survey myicon"></i></p>
+                                            <cite>发起事件</cite>
+                                        </a>
+                                    </li>
+                                    <li class="layui-col-xs4 setCenter">
+                                        <a lay-href="app/forum/list" class="layadmin-backlog-body">
+                                            <p><i class="layui-icon layui-icon-table myicon"></i></p>
+                                            <cite>全部事件</cite>
+                                        </a>
+                                    </li>
+                                    <li class="layui-col-xs4 setCenter">
+                                        <a href="javascript:;" onclick="layer.tips('不跳转', this, {tips: 3});" class="layadmin-backlog-body">
+                                            <p><i class="layui-icon layui-icon-note myicon" ></i></p>
+                                            <cite>我的代办</cite>
+                                        </a>
+                                    </li>
+                                    <li class="layui-col-xs4 setCenter">
+                                        <a lay-href="/senior/im/">
+                                            <p><i class="layui-icon layui-icon-loading-1 layui-icon layui-anim layui-anim-rotate layui-anim-loop myicon" ></i></p>
+                                            <cite>处理中事件</cite>
+                                        </a>
+                                    </li>
+                                    <li class="layui-col-xs4 setCenter">
+                                        <a lay-href="template/goodslist" class="layadmin-backlog-body">
+                                            <p><i class="layui-icon layui-icon-flag myicon" ></i></p>
+                                            <cite>我经办的事件</cite>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
     </div>
-        <div class="layui-footer" style="background-color: white">
-            © Liwinon.com
-        </div>
+<!--        <div class="layui-footer" style="background-color: white">-->
+<!--            © Liwinon.com-->
+<!--        </div>-->
 </div>
 </div>
 <!-- jQuery-->

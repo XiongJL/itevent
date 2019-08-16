@@ -85,6 +85,8 @@ layui.use(['form','layer','element','laydate'], function(){
 $(function () {
     //添加导航栏选中样式
     $("#oldToNew").addClass("layui-this");
+    $("#eventManager-nav").removeClass("layui-nav-itemed");
+    $("#assets-nav").addClass("layui-nav-itemed");
     //查询所有类型,并重新渲染Select
     allTypes(1);
     //赋值初始化数值

@@ -51,6 +51,63 @@ function chushihua(aaa){
 			}
 		});	
 }
+$.ajax({
+	async : false,
+	type : "GET",
+	url : "/itevent/api/getTypes",   //物料名称
+	dataType : "json",
+	data : {},
+	 beforeSend:function(XMLHttpRequest){
+         XMLHttpRequest.setRequestHeader("token",token);
+     },
+	success : function(res) {
+		data=res;
+		var option = "";
+		for(var i = 0; i <data.length; i++) {
+			option += '<option value="'+data[i]+'">' + data[i] + '</option>';
+		}
+		select2=data[0];
+		$("#type").append(option);
+		chushihuab(select2);
+	}
+});
+function chushihuab(select2){
+	var bb;
+	$.ajax({
+		async : false,
+		type : "GET",
+		url : "/itevent/api/getBrands",
+		dataType : "json",
+		 beforeSend:function(XMLHttpRequest){
+	            XMLHttpRequest.setRequestHeader("token",token);
+	        },
+		data : {type:select2},
+		success : function(res) {
+			$("#brand").empty(); 
+			data=res;
+			var option = "";
+			bb=data[0];
+			for(var i = 0; i <data.length; i++) {
+				option += '<option value="'+data[i]+'">' + data[i] + '</option>';
+			}
+			$("#brand").append(option);
+			form.render('select');
+		}
+	});	
+	$("#itemid").empty();
+    $.ajax({
+        url:"/itevent/api/getItemId",
+        data: {type:select2,brand:bb},
+        beforeSend:function(XMLHttpRequest){
+            XMLHttpRequest.setRequestHeader("token",token);
+        },
+        success:function (res) {
+            if (res!=null && res!=""){
+                $("#itemid").val(res)
+            }
+        }
+    })
+}
 layui.use(['form','layer','element','laydate'], function(){
     element = layui.element,
         form = layui.form,
@@ -118,6 +175,61 @@ layui.use(['form','layer','element','laydate'], function(){
 				}
 			});	
 		}); 
+    form.on('select(type1)', function(data){
+		// alert(data.value); //得到被选中的值
+    	var bb;
+		 var aaa=data.value;
+		 $.ajax({
+				async : false,
+				type : "GET",
+				url : "/itevent/api/getBrands",
+				dataType : "json",
+				 beforeSend:function(XMLHttpRequest){
+			            XMLHttpRequest.setRequestHeader("token",token);
+			        },
+				data : {type:aaa},
+				success : function(res) {
+					$("#brand").empty(); 
+					data=res;
+					var option = "";
+					bb=data[0];
+					for(var i = 0; i <data.length; i++) {
+						option += '<option value="'+data[i]+'">' + data[i] + '</option>';
+					}
+					$("#brand").append(option);
+					form.render('select');
+				}
+			});	
+		 $("#itemid").empty();
+		    $.ajax({
+		        url:"/itevent/api/getItemId",
+		        data: {type:aaa,brand:bb},
+		        beforeSend:function(XMLHttpRequest){
+		            XMLHttpRequest.setRequestHeader("token",token);
+		        },
+		        success:function (res) {
+		            if (res!=null && res!=""){
+		                $("#itemid").val(res)
+		            }
+		        }
+		    })
+		 
+		});
+    form.on('select(brand1)', function(data){
+	    $.ajax({
+	        url:"/itevent/api/getItemId",
+	        data: {type:$("#type").val(),brand:data.value},
+	        beforeSend:function(XMLHttpRequest){
+	            XMLHttpRequest.setRequestHeader("token",token);
+	        },
+	        success:function (res) {
+	            if (res!=null && res!=""){
+	                $("#itemid").val(res)
+	            }
+	        }
+	    })
+    });
+    
     //通过layui验证输入后提交 ,需要将提交按钮放入form内
     form.on('submit(sub)', function (data) {
         console.log($(data.form).serialize())
@@ -136,6 +248,9 @@ layui.use(['form','layer','element','laydate'], function(){
                 console.log(res)
                if (res.data=="ok"){
                     layer.msg("操作成功",{icon: 1})
+                    setTimeout(function () {
+                        location.reload();
+                    },2000)
                 }else{
                     layer.msg(res.msg)
                 }

@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.liwinon.itevent.entity.primary.EventStep;
 
-public interface EventStepDao extends JpaRepository<EventStep,String>, JpaSpecificationExecutor<EventStep>{
+public interface EventStepDao extends JpaRepository<EventStep,Integer>, JpaSpecificationExecutor<EventStep>{
 
 }

@@ -67,12 +67,16 @@ public class InitiationServiceImpl implements InitiationService {
 		JSONObject json=new JSONObject();
 		EventStep eventStep=new EventStep();
 		Event event=new Event();
+		String level_1=request.getParameter("level_1");
+		String level_2=request.getParameter("level_2");
+		String description=request.getParameter("description");
+		Integer etypeid=eventTypeDao.findAllBylevel_2(level_2);
+		
 		//生成it事件id
 		Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        String uuid1 = sdf.format(date)+"-"+event;
+        String uuid1 = sdf.format(date)+"-"+etypeid;
         String uuid = uuid1+"-"+1;
-        System.out.println(uuid);
         eventStep.setUuid(uuid);
         String step=request.getParameter("step");
 		eventStep.setStep(step);
@@ -96,11 +100,6 @@ public class InitiationServiceImpl implements InitiationService {
 		
 		
 		event.setUuid(uuid);
-		String level_1=request.getParameter("level_1");
-		String level_2=request.getParameter("level_2");
-		String description=request.getParameter("description");
-		System.out.println(level_1+"--------"+level_2+"---------------"+description);
-		Integer etypeid=eventTypeDao.finddescription(description);
 		event.setEvent(etypeid);
 		
 		String userid=request.getParameter("userid");
@@ -121,7 +120,11 @@ public class InitiationServiceImpl implements InitiationService {
 		}
 		String remark=request.getParameter("remark");
 		event.setRemark(remark);
+		event.setState("受理中");
+		String itemid=request.getParameter("itemid");
+		event.setItemid(itemid);
 		eventDao.save(event);
+		
 		json.accumulate("code",200);
         json.accumulate("msg","记录成功");
         json.accumulate("data","ok");

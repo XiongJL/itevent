@@ -9,7 +9,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
 
 /**
- *   工具类   获取用户发送的消息, 返回发送者id, 消息接收者id, 发送内容, 内容类型 ,发送时间(时间戳)
+ *   工具类,  解析发送的密文  ---> XML ,并读取XML
+ *   获取用户发送的消息, 返回发送者id, 消息接收者id, 发送内容, 内容类型 ,发送时间(时间戳)
  * @author 1902268014
  *
  */
@@ -64,7 +65,15 @@ public class GetMSG {
 		return Root.getElementsByTagName("MsgId").item(0).getTextContent(); 
 	}
 	/**获取应用的id*/
-	public String getAppid() {
+	public String getAgentID() {
 		return Root.getElementsByTagName("AgentID").item(0).getTextContent(); 
+	}
+	/**获取事件类型*/
+	public String getEvent() {
+		return Root.getElementsByTagName("Event").item(0).getTextContent();
+	}
+	/**获取事件号*/
+	public String getEventKey() {
+		return Root.getElementsByTagName("EventKey").item(0).getTextContent();
 	}
 }

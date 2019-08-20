@@ -1,27 +1,29 @@
 package com.liwinon.itevent.controller.qywx;
 
-import com.liwinon.itevent.annotation.PasssToken;
+import com.liwinon.itevent.qywx.WxConfig;
+import com.liwinon.itevent.service.ReceiveService;
+import com.liwinon.itevent.qywx.WxApi;
 import com.liwinon.itevent.util.AesException;
+import com.liwinon.itevent.util.GetMSG;
 import com.liwinon.itevent.util.WXBizMsgCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
-import java.net.URLDecoder;
 
 @Controller
 @RequestMapping("/itevent")
 public class ReceiveController {
-    private static final String Token = "j2guDGx";
-    private static final String EncodingAESKey = "f3DERzDMO2ys9X4W0F7YNDkN353F93toR86UGDKoK7u";
-    private static final String Corpid = "wwbc7acf1bd2c6f766";
+    //接收消息接口token和秘钥
 
+    @Autowired
+    ReceiveService receiveService;
 
     /**
      * 验证接口
@@ -64,31 +66,17 @@ public class ReceiveController {
     public String receive(String msg_signature,String timestamp,String nonce,@RequestBody String body){
         WXBizMsgCrypt wxcpt = null;
 		try {
-			wxcpt = new WXBizMsgCrypt(Token, EncodingAESKey, Corpid);
+			wxcpt = new WXBizMsgCrypt(WxConfig.Token.getValue(), WxConfig.EncodingAESKey.getValue(), WxConfig.Corpid.getValue());
 		} catch (AesException e1) {
 			e1.printStackTrace();
 		}
-		 System.out.println("sReqMsgSig: "+msg_signature);
-		 System.out.println("sReqTimeStamp: "+timestamp);
-		 System.out.println("sReqNonce: "+nonce);
-		 String sMsg;
-			try {
-				sMsg = wxcpt.DecryptMsg(msg_signature, timestamp, nonce, body);
-				System.out.println("after decrypt msg: " + sMsg);
-				// TODO: 解析出明文xml标签的内容进行处理
-				// For example:
-				DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-				DocumentBuilder db = dbf.newDocumentBuilder();
-				StringReader sr = new StringReader(sMsg);
-				InputSource is = new InputSource(sr);
-				Document document = db.parse(is);
-				Element root = document.getDocumentElement();
-				String userName =  root.getElementsByTagName("ToUserName").item(0).getTextContent();
-
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		System.out.println("sReqMsgSig: "+msg_signature);
+		System.out.println("sReqTimeStamp: "+timestamp);
+		System.out.println("sReqNonce: "+nonce);
+        GetMSG msg = new GetMSG(msg_signature,timestamp,nonce,body,wxcpt);
+        if (WxConfig.Corpid.getValue().equals(msg.getToUserNmae())){
+            receiveService.GetCorp(msg);
+        }
         return "ok";
     }
 }

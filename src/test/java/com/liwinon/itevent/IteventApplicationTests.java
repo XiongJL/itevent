@@ -32,6 +32,7 @@ public class IteventApplicationTests {
     WxApi wxApi;
     @Test
     public void contextLoads() {
+        //URL是点击任务卡片本身跳转的页面 , 回调接口依然是接收服务器端口
      wxApi.sendMissionToIT(new String[]{"1902268014","1907128000"},"某某的服务申请",
              " 申请类型: 软件无法正常工作<br> 申请描述: 用户填写的内容<br>" +
                      " 事件等级: 加急处理",

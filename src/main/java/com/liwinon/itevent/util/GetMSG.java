@@ -72,8 +72,12 @@ public class GetMSG {
 	public String getEvent() {
 		return Root.getElementsByTagName("Event").item(0).getTextContent();
 	}
-	/**获取事件号*/
+	/**获取事件号,当是卡片任务时获取的为btn:key按钮值*/
 	public String getEventKey() {
 		return Root.getElementsByTagName("EventKey").item(0).getTextContent();
+	}
+	/**获取卡片任务id*/
+	public String getTaskId() {
+		return Root.getElementsByTagName("TaskId").item(0).getTextContent();
 	}
 }

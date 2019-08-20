@@ -22,6 +22,7 @@ public class Event {
     private String oaid; //OA单单号
     private String orderid; //请购单单号
     private String remark;
+    private String state;//事件状态
 
     public Event() {
     }
@@ -48,6 +49,14 @@ public class Event {
         this.oaid = oaid;
         this.orderid = orderid;
         this.remark = remark;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public Date getApplydate() {

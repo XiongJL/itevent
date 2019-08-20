@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class TokenUtil {
     /**
-     * 获取token
+     * 获取JWT令牌token
      * Algorithm.HMAC256():使用HS256生成token,密钥则是用户的密码，唯一密钥的话可以保存在服务端。
      * withAudience()存入需要保存在token的信息，这里我把用户ID存入token中
      * @param admin

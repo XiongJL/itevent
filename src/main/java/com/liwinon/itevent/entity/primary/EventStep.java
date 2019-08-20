@@ -19,6 +19,7 @@ public class EventStep {
 	    private String executorId;
 	    private String executorName;
 	    private Date stepDate;
+	    private String imgurl;
 		public int getStepId() {
 			return stepId;
 		}
@@ -55,19 +56,17 @@ public class EventStep {
 		public void setStepDate(Date stepDate) {
 			this.stepDate = stepDate;
 		}
+		public String getImgurl() {
+			return imgurl;
+		}
+		public void setImgurl(String imgurl) {
+			this.imgurl = imgurl;
+		}
 		@Override
 		public String toString() {
 			return "EventStep [stepId=" + stepId + ", uuid=" + uuid + ", step=" + step + ", executorId=" + executorId
-					+ ", executorName=" + executorName + ", stepDate=" + stepDate + "]";
+					+ ", executorName=" + executorName + ", stepDate=" + stepDate + ", imgurl=" + imgurl + "]";
 		}
-		public EventStep() {
-			super();
-			this.stepId = stepId;
-			this.uuid = uuid;
-			this.step = step;
-			this.executorId = executorId;
-			this.executorName = executorName;
-			this.stepDate = stepDate;
-		}
+		
 	    
 }

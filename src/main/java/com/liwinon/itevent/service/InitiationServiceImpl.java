@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import com.liwinon.itevent.dao.primaryRepo.EventStepDao;
 import com.liwinon.itevent.dao.primaryRepo.EventTypeDao;
 import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.EventStep;
+import com.liwinon.itevent.qywx.WxApi;
 
 import net.sf.json.JSONObject;
 @Service
@@ -60,7 +62,9 @@ public class InitiationServiceImpl implements InitiationService {
 	EventDao eventDao;
 	@Autowired
 	EventStepDao eventStepDao;
-	
+	@Autowired
+	WxApi wxApi;
+	 
 	@Override
 	@Transactional
 	public JSONObject postinitiation(HttpServletRequest request) {
@@ -78,46 +82,22 @@ public class InitiationServiceImpl implements InitiationService {
         String uuid1 = sdf.format(date)+"-"+etypeid;
         String uuid = uuid1+"-"+1;
         eventStep.setUuid(uuid);
-        String step=request.getParameter("step");
-		eventStep.setStep(step);
-		String executorid=request.getParameter("executorid");
-		eventStep.setExecutorId(executorid);
-		String executorname=request.getParameter("executorname");
-		eventStep.setExecutorName(executorname);
-		String stepdate=request.getParameter("stepdate");
-		
-		SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		try {
-			Date datea = fmt.parse(stepdate.trim());
-			eventStep.setStepDate(datea);
-		} catch (ParseException e) {
-			json.accumulate("code",400);
-	        json.accumulate("msg","请按标准选择时间");
-	        json.accumulate("data","no");
-			return json;
-		}
+		eventStep.setStep("1");
+		eventStep.setStepDate(new Date());
 		eventStepDao.save(eventStep);
 		
 		
 		event.setUuid(uuid);
 		event.setEvent(etypeid);
-		
 		String userid=request.getParameter("userid");
 		event.setUserid(userid);
 		String phone=request.getParameter("phone");
 		event.setPhone(phone);
-		String adminuser=request.getParameter("adminuser");
+		 //获取操作人员
+        HttpSession session = request.getSession();
+        String adminuser = (String)session.getAttribute("username");
 		event.setAdminuser(adminuser);
-		String datea=request.getParameter("date");
-		try {
-			Date datea1 = fmt.parse(datea.trim());
-			event.setDate(datea1);
-		} catch (ParseException e) {
-			json.accumulate("code",400);
-			json.accumulate("msg","请按标准选择时间");
-	        json.accumulate("data","no");
-			return json;
-		}
+		event.setDate(new Date());
 		String remark=request.getParameter("remark");
 		event.setRemark(remark);
 		event.setState("受理中");
@@ -128,6 +108,13 @@ public class InitiationServiceImpl implements InitiationService {
 		json.accumulate("code",200);
         json.accumulate("msg","记录成功");
         json.accumulate("data","ok");
+      /*  wxApi.sendMissionToIT(new String[]{userid,executorid},level_1+"的服务申请",
+                " 申请类型: 软件无法正常工作<br> 申请描述: 用户填写的内容<br>" +
+                        " 事件等级: 加急处理",
+                "6",
+                new String[]{"1","2"},new String[]{"拒接","接收"},new String[]{"已拒接","开始处理"},"http://www.baidu.com");
+        */
+        
 		return json;
 	}
 

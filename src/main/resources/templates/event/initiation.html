@@ -19,6 +19,7 @@
         </fieldset>
          <div class="layui-row">
 	        <form class="layui-form" action=""  id="initation">
+	        	<input  hidden="hidden" name="adminuser" th:value="${adminuser}"/>
 		        <div class="layui-col-xs12  layui-col-md4">
 					    <label class="layui-form-label">选择事件</label>
 					    <div class="layui-input-block">
@@ -59,36 +60,6 @@
 					    	<input name="itemid" id="itemid" class="layui-input" lay-verify="" lay-filter="" />
 				    </div>
 			    </div>
-			    <div class="layui-col-xs12  layui-col-md4" style="margin-top: 10px;">
-				    <label class="layui-form-label">事件环节</label>
-				    <div class="layui-input-block">
-					    	<select name="step" id="step" lay-verify="" lay-filter="">
-					    		<option value="1">1</option>
-					    		<option value="2">2</option>
-					    		<option value="3">3</option>
-					    		<option value="4">4</option>
-					    		<option value="5">5</option>
-					    	</select>
-				    </div>
-			    </div>
-			    <div class="layui-col-xs12  layui-col-md4" style="margin-top: 10px;">
-				    <label class="layui-form-label">执行人工号</label>
-				    <div class="layui-input-block">
-					    	<input name="executorid" id="executorid" class="layui-input" lay-verify="" lay-filter="" />
-				    </div>
-			    </div>
-			    <div class="layui-col-xs12  layui-col-md4" style="margin-top: 10px;">
-				    <label class="layui-form-label">执行人姓名</label>
-				    <div class="layui-input-block">
-					    	<input name="executorname" id="executorname"class="layui-input"  lay-verify="" lay-filter="" />
-				    </div>
-			    </div>
-			    <div class="layui-col-xs12  layui-col-md4" style="margin-top: 10px;">
-				    <label class="layui-form-label" style="margin-top: -10px;">环节开始时间</label>
-				    <div class="layui-input-block">
-					    	<input name="stepdate" id="stepdate" class="layui-input" lay-verify="" lay-filter="" />
-				    </div>
-			    </div>
 			     <div class="layui-col-xs12  layui-col-md4" style="margin-top: 10px;">
 				    <label class="layui-form-label" style="margin-top: -10px;">事件发起人工号</label>
 				    <div class="layui-input-block">
@@ -99,18 +70,6 @@
 				    <label class="layui-form-label" style="margin-top: -10px;">事件发起人电话</label>
 				    <div class="layui-input-block">
 					    	<input name="phone" id="phone"class="layui-input"  lay-verify="" lay-filter="" />
-				    </div>
-			    </div>
-			     <div class="layui-col-xs12  layui-col-md4">
-				    <label class="layui-form-label" style="margin-top: -10px;">事件操作人工号</label>
-				    <div class="layui-input-block">
-					    	<input name="adminuser" id="adminuser"class="layui-input"  lay-verify="" lay-filter="" />
-				    </div>
-			    </div>
-			    <div class="layui-col-xs12  layui-col-md4">
-				    <label class="layui-form-label" style="margin-top: -10px;">事件发起时间</label>
-				    <div class="layui-input-block">
-					    	<input name="date" id="date" class="layui-input" lay-verify="" lay-filter="" />
 				    </div>
 			    </div>
 			     <div class="layui-col-xs12  layui-col-md12">
@@ -137,5 +96,6 @@
 <script th:src="@{../js/jquery-3.4.0.min.js}" type="text/javascript"></script>
 <script th:src="@{../js/layui.js}"  type="text/javascript"></script>
 <script th:src="@{../js/ite/initation.js}"></script>
+
 </body>
 </html>

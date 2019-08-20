@@ -4,6 +4,7 @@ import com.liwinon.itevent.dao.primaryRepo.AssetsDao;
 import com.liwinon.itevent.dao.primaryRepo.EventDao;
 import com.liwinon.itevent.dao.secondRepo.SapDao;
 import com.liwinon.itevent.entity.primary.Assets;
+import com.liwinon.itevent.qywx.WxApi;
 import com.liwinon.itevent.util.setExcel;
 import net.sf.json.JSONObject;
 import org.junit.Test;
@@ -27,19 +28,15 @@ public class IteventApplicationTests {
     setExcel excel;
     @Autowired
     SapDao sapDao;
+    @Autowired
+    WxApi wxApi;
     @Test
     public void contextLoads() {
-        //将所有有userid,没有name 的添加name
-//        List<Assets> all =assetsDao.findAll();
-//        for (Assets a:all){
-//            if(!StringUtils.isEmpty(a.getUserid())){
-//                if (StringUtils.isEmpty(a.getUsername())){
-//                    String name = sapDao.findNByUserId(a.getUserid());
-//                    a.setUsername(name);
-//                    assetsDao.save(a);
-//                }
-//            }
-//        }
+     wxApi.sendMissionToIT(new String[]{"1902268014","1907128000"},"某某的服务申请",
+             " 申请类型: 软件无法正常工作<br> 申请描述: 用户填写的内容<br>" +
+                     " 事件等级: 加急处理",
+             "6",
+             new String[]{"1","2"},new String[]{"拒接","接收"},new String[]{"已拒接","开始处理"},"http://www.baidu.com");
     }
 
 

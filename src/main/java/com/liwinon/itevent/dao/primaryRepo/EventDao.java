@@ -65,4 +65,12 @@ public interface EventDao extends JpaRepository<Event,String>, JpaSpecificationE
     String[] findPhoneByUserid(String userid);
 
 	Event findByUserid(String userid);
+
+    //查找该用户发起的未结束事件
+    @Query(value = "select * from ITE_Event e where e.userid =:userid  and " +
+            "e.state <> '已结束' and e.state<>''",nativeQuery = true)
+    List<Event> findByUseridEventIng(String userid);
+//    @Query(value = "select count(*) from ITE_Event e where e.userid =:userid  and " +
+//            "e.state <> '已结束' and e.state<>''",nativeQuery = true)
+//    long  CountUseridEventIng(String userid);
 }

@@ -31,8 +31,8 @@ public class AccessToken {
      */
     public static JSONObject getAccessToken(String corpid, String appsecret) {
         JSONObject map = getMemoryInfo();
-        String time = map.getString("time");//从缓存中拿数据
-        String accessToken = map.getString("access_token");//从缓存中拿数据
+        String time = (String) map.get("time");//从缓存中拿数据
+        String accessToken = (String) map.get("access_token");//从缓存中拿数据
         Long nowDate = new Date().getTime();
         if (accessToken != null && time != null && nowDate - Long.parseLong(time) < 7100 * 1000) {
             System.out.println(new Date()+"-----从缓存读取access_token："+accessToken);

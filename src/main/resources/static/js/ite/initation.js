@@ -35,7 +35,6 @@ function chushihua(aaa){
 					option += '<option value="'+data[i]+'">' + data[i] + '</option>';
 				}
 				$("#level_2").append(option);
-				form.render('select');
 			}
 		});	
 	 $.ajax({
@@ -91,7 +90,6 @@ function chushihuab(select2){
 				option += '<option value="'+data[i]+'">' + data[i] + '</option>';
 			}
 			$("#brand").append(option);
-			form.render('select');
 		}
 	});	
 	$("#itemid").empty();
@@ -107,6 +105,7 @@ function chushihuab(select2){
             }
         }
     })
+    form.render('select');
 }
 layui.use(['form','layer','element','laydate'], function(){
     element = layui.element,
@@ -238,8 +237,6 @@ $(function () {
     $("#eventManager-nav").removeClass("layui-nav-itemed");
     $("#assets-nav").addClass("layui-nav-itemed");
     //赋值初始化数值
-    
-    window.onload = function(){
     	var files=[];
     	var filesa=[];
     	var result;
@@ -250,9 +247,7 @@ $(function () {
         var uploadBtn = document.querySelector('#upload');
         var previewImgList = document.querySelector('.preview_img_list');
         var submitBtn = document.querySelector('#submit');
-
         imgArr = new Array();
-
         uploadBtn.addEventListener('change',function(){
         	fd = null ;
             fd = new FormData();
@@ -311,7 +306,7 @@ $(function () {
             }
         },false);
         
-        submitBtn.addEventListener('click',function(){
+        $("#submit").click(function() {
             if(!filesa.length){
             	layer.msg("请选择要上传的图片", {
         			  icon: 1,
@@ -379,7 +374,6 @@ $(function () {
             })
         },false);
 
-    }
 
 
 

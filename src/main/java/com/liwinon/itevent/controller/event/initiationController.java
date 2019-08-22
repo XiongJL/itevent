@@ -7,6 +7,7 @@ import net.sf.json.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -26,11 +27,18 @@ public class initiationController {
 	
 	@GetMapping(value = "/initiation")
     @PasssToken
-    public String initiation(String adminuser,Model model){
+    public String initiation(String adminuser,Model model,HttpServletRequest request){
 		if(!"".equals(adminuser)) {
 			model.addAttribute("adminuser", adminuser);
 		}
-        return "event/initiation";
+		
+		HttpSession session = request.getSession();
+		String models=session.getAttribute("AccessMode").toString();
+		if("pc".equals(models)) {			
+			return "event/initiationpc";
+		}else {
+			return "event/initiation";
+		}
     }
 	
 	@Autowired

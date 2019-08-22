@@ -27,7 +27,7 @@ public class UpdateImgUtil {
                     if(i==0) {
                     	path=fileName;                    	
                     }else {
-                    	path=path+","+fileName;
+                    	path=","+fileName;
                     }
                 }catch (IllegalStateException e) {
                     return "文件过大,内存溢出异常";

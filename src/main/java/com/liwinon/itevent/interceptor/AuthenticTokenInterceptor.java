@@ -33,7 +33,9 @@ public class AuthenticTokenInterceptor implements HandlerInterceptor {
         String token = request.getHeader("token");// 从 http 请求头中取出 token
         String url=request.getRequestURL().toString();
         System.out.println("拦截器:"+url);
-        if (url.indexOf("login")>=0){  //登录页面不做验证
+        //不需要拦截的页面
+        String[] not = new String[]{"login","initiation"};
+        if (isNeed(not,url)){  //登录页面不做验证
             return true;
         }
         HttpSession session = request.getSession();
@@ -156,5 +158,17 @@ public class AuthenticTokenInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest httpServletRequest,
                                 HttpServletResponse httpServletResponse,
                                 Object o, Exception e) throws Exception {
+    }
+
+    public boolean isNeed(String[] strs,String url){
+        boolean flag = false;
+        for (String str : strs){
+            if (url.indexOf(str)!=-1){
+                flag = true;  //匹配上则跳过验证
+                break;
+            }
+        }
+
+        return flag;
     }
 }

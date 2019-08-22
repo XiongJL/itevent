@@ -30,7 +30,11 @@ public class indexController {
         if(userAgent.indexOf("micromessenger")!= -1){
             //微信
             AccessMode = "wx";
-        }else if(userAgent.indexOf("android") != -1){
+        }else if(userAgent.indexOf("wxwork") != -1){
+            //企业微信
+            AccessMode = "qywx";
+        }
+        else if(userAgent.indexOf("android") != -1){
             //安卓
             AccessMode = "android";
         }else if(userAgent.indexOf("iphone") != -1 || userAgent.indexOf("ipad") != -1 || userAgent.indexOf("ipod") != -1){

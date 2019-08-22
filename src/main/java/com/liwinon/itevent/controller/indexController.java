@@ -23,8 +23,24 @@ public class indexController {
     ApiService api;
     @GetMapping("/itevent/login")
     @PasssToken
-    public String login(){
-
+    public String login(HttpServletRequest request){
+        String userAgent = request.getHeader("user-agent").toLowerCase();
+        System.out.println(userAgent);
+        String AccessMode = "";
+        if(userAgent.indexOf("micromessenger")!= -1){
+            //微信
+            AccessMode = "wx";
+        }else if(userAgent.indexOf("android") != -1){
+            //安卓
+            AccessMode = "android";
+        }else if(userAgent.indexOf("iphone") != -1 || userAgent.indexOf("ipad") != -1 || userAgent.indexOf("ipod") != -1){
+            //苹果
+        }else{
+            //电脑
+            AccessMode = "pc";
+        }
+        HttpSession session = request.getSession();
+        session.setAttribute("AccessMode",AccessMode);
         return "login";
     }
     @GetMapping("/itevent/index")

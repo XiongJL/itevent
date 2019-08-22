@@ -13,7 +13,7 @@
         <legend>任务进程</legend>
     </fieldset>
     <div class="layui-row layui-col-space15">
-        <h5><span th:text="${start}"></span></h5>
+        <h5><span th:text="${ing}"></span></h5>
 
         <div class="layui-col-md12">
             <div class="layui-card layui-col-md12 layui-col-xs12">
@@ -51,11 +51,31 @@
 
     <div>此处展示申请人相关信息和任务信息</div>
     <ul class="layui-timeline">
-        <li class="layui-timeline-item">
+        <!--第二个参数包含状态变量
+       index:当前迭代对象的index（从0开始计算）
+    count: 当前迭代对象的index(从1开始计算)
+    size:被迭代对象的大小
+    current:当前迭代变量
+    even/odd:布尔值，当前循环是否是偶数/奇数（从0开始计算）
+    first:布尔值，当前循环是否是第一个
+    last:布尔值，当前循环是否是最后一个
+        -->
+        <li class="layui-timeline-item" th:each="step,stepState : ${ing}">
             <!--如果是第一个才使用旋转图标-->
-            <i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis"></i>
+            <i th:if="${stepState.first} ==true " class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis"></i>
+            <i th:if="${stepState.first} !=true " class="layui-icon layui-timeline-axis"></i>
             <div class="layui-timeline-content layui-text">
-                <h3 class="layui-timeline-title">step1</h3>
+                <div th:if="${stepState.last} !=true">
+                    <h3 class="layui-timeline-title">step1</h3>
+
+                </div>
+                <!--最后是事件的起始节点,用户填单时的时间-->
+                <div th:if="${stepState.last} ==true">
+                    <h3 class="layui-timeline-title"><span th:text="${start.date}"></span></h3>
+                    <p>
+                        用户发出申请 <i class="layui-icon"></i>
+                    </p>
+                </div>
 
             </div>
         </li>

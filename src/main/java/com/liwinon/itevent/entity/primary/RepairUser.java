@@ -15,7 +15,7 @@ public class RepairUser {
 	    private String userid;  //工号
 	    private String wxid;	//企业微信账号
 	    private String name;	//姓名
-	    private String userlevel;//级别
+	    private int userlevel;//级别
 	    private String phone;    //电话
 		public String getUserid() {
 			return userid;
@@ -35,10 +35,10 @@ public class RepairUser {
 		public void setName(String name) {
 			this.name = name;
 		}
-		public String getUserlevel() {
+		public int getUserlevel() {
 			return userlevel;
 		}
-		public void setUserlevel(String userlevel) {
+		public void setUserlevel(int userlevel) {
 			this.userlevel = userlevel;
 		}
 		public String getPhone() {

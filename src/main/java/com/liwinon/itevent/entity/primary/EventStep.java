@@ -15,7 +15,7 @@ public class EventStep {
 	 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private int stepId;
 	    private String uuid;
-	    private String step;
+	    private int step;
 	    private String executorId;
 	    private String executorName;
 	    private Date stepDate;
@@ -32,10 +32,10 @@ public class EventStep {
 		public void setUuid(String uuid) {
 			this.uuid = uuid;
 		}
-		public String getStep() {
+		public int getStep() {
 			return step;
 		}
-		public void setStep(String step) {
+		public void setStep(int step) {
 			this.step = step;
 		}
 		public String getExecutorId() {

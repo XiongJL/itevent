@@ -23,4 +23,6 @@ public interface EventTypeDao extends JpaRepository<EventType,Integer>, JpaSpeci
 	
 	@Query(value = "select   eTypeId from ITE_EventType where level_2 =:value",nativeQuery = true)
 	Integer findAllBylevel_2(String value);
+
+	EventType findByETypeId(int id);
 }

@@ -7,7 +7,9 @@ public enum ResultEnum {
     ERROR_2(112,"用户不存在,请重新登录"),
     ERROR_3(401,"用户或密码错误"),
     ERROR_4(113,"用户不存在"),
-    ERROR_5(114,"token已过期");
+    ERROR_5(114,"token已过期"),
+    ERROR_6(115,"该申请事件不存在")
+    ;
 
     private int code;
     private String msg;

@@ -28,7 +28,17 @@ function login(){
             }
             else if (typeof token == "string") {  //字符串类型是token
                 localStorage.setItem("token",token);
-                window.location.href = "/itevent/index";
+                $.ajax({  //获取用户之前打算访问的页面
+                    url:'/itevent/originURL',
+                    success:function (res) {
+                        var url = "/itevent/index";
+                        if (res!=null){
+                            url = res;
+                        }
+                        console.log(res)
+                        window.location.href = url;
+                    }
+                })
             }else{  //object 类型是错误代码
                 //{code: 401, msg: "需要先登录,或用户或密码错误", data: null}
                 layer.msg(token.msg)

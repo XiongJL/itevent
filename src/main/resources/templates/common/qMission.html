@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>IT事件管理系统</title>
+    <link th:href="@{../css/layui.css}" href="../css/layui.css" rel="stylesheet" type="text/css">
+<!--    <link th:href="@{../css/ite/common.css}" rel="stylesheet" type="text/css">-->
+</head>
+<body >
+    <!--一页两用-->
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+        <legend>任务进程</legend>
+    </fieldset>
+    <div class="layui-row layui-col-space15">
+        <h5><span th:text="${start}"></span></h5>
+
+        <div class="layui-col-md12">
+            <div class="layui-card layui-col-md12 layui-col-xs12">
+                <div class="layui-card-header">申请服务描述</div>
+                <div class="layui-card-body">
+                    <div>申请人: <span th:text="${start.username}"></span></div>
+                    <div>申请人工号: <span th:text="${start.userid}"></span></div>
+                    <div>联系方式: <span th:text="${start.phone}"></span></div>
+                    <div>任务状态: <span th:text="${start.state}"></span></div>
+                    <!--折叠卡片开始-->
+                    <div class="layui-collapse" lay-filter="test">
+                        <div class="layui-colla-item">
+                            <h2 class="layui-colla-title">详细信息</h2>
+                            <div class="layui-colla-content">
+                                <div>事件类型: <span th:text="${start.type}"></span> </div>
+                                <div>事件状态: <span th:text="${start.state}"></span> </div>
+                                <div>物料ID: <span th:text="${start.itemid}"></span></div>
+                                <div>用户描述: <span th:text="${start.remark}"></span></div>
+                                <div>填单人: <span th:text="${start.adminuser}"></span></div>
+                                <div>图片描述:</div>
+                                <div class=""  id="photos" >
+                                    <div ><img th:each="url : ${imgUrls}" src="../images/face/0.gif" th:src="'../itevent/img/'+${url}" style="width: 50%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--折叠卡片结束-->
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+    <div>此处展示申请人相关信息和任务信息</div>
+    <ul class="layui-timeline">
+        <li class="layui-timeline-item">
+            <!--如果是第一个才使用旋转图标-->
+            <i class="layui-icon layui-anim layui-anim-rotate layui-anim-loop layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <h3 class="layui-timeline-title">step1</h3>
+
+            </div>
+        </li>
+        <li class="layui-timeline-item">
+            <i class="layui-icon layui-timeline-axis"></i>
+            <div class="layui-timeline-content layui-text">
+                <h3 class="layui-timeline-title"><span th:text="${start.date}"></span></h3>
+                <p>
+                    用户发出申请 <i class="layui-icon"></i>
+                </p>
+            </div>
+        </li>
+
+    </ul>
+
+
+<!-- jQuery-->
+<script th:src="@{../js/jquery-3.4.0.min.js}" type="text/javascript"></script>
+<script th:src="@{../js/layui.js}"  type="text/javascript"></script>
+<script>
+    layui.use(['element', 'layer','carousel'], function(){
+        var element = layui.element;
+        var layer = layui.layer;
+
+        //监听折叠
+        element.on('collapse(test)', function(data){
+            layer.msg('展开状态：'+ data.show);
+        });
+        layer.photos({
+            photos: '#photos'
+            ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+        });
+
+
+    });
+
+</script>
+</body>
+</html>

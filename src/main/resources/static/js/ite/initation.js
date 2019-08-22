@@ -271,6 +271,7 @@ $(function () {
     	var files=[];
     	var filesa=[];
     	var result;
+    	var aa;
         var dataArr = []; // 储存所选图片的结果(文件名和base64数据)
     	var fd;
         var that = this;
@@ -284,18 +285,19 @@ $(function () {
         	fd = null ;
             fd = new FormData();
             var iLen = this.files.length;
-            if(iLen>5){
+            if(aa>5){
             	layer.alert("最多上传5张图片", {
       			  icon: 1,
       			  time: 2000});
             	return false;
             }
             for(var i=0;i<iLen;i++){
+            	aa++;
                 var reader = new FileReader();
                 var aaaa=this.files[i].name;
                 console.log(this.files[i])
                 var ab="ok";
-                for(var j=0;j<filesa.length;j++){
+               /* for(var j=0;j<filesa.length;j++){
                 	if(filesa[j]==aaaa){
                 		layer.msg("不能挑选重复图片", {
                 			  icon: 1,
@@ -305,7 +307,7 @@ $(function () {
                 }
                 if(ab=="no"){
                 	continue;
-                }
+                }*/
                 fd.append("file",this.files[i]);
                 reader.readAsDataURL(this.files[i]);  //转成base64
                 reader.fileName = this.files[i].name;
@@ -360,6 +362,8 @@ $(function () {
             }
             fd.append("userid",userid);
             fd.append("phone",phone);
+            var adminuser = document.getElementById("adminuser").value;
+            fd.append("adminuser",adminuser);
             var level_1 = document.getElementById("level_1").value;
             fd.append("level_1",level_1);
             var level_2 = document.getElementById("level_2").value;
@@ -396,12 +400,9 @@ $(function () {
                 	}
                 },
                 error: function (err) {
-                    console.log(err)
-                    if (err.responseText=="ok"){
-                        alert("上传成功")
-                    } else{
-                        alert("上传超时!请查看文件夹是否上传成功")
-                    }
+                	layer.alert('数据上传失败', {
+          			  icon: 2
+          			 });
                 }
             })
         },false);

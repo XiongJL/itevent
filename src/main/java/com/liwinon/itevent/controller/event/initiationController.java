@@ -59,10 +59,11 @@ public class initiationController {
 	@ResponseBody
 	public JSONObject postinitiation(HttpServletRequest request,HttpServletResponse response,
 			@RequestParam("file")MultipartFile[] files, @RequestParam("userid")String userid
-			, @RequestParam("phone")String phone, @RequestParam("level_1")String level_1
+			, @RequestParam("phone")String phone,@RequestParam("adminuser")String adminuser,
+			@RequestParam("level_1")String level_1
 			, @RequestParam("level_2")String level_2, @RequestParam("description")String description
 			, @RequestParam("type")String type, @RequestParam("brand")String brand
 			, @RequestParam("itemid")String itemid, @RequestParam("remark")String remark){
-		return initiationService.postinitiation(request,files,userid,phone,level_1,level_2,description,type,brand,itemid,remark);
+		return initiationService.postinitiation(request,files,userid,phone,adminuser,level_1,level_2,description,type,brand,itemid,remark);
 	}
 }

@@ -17,7 +17,7 @@ $.ajax({
 		$("#level_1").append(option);
 		chushihua(select2);
 	}
-});	
+});
 function chushihua(aaa){
 	var bb;
 	 $.ajax({
@@ -48,7 +48,7 @@ function chushihua(aaa){
 				data=res.data;
 				$("#description").val(data);
 			}
-		});	
+		});
 }
 $.ajax({
 	async : false,

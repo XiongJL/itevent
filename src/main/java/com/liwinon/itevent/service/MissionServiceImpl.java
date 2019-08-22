@@ -5,11 +5,14 @@ import com.liwinon.itevent.dao.primaryRepo.EventStepDao;
 import com.liwinon.itevent.dao.primaryRepo.EventTypeDao;
 import com.liwinon.itevent.dao.secondRepo.SapDao;
 import com.liwinon.itevent.entity.Model.MissionModel;
+import com.liwinon.itevent.entity.Model.MissionStepModel;
+import com.liwinon.itevent.entity.StepEnum;
 import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.EventStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +37,11 @@ public class MissionServiceImpl implements MissionService {
         Map<String,Object> res = new HashMap<>();
         List<EventStep> eSteps = eventStepDao.findByUuid(uuid);
         res.put("start",TransferToMission(e));
-        res.put("ing",eSteps);
+        List<MissionStepModel> ings =  TransferToStepModel(eSteps);
+        if (ings==null){
+            return null;
+        }
+        res.put("ing",ings);
         String[] imgUrls =null;
         if (eSteps.size()>0){
             EventStep tmp = eSteps.get(0);
@@ -64,5 +71,20 @@ public class MissionServiceImpl implements MissionService {
                 event.getPhone(),event.getItemid(),event.getDate(),event.getAdminuser(),
                 sapDao.findNByUserId(event.getAdminuser()),event.getState(),event.getRemark());
         return model;
+    }
+    public List<MissionStepModel> TransferToStepModel(List<EventStep> eventSteps){
+        if (eventSteps.size()<=0)
+            return null;
+        List<MissionStepModel> list = new ArrayList<>();
+        for (EventStep eventStep : eventSteps){
+            if (eventStep==null)
+                continue;
+            MissionStepModel model = new MissionStepModel(eventStep.getStepId(),eventStep.getUuid()
+                    , StepEnum.getStep(eventStep.getStep()),eventStep.getExecutorId(),eventStep.getExecutorName()
+                    ,eventStep.getStepDate(),eventStep.getImgurl());
+            list.add(model);
+        }
+        return  list;
+
     }
 }

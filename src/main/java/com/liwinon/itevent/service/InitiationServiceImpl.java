@@ -83,7 +83,7 @@ public class InitiationServiceImpl implements InitiationService {
         String uuid1 = sdf.format(date)+"-"+etypeid;
         String uuid = uuid1+"-"+1;
         eventStep.setUuid(uuid);
-		eventStep.setStep("1");
+		eventStep.setStep(1);
 		eventStep.setStepDate(new Date());
 		eventStepDao.save(eventStep);
 		

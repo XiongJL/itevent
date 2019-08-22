@@ -115,7 +115,7 @@ public class ReceiveServiceImpl implements ReceiveService {
                             step.setExecutorName(name);
                             EventStep next = new EventStep();
                             next.setUuid(step.getUuid());
-                            next.setStep("2");
+                            next.setStep(2);
                             next.setExecutorName(name);
                             next.setExecutorId(id);
                             next.setImgurl(step.getImgurl());

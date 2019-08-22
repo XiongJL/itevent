@@ -53,4 +53,17 @@ public class indexController {
         session.invalidate();
         return "login";
     }
+
+    /**
+     * 返回用户登录前想访问的页面
+     */
+    @GetMapping("/itevent/originURL")
+    @PasssToken
+    @ResponseBody
+    public String originURL(HttpServletRequest request){
+        HttpSession session = request.getSession();
+        String URL = (String) session.getAttribute("OriginUrl");
+        session.setAttribute("OriginUrl",null);
+        return URL;
+    }
 }

@@ -70,6 +70,10 @@ public interface EventDao extends JpaRepository<Event,String>, JpaSpecificationE
     @Query(value = "select * from ITE_Event e where e.userid =:userid  and " +
             "e.state <> '已结束' and e.state<>''",nativeQuery = true)
     List<Event> findByUseridEventIng(String userid);
+
+    //根据事件流水号查找
+    @Query(value = "select * from ITE_Event e where e.uuid = :uuid",nativeQuery = true)
+    Event findByUuid(String  uuid);
 //    @Query(value = "select count(*) from ITE_Event e where e.userid =:userid  and " +
 //            "e.state <> '已结束' and e.state<>''",nativeQuery = true)
 //    long  CountUseridEventIng(String userid);

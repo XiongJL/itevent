@@ -6,6 +6,8 @@ import com.liwinon.itevent.dao.primaryRepo.AdminDao;
 import com.liwinon.itevent.entity.primary.Admin;
 import com.liwinon.itevent.entity.primary.Assets;
 import com.liwinon.itevent.exception.MyException;
+import com.liwinon.itevent.service.ApiService;
+import com.liwinon.itevent.service.IndexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;

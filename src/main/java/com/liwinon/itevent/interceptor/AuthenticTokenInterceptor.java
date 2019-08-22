@@ -37,15 +37,12 @@ public class AuthenticTokenInterceptor implements HandlerInterceptor {
             return true;
         }
         HttpSession session = request.getSession();
-        if (session==null){
+        if (session==null ||session.getAttribute("username")==null||session.getAttribute("username")=="" ){
+            String  parma = request.getQueryString();
+            System.out.println("param:"+parma);
+            session.setAttribute("OriginUrl",url+"?"+parma);
             response.sendRedirect("/itevent/login");
             return true;
-        }else {
-            String admin = (String) session.getAttribute("username");
-            if (admin==null || admin ==""){
-                response.sendRedirect("/itevent/login");
-                return true;
-            }
         }
         // 如果不是映射到方法直接通过
         if (!(handler instanceof HandlerMethod)){

@@ -1,21 +1,40 @@
 package com.liwinon.itevent.service;
 
 import com.liwinon.itevent.dao.primaryRepo.EventDao;
+import com.liwinon.itevent.dao.primaryRepo.EventStepDao;
+import com.liwinon.itevent.dao.primaryRepo.EventTypeDao;
+import com.liwinon.itevent.dao.primaryRepo.RepairDao;
+import com.liwinon.itevent.dao.secondRepo.SapDao;
 import com.liwinon.itevent.entity.primary.Event;
+import com.liwinon.itevent.entity.primary.EventStep;
+import com.liwinon.itevent.entity.primary.EventType;
+import com.liwinon.itevent.entity.primary.RepairUser;
 import com.liwinon.itevent.qywx.WxApi;
 import com.liwinon.itevent.qywx.WxConfig;
+import com.liwinon.itevent.service.ReceiveService;
 import com.liwinon.itevent.util.GetMSG;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
-public class ReceiveServiceImpl implements ReceiveService{
+public class ReceiveServiceImpl implements ReceiveService {
     @Autowired
     EventDao eventDao;
     @Autowired
+    EventStepDao eventStepDao;
+    @Autowired
+    EventTypeDao eventTypeDao;
+    @Autowired
+    SapDao sapDao;
+    @Autowired
     WxApi wxApi;
+    @Autowired
+    RepairDao repairDao;
     /**
      * 接收并处理企业微信发送的消息/事件
      * @param msg
@@ -73,6 +92,53 @@ public class ReceiveServiceImpl implements ReceiveService{
                     }
                     return wxApi.sendCardToIT(new String[]{userid},title,description,URL,btntxt);
                 }else if ("taskcard_click".equals(event)){  //是任务卡片回调信息
+                    //获取卡片的task_id , 等同于事件的uuid.
+                    String task_id = msg.getTaskId();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
+                    Date date = new Date();
+                    String dateStr =  sdf.format(date);
+                    EventStep step = eventStepDao.findByUuidAndStep1(task_id);
+                    Event e = eventDao.findByUuid(task_id);
+                    String executorId = step.getExecutorId();
+                    String executorName = step.getExecutorName();
+                    String EventKey = msg.getEventKey();
+                    if ("2".equals(EventKey)){ //如果本次回调是按得接受按钮
+                        if (StringUtils.isEmpty(executorId)){  //尚未有任务执行人
+                            //添加该人为执行人
+                            String FromUserName = msg.getFromUserNmae();
+                            //从维修人员表通过微信号获取人员工号姓名
+                            RepairUser repairUser =  repairDao.findByPersonid(FromUserName);
+                            String id = repairUser.getUserid() ;
+                            String name = repairUser.getName();
+
+                            step.setExecutorId(id);
+                            step.setExecutorName(name);
+                            EventStep next = new EventStep();
+                            next.setUuid(step.getUuid());
+                            next.setStep(2);
+                            next.setExecutorName(name);
+                            next.setExecutorId(id);
+                            next.setImgurl(step.getImgurl());
+                            next.setStepDate(date);
+                            eventStepDao.save(step);
+                            eventStepDao.save(next);
+                            //回执卡片信息, 方便执行人查看详细数据,以及更新环节
+                            EventType eType = eventTypeDao.findByETypeId(e.getEvent());
+                            String title = "您已接受"+sapDao.findNByUserId(e.getUserid())+":"+e.getPhone()+"提出的申请";
+
+                            String description = dateStr+"<br>"+"事件类型:"+eType.getLevel_2()+"<br>"+"用户描述:"+e.getRemark();
+                            String btntxt = "查看详情";
+                            String URL = "?uuid="+task_id;
+                            return wxApi.sendCardToIT(new String[]{FromUserName},title,description,URL,btntxt);
+
+                        }
+                    }else if ("1".equals(EventKey)){  //拒绝
+                        if (StringUtils.isEmpty(executorId)){  //尚未有任务执行人
+                            //发送文本消息给该人
+                        }
+                    }else{
+                        System.out.println("按钮值不对应!值为:"+EventKey);
+                    }
 
                 }
             }

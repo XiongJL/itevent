@@ -13,13 +13,13 @@ import javax.persistence.Table;
 public class EventStep {
 	 	@Id
 	 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private int stepId;  //环节id序号
-	    private String uuid;  //事件号
-	    private int step;  //事件环节{开始1,处理2-5(移交过程2程序员,3工程师,4高工,5经理),结束6,回访7,满意度调查8,竣工0}
-	    private String executorId;  //执行人工号
-	    private String executorName;  //执行人姓名
-	    private Date stepDate;    //环节开始时间
-	    private String imgurl;  //图片地址
+	    private int stepId;
+	    private String uuid;
+	    private int step;
+	    private String executorId;
+	    private String executorName;
+	    private Date stepDate;
+	    private String imgurl;
 		public int getStepId() {
 			return stepId;
 		}

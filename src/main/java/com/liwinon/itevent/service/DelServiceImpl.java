@@ -2,6 +2,7 @@ package com.liwinon.itevent.service;
 
 import com.liwinon.itevent.dao.primaryRepo.AssetsDao;
 import com.liwinon.itevent.entity.primary.Assets;
+import com.liwinon.itevent.service.DelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

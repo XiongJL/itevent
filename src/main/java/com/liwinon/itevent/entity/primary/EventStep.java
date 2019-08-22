@@ -15,7 +15,7 @@ public class EventStep {
 	 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private int stepId;  //环节id序号
 	    private String uuid;  //事件号
-	    private String step;  //事件环节{开始1,处理2-5(移交过程2程序员,3工程师,4高工,5经理),结束6,回访7,满意度调查8,竣工0}
+	    private int step;  //事件环节{开始1,处理2-5(移交过程2程序员,3工程师,4高工,5经理),结束6,回访7,满意度调查8,竣工0}
 	    private String executorId;  //执行人工号
 	    private String executorName;  //执行人姓名
 	    private Date stepDate;    //环节开始时间
@@ -32,10 +32,10 @@ public class EventStep {
 		public void setUuid(String uuid) {
 			this.uuid = uuid;
 		}
-		public String getStep() {
+		public int getStep() {
 			return step;
 		}
-		public void setStep(String step) {
+		public void setStep(int step) {
 			this.step = step;
 		}
 		public String getExecutorId() {

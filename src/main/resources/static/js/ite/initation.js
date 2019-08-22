@@ -230,34 +230,6 @@ layui.use(['form','layer','element','laydate'], function(){
 	    })
     });
     
-    //通过layui验证输入后提交 ,需要将提交按钮放入form内
-    form.on('submit(sub)', function (data) {
-        console.log($(data.form).serialize())
-        var data = $('#initation').serialize();
-        console.log(typeof data)
-        //告诉后台有多少物料
-        console.log(data)
-        $.ajax({
-            url: "/itevent/initiation/postinitiation",
-            data: data,
-            type: "post",
-            beforeSend:function(XMLHttpRequest){
-                XMLHttpRequest.setRequestHeader("token",token);
-            },
-            success: function (res) {
-                console.log(res)
-               if (res.data=="ok"){
-                    layer.msg("操作成功",{icon: 1})
-                    setTimeout(function () {
-                        location.reload();
-                    },2000)
-                }else{
-                    layer.msg(res.msg)
-                }
-            }
-        });
-        return false;
-    });
 
 });
 $(function () {

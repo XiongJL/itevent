@@ -6,6 +6,88 @@
     <title>IT事件管理系统</title>
     <link th:href="@{../css/layui.css}" href="../css/layui.css" rel="stylesheet" type="text/css">
     <link th:href="@{../css/ite/common.css}" rel="stylesheet" type="text/css">
+      <style type="text/css">
+             *{
+            margin:0;
+            padding:0;
+        }
+
+        ul,ol{
+            list-style-type:none;
+        }
+
+        .clearfix:after,.clearfix:before{
+
+            display:table;
+            content:' ';
+        }
+
+        .clearfix:after{
+            clear:both
+        }
+
+        .tc{
+            text-align:center;
+        }
+
+        .select,.select_video{
+            height:2rem;
+            line-height:2rem;
+            background:#fff;
+            border:1px solid #4285F4;
+            margin:0.5rem 1rem;
+            position:relative;
+        }
+        .selectupdate{
+            height:2rem;
+            line-height:2rem;
+            background:#5fb878;
+            border:1px solid #5fb878;
+            margin:0.5rem 1rem;
+            position:relative;
+        }
+
+        .select label,.select_video label{
+            width:100%;
+            position:absolute;
+            top:0;
+            left:0;
+            font-size:14px;
+            color:#333;
+        }
+
+        #upload,#upload_video{
+            display:none;
+        }
+
+        .preview,.video_preview{
+            margin:0.5rem 1rem;
+            border:1px solid #bbb;
+            padding:4px;
+            display:none;
+        }
+
+        .preview_img_list li{
+            float:left;
+            width:30%;
+            padding:2px 0;
+
+        }   
+
+        .preview_img_list li img{
+            vertical-align:top;
+            max-width:98%;
+        }
+
+        .btn{
+            background: #4285F4;
+            color:#fff;
+            height:2.5rem;
+            line-height:2.5rem;
+            margin:2rem 1rem;
+            border-radius:0.5rem;
+        }
+    </style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -17,9 +99,9 @@
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 1%">
             <legend>发起事件</legend>
         </fieldset>
-         <div class="layui-row">
-	        <form class="layui-form" action=""  id="initation">
-	        	<input  hidden="hidden" name="adminuser" th:value="${adminuser}"/>
+         <div class="layui-row" >
+	        <form class="layui-form"  enctype="multipart/form-data" action=""  id="initation">
+	        	<input  hidden="hidden" name="adminuser" id="adminuser" th:value="${adminuser}"/>
 		        <div class="layui-col-xs12  layui-col-md4">
 					    <label class="layui-form-label">选择事件</label>
 					    <div class="layui-input-block">
@@ -72,19 +154,27 @@
 					    	<input name="phone" id="phone"class="layui-input"  lay-verify="" lay-filter="" />
 				    </div>
 			    </div>
-			     <div class="layui-col-xs12  layui-col-md12">
+			     <div class="layui-col-xs12  layui-col-md4" style="margin-top: 10px;">
 				    <label class="layui-form-label">备注</label>
 				    <div class="layui-input-block">
-					    	<textarea  name="remark" id="remark" class="layui-textarea"  lay-verify="" lay-filter="" >
-					    	</textarea>
+					    	<input   name="remark" id="remark" class="layui-input"  lay-verify="" lay-filter="" />
 				    </div>
 			    </div>
-			      <div class="layui-form-item" style="margin-top: 20px;">
-				    <div class="layui-input-block" style="padding-top: 20px">
-				      <button class="layui-btn" lay-submit lay-filter="sub" style="margin-left: 35%;">立即提交</button>
-				      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			    <div class="layui-col-xs12  layui-col-md8" style="margin-top: 10px;">
+			    	<div  >
+				        <div class="selectupdate tc layui-col-xs12 layui-col-md2" >
+				            <label for="upload">选择(重选)图片</label>
+				            <input type="file" id = "upload" multiple="multiple" accpet = "image/*" capture = "camera" >
+				        </div>
+				        <div class="gallery tc layui-col-xs12 layui-col-md10" id="gallery">
+				        </div>
+			        </div>
+			    </div>
+			    <div  class="layui-form-item model-form-footer "   >
+				    <div class="layui-input-block tc" style="padding-top: 20px">
+				      <button class="layui-btn" style="text-align: center;margin-left: -100px;width: auto;" id="submit" >提交</button>
 				    </div>
-				  </div>
+				</div>
 		    </form>
  		 </div>
     </div>
@@ -96,6 +186,13 @@
 <script th:src="@{../js/jquery-3.4.0.min.js}" type="text/javascript"></script>
 <script th:src="@{../js/layui.js}"  type="text/javascript"></script>
 <script th:src="@{../js/ite/initation.js}"></script>
-
+ <script type="text/javascript">
+    </script>
+    <style>
+        .button-a{
+            width: 22%;
+            height: 50px;
+        }
+    </style>
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.liwinon.itevent.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,13 +12,17 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.liwinon.itevent.dao.primaryRepo.EventDao;
 import com.liwinon.itevent.dao.primaryRepo.EventStepDao;
 import com.liwinon.itevent.dao.primaryRepo.EventTypeDao;
+import com.liwinon.itevent.dao.primaryRepo.RepairUserDao;
 import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.EventStep;
+import com.liwinon.itevent.entity.primary.RepairUser;
 import com.liwinon.itevent.qywx.WxApi;
+import com.liwinon.itevent.util.UpdateImgUtil;
 
 import net.sf.json.JSONObject;
 @Service
@@ -64,58 +69,84 @@ public class InitiationServiceImpl implements InitiationService {
 	EventStepDao eventStepDao;
 	@Autowired
 	WxApi wxApi;
+	@Autowired
+	RepairUserDao repairUserDao;
 	 
+	@SuppressWarnings("null")
 	@Override
 	@Transactional
-	public JSONObject postinitiation(HttpServletRequest request) {
+	public JSONObject postinitiation(HttpServletRequest request, MultipartFile[] files,
+			String userid, String phone,
+			String level_1, String level_2, String description, 
+			String type, String brand, String itemid,
+			String remark) {
+		UpdateImgUtil updateImgUtil=new UpdateImgUtil();
+		String path=updateImgUtil.updateImg(files);
 		JSONObject json=new JSONObject();
+		if(path==null) {
+			json.accumulate("code",400);
+	        json.accumulate("msg","图片存储失败，请重新填写事件，上传图片");
+	        json.accumulate("data","no1");
+			return  json;
+		}else if("文件过大,内存溢出异常".equals(path)||"文件路径错误,IO异常".equals(path)){
+			json.accumulate("code",400);
+	        json.accumulate("msg",path);
+	        json.accumulate("data","no1");
+			return  json;
+		}
 		EventStep eventStep=new EventStep();
 		Event event=new Event();
-		String level_1=request.getParameter("level_1");
-		String level_2=request.getParameter("level_2");
-		String description=request.getParameter("description");
 		Integer etypeid=eventTypeDao.findAllBylevel_2(level_2);
-		
 		//生成it事件id
 		Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String uuid1 = sdf.format(date)+"-"+etypeid;
         String uuid = uuid1+"-"+1;
+        System.out.println(uuid+"--------事件号uuid----------------");
         eventStep.setUuid(uuid);
 		eventStep.setStep("1");
 		eventStep.setStepDate(new Date());
+		eventStep.setImgurl(path);
 		eventStepDao.save(eventStep);
-		
-		
 		event.setUuid(uuid);
 		event.setEvent(etypeid);
-		String userid=request.getParameter("userid");
 		event.setUserid(userid);
-		String phone=request.getParameter("phone");
 		event.setPhone(phone);
 		 //获取操作人员
         HttpSession session = request.getSession();
         String adminuser = (String)session.getAttribute("username");
 		event.setAdminuser(adminuser);
 		event.setDate(new Date());
-		String remark=request.getParameter("remark");
 		event.setRemark(remark);
 		event.setState("受理中");
-		String itemid=request.getParameter("itemid");
 		event.setItemid(itemid);
 		eventDao.save(event);
 		
 		json.accumulate("code",200);
         json.accumulate("msg","记录成功");
         json.accumulate("data","ok");
-      /*  wxApi.sendMissionToIT(new String[]{userid,executorid},level_1+"的服务申请",
-                " 申请类型: 软件无法正常工作<br> 申请描述: 用户填写的内容<br>" +
-                        " 事件等级: 加急处理",
-                "6",
-                new String[]{"1","2"},new String[]{"拒接","接收"},new String[]{"已拒接","开始处理"},"http://www.baidu.com");
-        */
         
+        String[] user =repairUserDao.findAllUserid();
+       /* https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?
+        * access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD
+        * ACCESS_TOKEN=wwbc7acf1bd2c6f766
+        * department_id=2
+        * fetch_child =     是否递归获取子部门下面的成员：1-递归获取，0-只获取本部门
+*/        
+       /* String[] user = null;
+        for (int i = 0; i < list.size(); i++) {
+        	RepairUser repairUser=list.get(i);
+        	System.out.println(repairUser.getUserid());
+        	user[i] = repairUser.getUserid();
+		}*/
+        wxApi.sendMissionToIT(user,level_1+"的服务申请", "  类型: "+level_2+"<br> 申请描述: "+description+"<br>" + " 事件等级: 一般",
+        		uuid,
+                new String[]{"1","2"},new String[]{"拒接","接收"},
+                new String[]{"已拒接","开始处理"},"");
 		return json;
 	}
+	
+	
+	
 
 }

@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import com.liwinon.itevent.entity.primary.EventType;
 
 public interface EventTypeDao extends JpaRepository<EventType,Integer>, JpaSpecificationExecutor<EventType>{
-	@Query(value = "select  distinct level_1  from ITE_EventType ",nativeQuery = true)
+	@Query(value = "select  distinct level_1  from ITE_EventType where eTypeId > 9",nativeQuery = true)
 	List findAlllevel_1();
 	
 	@Query(value = "select   level_2 from ITE_EventType where level_1  =:value",nativeQuery = true)

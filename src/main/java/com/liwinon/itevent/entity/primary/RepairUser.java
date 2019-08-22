@@ -12,8 +12,8 @@ import javax.persistence.Table;
 @Table(name = "ITE_RepairUser")
 public class RepairUser {
 	 	@Id
-	    private String userid;  //工号
-	    private String wxid;	//企业微信账号
+	    private String userid;  //企业微信userid
+	    private String personid;	//工号
 	    private String name;	//姓名
 	    private String userlevel;//级别
 	    private String phone;    //电话
@@ -23,11 +23,11 @@ public class RepairUser {
 		public void setUserid(String userid) {
 			this.userid = userid;
 		}
-		public String getWxid() {
-			return wxid;
+		public String getPersonid() {
+			return personid;
 		}
-		public void setWxid(String wxid) {
-			this.wxid = wxid;
+		public void setPersonid(String personid) {
+			this.personid = personid;
 		}
 		public String getName() {
 			return name;
@@ -49,7 +49,7 @@ public class RepairUser {
 		}
 		@Override
 		public String toString() {
-			return "RepairUser [userid=" + userid + ", wxid=" + wxid + ", name=" + name + ", userlevel=" + userlevel
+			return "RepairUser [userid=" + userid + ", personid=" + personid + ", name=" + name + ", userlevel=" + userlevel
 					+ ", phone=" + phone + "]";
 		}
 	    

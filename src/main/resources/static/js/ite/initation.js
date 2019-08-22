@@ -266,7 +266,182 @@ $(function () {
     $("#eventManager-nav").removeClass("layui-nav-itemed");
     $("#assets-nav").addClass("layui-nav-itemed");
     //赋值初始化数值
+    
+    window.onload = function(){
+    	var files=[];
+    	var filesa=[];
+    	var result;
+        var dataArr = []; // 储存所选图片的结果(文件名和base64数据)
+    	var fd;
+        var that = this;
+        var uploadBtn = document.querySelector('#upload');
+        var previewImgList = document.querySelector('.preview_img_list');
+        var submitBtn = document.querySelector('#submit');
+
+        imgArr = new Array();
+
+        uploadBtn.addEventListener('change',function(){
+        	fd = null ;
+            fd = new FormData();
+            var iLen = this.files.length;
+            if(iLen>5){
+            	layer.alert("最多上传5张图片", {
+      			  icon: 1,
+      			  time: 2000});
+            	return false;
+            }
+            for(var i=0;i<iLen;i++){
+                var reader = new FileReader();
+                var aaaa=this.files[i].name;
+                console.log(this.files[i])
+                var ab="ok";
+                for(var j=0;j<filesa.length;j++){
+                	if(filesa[j]==aaaa){
+                		layer.msg("不能挑选重复图片", {
+                			  icon: 1,
+                			  time: 2000});
+                		ab="no";
+                	}
+                }
+                if(ab=="no"){
+                	continue;
+                }
+                fd.append("file",this.files[i]);
+                reader.readAsDataURL(this.files[i]);  //转成base64
+                reader.fileName = this.files[i].name;
+                filesa.push(this.files[i].name);
+                reader.onload = function(e){
+                    var imgMsg = {
+                        name : reader.fileName,//获取文件名
+                        base64 : reader.result   //reader.readAsDataURL方法执行完后，base64数据储存在reader.result里
+                    }
+                    dataArr.push(imgMsg);
+                    result = '<div class="result layui-col-xs12 layui-col-md4" style="margin-right: 10px"><img class="subPic" src="'+this.result+'" alt="'+this.fileName+'"/><div class="delete tc" color="red">删除</div></div>';
+                    var div = document.createElement('div');
+                    div.innerHTML = result;
+                    div['className'] = 'float';
+                    document.getElementsByClassName("gallery")[0].appendChild(div);  　　//插入dom树
+                    var img = div.getElementsByTagName('img')[0];
+                    img.onload = function(){
+                        var nowHeight = ReSizePic(this); //设置图片大小
+                        this.parentNode.style.display = 'block';
+                        var oParent = this.parentNode;
+                        if(nowHeight){
+                            oParent.style.paddingTop = (oParent.offsetHeight - nowHeight)/2 + 'px';
+                        }
+                    }
+                    div.onclick = function(){
+                        $(this).remove();                  // 在页面中删除该图片元素
+                    }
+                }
+            }
+        },false);
+        
+        submitBtn.addEventListener('click',function(){
+            if(!filesa.length){
+            	layer.msg("请选择要上传的图片", {
+        			  icon: 1,
+          			  time: 2000});
+                return false;
+            }
+            var userid = document.getElementById("userid").value;
+            if(userid==""||userid==null||userid==undefined){
+            	layer.msg("请填写发起人工号", {
+      			  icon: 1,
+      			  time: 2000});
+            	return false;
+            }
+            var phone = document.getElementById("phone").value;
+            if(phone==""||phone==null||phone==undefined){
+            	layer.msg("请填写发起人电话", {
+      			  icon: 1,
+      			  time: 2000});
+            	return false;
+            }
+            fd.append("userid",userid);
+            fd.append("phone",phone);
+            var level_1 = document.getElementById("level_1").value;
+            fd.append("level_1",level_1);
+            var level_2 = document.getElementById("level_2").value;
+            fd.append("level_2",level_2);
+            var description = document.getElementById("description").value;
+            fd.append("description",description);
+            var type = document.getElementById("type").value;
+            fd.append("type",type);
+            var brand = document.getElementById("brand").value;
+            fd.append("brand",brand);
+            var itemid = document.getElementById("itemid").value;
+            fd.append("itemid",itemid);
+            var remark = document.getElementById("remark").value;
+            fd.append("remark",remark);
+            $.ajax({
+                url : '/itevent/initiation/postinitiation',
+                type : 'post',
+                data : fd,
+                processData: false,   //用FormData传fd时需有这两项
+                contentType: false,
+                timeout:60000,
+                beforeSend:function(XMLHttpRequest){
+                	XMLHttpRequest.setRequestHeader("token",token);
+                },
+                success : function(res){
+                	if(res.data=="ok"){
+                		layer.msg(res.msg, {
+              			  icon: 1
+              			 });
+                	}else if(res.data=="no1"){
+                		layer.alert(res.msg, {
+                			  icon: 2
+                			 });
+                	}
+                },
+                error: function (err) {
+                    console.log(err)
+                    if (err.responseText=="ok"){
+                        alert("上传成功")
+                    } else{
+                        alert("上传超时!请查看文件夹是否上传成功")
+                    }
+                }
+            })
+        },false);
+
+    }
+
+
+
+    // 初始化图片宽度
+    // 使得图片高度一致
+    function ReSizePic(ThisPic) {
+        var RePicWidth = 200; //这里修改为您想显示的宽度值
+
+        var TrueWidth = ThisPic.width; //图片实际宽度
+        var TrueHeight = ThisPic.height; //图片实际高度
+
+        if(TrueWidth>TrueHeight){
+            //宽大于高
+            var reWidth = RePicWidth;
+            ThisPic.width = reWidth;
+            //垂直居中
+            var nowHeight = TrueHeight * (reWidth/TrueWidth);
+            return nowHeight;  //将图片修改后的高度返回，供垂直居中用
+        }else{
+            //宽小于高
+            var reHeight = RePicWidth;
+            ThisPic.height = reHeight;
+        }
+    }
+    
+    var adminuser=$("#adminuser").val();
+    if(adminuser==""||adminuser==null||adminuser==undefined){//web端 上传
+    	
+    }else{ //移动端上传
+    	
+    }
 })
+function qywxuser(){
+	
+}
 //自动查询责任人工号
 function selectaa(aaa){
 	 $.ajax({
@@ -290,3 +465,44 @@ function selectaa(aaa){
 			}
 		});	
 }
+
+
+/*
+document.getElementById("gallery").innerHTML="";
+var img=this.files; 
+var div=document.createElement("div");
+for(var i=0;i<img.length;i++){
+    var file=img[i]; var url=URL.createObjectURL(file); 
+    var box=document.createElement("img"); 
+    box.setAttribute("src",url); 
+    box.className='img';
+
+    var imgBox=document.createElement("div");
+    imgBox.style.display='inline-block';
+    imgBox.className='img-item';
+
+    imgBox.appendChild(box);
+    var body=document.getElementsByClassName("gallery")[0]; 
+    body.appendChild(imgBox);
+    
+    var deleteIcon = document.createElement("span");
+    deleteIcon.className = 'delete';
+    deleteIcon.innerText = '删除';
+    deleteIcon.dataset.filename = img[i].name;
+    imgBox.appendChild(deleteIcon);
+    
+    that.files = img;
+    $(deleteIcon).click(function () {
+        var filename = $(this).data("filename");
+        $(this).parent().remove();
+        var fileList = Array.from(that.files);
+
+        for(var j=0;j<fileList.length;j++){
+            if(fileList[j].name = filename){
+                fileList.splice(j,1);
+                break;
+            }
+        }
+        that.files = fileList
+    })
+}*/

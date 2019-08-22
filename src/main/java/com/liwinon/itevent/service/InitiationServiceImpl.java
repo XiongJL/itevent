@@ -102,7 +102,6 @@ public class InitiationServiceImpl implements InitiationService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String uuid1 = sdf.format(date)+"-"+etypeid;
         String uuid = uuid1+"-"+1;
-        System.out.println(uuid+"--------事件号uuid----------------");
         eventStep.setUuid(uuid);
 		eventStep.setStep("1");
 		eventStep.setStepDate(new Date());

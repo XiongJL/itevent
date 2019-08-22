@@ -11,6 +11,7 @@ import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.EventStep;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,15 +45,18 @@ public class MissionServiceImpl implements MissionService {
         res.put("ing",ings);
         String[] imgUrls =null;
         if (eSteps.size()>0){
-            EventStep tmp = eSteps.get(0);
-            String[] tmpUrls = tmp.getImgurl().split(",");
-            if (tmpUrls.length>0){
-                imgUrls =  new String[tmpUrls.length];
-                for (int i=0;i<tmpUrls.length;i++){
-                    imgUrls[i]  = tmpUrls[i];
+            EventStep tmp = eSteps.get(eSteps.size()-1);  //获取环节最开始的图片信息,倒叙
+            if (!StringUtils.isEmpty(tmp.getImgurl())){
+                String[] tmpUrls = tmp.getImgurl().split(",");
+                if (tmpUrls.length>0){
+                    imgUrls =  new String[tmpUrls.length];
+                    for (int i=0;i<tmpUrls.length;i++){
+                        imgUrls[i]  = tmpUrls[i];
+                    }
                 }
+            }else{
+                imgUrls = new String[]{};
             }
-
         }else{
             imgUrls = new String[]{};
         }

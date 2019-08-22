@@ -19,7 +19,7 @@ public class MissionController {
     @Autowired
     MissionService mission;
 
-    @GetMapping(value = "/qMission")  //是否需要区分手机版?
+    @GetMapping(value = "/qMission")  //单模块版
     @PasssToken
     public  String qMission(String uuid, Model model){
         System.out.println(uuid);

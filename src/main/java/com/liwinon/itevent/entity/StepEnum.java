@@ -4,8 +4,8 @@ package com.liwinon.itevent.entity;
  * 事件环节{受理中1,处理2-5(移交过程2程序员,3工程师,4高工,5经理),结束6,回访7,满意度调查8,竣工0}
  */
 public enum StepEnum {
-    accept("受理中",1),handleLevel1("程序员",2),handleLevel2("助理工程师",3),handleLevel3("工程师",4),
-    handleLevel4("经理",5),done("处理结束",6),reVisit("回访用户",7),
+    accept("受理中",1),handleLevel1("程序员处理中",2),handleLevel2("移交助理工程师",3),handleLevel3("移交工程师",4),
+    handleLevel4("上报经理",5),done("处理结束",6),reVisit("回访用户",7),
     survey("用户满意度调查",8),complete("竣工",0);
     private String step;
     private int stepid;

@@ -76,7 +76,7 @@ public class InitiationServiceImpl implements InitiationService {
 	@Override
 	@Transactional
 	public JSONObject postinitiation(HttpServletRequest request, MultipartFile[] files,
-			String userid, String phone,
+			String userid, String phone,String adminuser,
 			String level_1, String level_2, String description, 
 			String type, String brand, String itemid,
 			String remark) {
@@ -113,8 +113,12 @@ public class InitiationServiceImpl implements InitiationService {
 		event.setPhone(phone);
 		 //获取操作人员
         HttpSession session = request.getSession();
-        String adminuser = (String)session.getAttribute("username");
-		event.setAdminuser(adminuser);
+        if(adminuser!=null&&!"".equals(adminuser)) {
+        	event.setAdminuser(adminuser);        	
+        }else {
+        	 String adminusera = (String)session.getAttribute("username");
+        	 event.setAdminuser(adminuser);        	
+        }
 		event.setDate(new Date());
 		event.setRemark(remark);
 		event.setState("受理中");

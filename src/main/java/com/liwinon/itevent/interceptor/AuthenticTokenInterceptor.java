@@ -40,7 +40,15 @@ public class AuthenticTokenInterceptor implements HandlerInterceptor {
         if (session==null ||session.getAttribute("username")==null||session.getAttribute("username")=="" ){
             String  parma = request.getQueryString();
             System.out.println("param:"+parma);
-            session.setAttribute("OriginUrl",url+"?"+parma);
+            if (url.indexOf("login")>=0){  //登录页面不做验证
+                System.out.println("之前进入的登录页面,不做保存");
+                return true;
+            }
+            String trueURL = url;
+            if (parma!=null){
+                trueURL += "?"+parma;
+            }
+            session.setAttribute("OriginUrl",trueURL);
             response.sendRedirect("/itevent/login");
             return true;
         }

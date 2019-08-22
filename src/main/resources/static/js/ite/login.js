@@ -32,7 +32,7 @@ function login(){
                     url:'/itevent/originURL',
                     success:function (res) {
                         var url = "/itevent/index";
-                        if (res!=null){
+                        if (res!=null && res!="" && res.indexOf("login")==-1){ //如果第一次进入的是登录页面不跳转回去
                             url = res;
                         }
                         console.log(res)

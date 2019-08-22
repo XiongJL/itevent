@@ -39,6 +39,7 @@ public class indexController {
             AccessMode = "android";
         }else if(userAgent.indexOf("iphone") != -1 || userAgent.indexOf("ipad") != -1 || userAgent.indexOf("ipod") != -1){
             //苹果
+            AccessMode = "apple";
         }else{
             //电脑
             AccessMode = "pc";

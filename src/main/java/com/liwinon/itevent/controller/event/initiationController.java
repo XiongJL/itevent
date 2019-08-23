@@ -5,6 +5,12 @@ import com.liwinon.itevent.service.InitiationService;
 
 import net.sf.json.JSONObject;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 
 @Controller
@@ -63,6 +71,37 @@ public class initiationController {
 	public JSONObject description(HttpServletRequest request,HttpServletResponse response){
 		return initiationService.description(request);
 	}
+	@PostMapping(value="/initiation/postinitiationapple")
+	@PasssToken
+	@ResponseBody
+	public JSONObject postinitiationapple(HttpServletRequest request,HttpServletResponse response/*,
+			@RequestParam("file")MultipartFile[] file, @RequestParam("userid")String userid
+			, @RequestParam("phone")String phone,@RequestParam("adminuser")String adminuser,
+			@RequestParam("level_1")String level_1
+			, @RequestParam("level_2")String level_2, @RequestParam("description")String description
+			, @RequestParam("type")String type, @RequestParam("brand")String brand
+			, @RequestParam("itemid")String itemid, @RequestParam("remark")String remark*/){
+		//创建一个通用的多部分解析器
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+        //判断request是否有文件需要上传
+        List<MultipartFile> file = null ;
+        if(multipartResolver.isMultipart(request)){
+            //转换成多部分request
+            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
+            file = multiRequest.getFiles("file");
+        }
+        String userid=request.getParameter("userid");
+        String phone=request.getParameter("phone");
+        String adminuser=request.getParameter("adminuser");
+        String level_1=request.getParameter("level_1");
+        String level_2=request.getParameter("level_2");
+        String description=request.getParameter("description");
+        String type=request.getParameter("type");
+        String brand=request.getParameter("brand");
+        String itemid=request.getParameter("itemid");
+        String remark=request.getParameter("remark");
+		return initiationService.postinitiationapple(request,file,userid,phone,adminuser,level_1,level_2,description,type,brand,itemid,remark);
+	}
 	@PostMapping(value="/initiation/postinitiation")
 	@PasssToken
 	@ResponseBody
@@ -75,4 +114,6 @@ public class initiationController {
 			, @RequestParam("itemid")String itemid, @RequestParam("remark")String remark){
 		return initiationService.postinitiation(request,file,userid,phone,adminuser,level_1,level_2,description,type,brand,itemid,remark);
 	}
+	
 }
+	

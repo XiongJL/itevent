@@ -346,7 +346,7 @@ $("#submit").click(function() {
                  var remark = document.getElementById("remark").value;
                  formData.append("remark",remark);
                  $.ajax({
-                     url : '/itevent/initiation/postinitiation',
+                     url : '/itevent/initiation/postinitiationapple',
                      type : 'post',
                      data : fd,
                      async: false,  
@@ -354,9 +354,6 @@ $("#submit").click(function() {
                      processData: false,   //用FormData传fd时需有这两项
                      contentType: false,
                      timeout:600000,
-                     headers: {
-                    	  'Content-Type': 'multipart/form-data'
-                    	},
                      beforeSend:function(XMLHttpRequest){
                      	XMLHttpRequest.setRequestHeader("token",token);
                      },

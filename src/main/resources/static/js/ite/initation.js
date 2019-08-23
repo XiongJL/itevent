@@ -37,7 +37,6 @@ function chushihua(aaa){
 					option += '<option value="'+data[i]+'">' + data[i] + '</option>';
 				}
 				$("#level_2").append(option);
-			//	form.render('select');
 			}
 		});	
 	 $.ajax({
@@ -108,7 +107,6 @@ function chushihuab(select2){
             }
         }
     })
-   // form.render('select');
 }
 layui.use(['form','layer','element','laydate'], function(){
     element = layui.element,
@@ -231,22 +229,20 @@ layui.use(['form','layer','element','laydate'], function(){
 	        }
 	    })
     });
-    
-
 });
+//赋值初始化数值
+var files=[];
+var filesa=[];
+var result;
+var aa;
+var dataArr = []; // 储存所选图片的结果(文件名和base64数据)
+var fd;
+var that = this;
 $(function () {
     //添加导航栏选中样式
     $("#back").addClass("layui-this");
     $("#eventManager-nav").removeClass("layui-nav-itemed");
     $("#assets-nav").addClass("layui-nav-itemed");
-    //赋值初始化数值
-    var files=[];
-    var filesa=[];
-    var result;
-    var aa;
-    var dataArr = []; // 储存所选图片的结果(文件名和base64数据)
-    var fd;
-    var that = this;
 
         var uploadBtn = document.querySelector('#upload');
         var previewImgList = document.querySelector('.preview_img_list');
@@ -278,7 +274,7 @@ $(function () {
                         base64 : reader.result   //reader.readAsDataURL方法执行完后，base64数据储存在reader.result里
                     }
                     dataArr.push(imgMsg);
-                    result = '<div class="result layui-col-xs12 layui-col-md4" style="margin-right: 10px"><img class="subPic" src="'+this.result+'" alt="'+this.fileName+'"/><div class="delete tc" color="red">删除</div></div>';
+                    result = '<div class="layui-col-xs12 layui-col-md4" style="margin-right: 10px"><img class="subPic" src="'+this.result+'" alt="'+this.fileName+'"/><div class="delete tc" color="red">删除</div></div>';
                     var div = document.createElement('div');
                     div.innerHTML = result;
                     div['className'] = 'float';
@@ -299,24 +295,55 @@ $(function () {
             }
         },false);
         
-        $("#submit").click(function() {
+
+	// 初始化图片宽度
+	// 使得图片高度一致
+	function ReSizePic(ThisPic) {
+		var RePicWidth = 200; //这里修改为您想显示的宽度值
+
+		var TrueWidth = ThisPic.width; //图片实际宽度
+		var TrueHeight = ThisPic.height; //图片实际高度
+
+		if(TrueWidth>TrueHeight){
+			//宽大于高
+			var reWidth = RePicWidth;
+			ThisPic.width = reWidth;
+			//垂直居中
+			var nowHeight = TrueHeight * (reWidth/TrueWidth);
+			return nowHeight;  //将图片修改后的高度返回，供垂直居中用
+		}else{
+			//宽小于高
+			var reHeight = RePicWidth;
+			ThisPic.height = reHeight;
+		}
+	}
+
+	var adminuser=$("#adminuser").val();
+	if(adminuser==""||adminuser==null||adminuser==undefined){//web端 上传
+
+	}else{ //移动端上传
+
+	}
+})
+
+$("#submit").click(function() {
             if(!filesa.length){
             	layer.msg("请选择要上传的图片", {
-        			  icon: 1,
+        			  icon: 2,
           			  time: 2000});
                 return false;
             }
             var userid = document.getElementById("userid").value;
             if(userid==""||userid==null||userid==undefined){
             	layer.msg("请填写发起人工号", {
-      			  icon: 1,
+      			  icon: 2,
       			  time: 2000});
             	return false;
             }
             var phone = document.getElementById("phone").value;
             if(phone==""||phone==null||phone==undefined){
             	layer.msg("请填写发起人电话", {
-      			  icon: 1,
+      			  icon: 2,
       			  time: 2000});
             	return false;
             }
@@ -364,69 +391,8 @@ $(function () {
           			  icon: 2
           			 });
                 }
-            })
+            });
         });
-
-
-
-
-    // 初始化图片宽度
-    // 使得图片高度一致
-    function ReSizePic(ThisPic) {
-        var RePicWidth = 200; //这里修改为您想显示的宽度值
-
-        var TrueWidth = ThisPic.width; //图片实际宽度
-        var TrueHeight = ThisPic.height; //图片实际高度
-
-        if(TrueWidth>TrueHeight){
-            //宽大于高
-            var reWidth = RePicWidth;
-            ThisPic.width = reWidth;
-            //垂直居中
-            var nowHeight = TrueHeight * (reWidth/TrueWidth);
-            return nowHeight;  //将图片修改后的高度返回，供垂直居中用
-        }else{
-            //宽小于高
-            var reHeight = RePicWidth;
-            ThisPic.height = reHeight;
-        }
-    }
-    
-    var adminuser=$("#adminuser").val();
-    if(adminuser==""||adminuser==null||adminuser==undefined){//web端 上传
-    	
-    }else{ //移动端上传
-    	
-    }
-})
-function qywxuser(){
-	
-}
-//自动查询责任人工号
-function selectaa(aaa){
-	 $.ajax({
-			async : false,
-			type : "GET",
-			url : "/itevent/initiation/level_2",
-			dataType : "json",
-			data : {value:aaa},
-			success : function(res) {
-				$("#level_2").empty(); 
-				data=res.data;
-				for(var i = 0; i <data.length; i++) {
-					var option = "";
-					var optiona = "";
-					option = '<option value="'+data[i][0]+'">' + data[i][0] + '</option>';
-					optiona = '<option value="'+data[i][1]+'">' + data[i][1] + '</option>';
-					$("#level_2").append(option);
-					$("#description").append(optiona);
-					 form.render('select');
-				}
-			}
-		});	
-}
-
-
 /*
 document.getElementById("gallery").innerHTML="";
 var img=this.files; 

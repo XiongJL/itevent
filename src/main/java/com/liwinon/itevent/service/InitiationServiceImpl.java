@@ -104,7 +104,6 @@ public class InitiationServiceImpl implements InitiationService {
         String uuid = uuid1+"-"+1;
         eventStep.setUuid(uuid);
 		eventStep.setStep(1);
-		eventStep.setStepDate(new Date());
 		eventStep.setImgurl(path);
 		eventStepDao.save(eventStep);
 		event.setUuid(uuid);

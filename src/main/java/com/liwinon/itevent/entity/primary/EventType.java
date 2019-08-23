@@ -15,6 +15,8 @@ public class EventType {
 	    private String level_1;
 	    private String level_2;
 	    private String description;
+	    private String group;
+		private int startLevel;
 		public int geteTypeId() {
 			return eTypeId;
 		}
@@ -39,17 +41,42 @@ public class EventType {
 		public void setDescription(String description) {
 			this.description = description;
 		}
-		@Override
-		public String toString() {
-			return "EventType [eTypeId=" + eTypeId + ", level_1=" + level_1 + ", level_2=" + level_2 + ", description="
-					+ description + "]";
-		}
-		public EventType() {
-			super();
-			this.eTypeId = eTypeId;
-			this.level_1 = level_1;
-			this.level_2 = level_2;
-			this.description = description;
-		}
+
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+	public int getStartLevel() {
+		return startLevel;
+	}
+
+	public void setStartLevel(int startLevel) {
+		this.startLevel = startLevel;
+	}
+
+	public EventType(String level_1, String level_2, String description, String group, int startLevel) {
+		this.level_1 = level_1;
+		this.level_2 = level_2;
+		this.description = description;
+		this.group = group;
+		this.startLevel = startLevel;
+	}
+
+	@Override
+	public String toString() {
+		return "EventType{" +
+				"eTypeId=" + eTypeId +
+				", level_1='" + level_1 + '\'' +
+				", level_2='" + level_2 + '\'' +
+				", description='" + description + '\'' +
+				", group='" + group + '\'' +
+				", startLevel=" + startLevel +
+				'}';
+	}
+
 	    
 }

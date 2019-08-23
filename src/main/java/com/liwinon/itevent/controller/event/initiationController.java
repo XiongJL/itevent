@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,17 +27,17 @@ public class initiationController {
 	@GetMapping(value = "/initiation")
     @PasssToken
     public String initiation(String adminuser,Model model,HttpServletRequest request){
+		String userAgent = request.getHeader("user-agent").toLowerCase();
 		if(!"".equals(adminuser)) {
 			model.addAttribute("adminuser", adminuser);
 		}
-		
 		HttpSession session = request.getSession();
 		String models=(String) session.getAttribute("AccessMode");
 		if("pc".equals(models)) {			
-			System.out.println("pc端=================");
 			return "event/initiationpc";
-		}else {
-			System.out.println("移动端--------------------");
+		}else if(userAgent.contains("apple")) {  //识别apple的访问页面问题   apple的微信  企业微信     浏览器统一范文这个页面
+			return "event/initiationapple";  
+		}else {   //安卓   安卓微信    企业微信   都可以用这个也买你
 			return "event/initiation";
 		}
     }
@@ -68,12 +67,12 @@ public class initiationController {
 	@PasssToken
 	@ResponseBody
 	public JSONObject postinitiation(HttpServletRequest request,HttpServletResponse response,
-			@RequestParam("file")MultipartFile[] files, @RequestParam("userid")String userid
+			@RequestParam("file")MultipartFile[] file, @RequestParam("userid")String userid
 			, @RequestParam("phone")String phone,@RequestParam("adminuser")String adminuser,
 			@RequestParam("level_1")String level_1
 			, @RequestParam("level_2")String level_2, @RequestParam("description")String description
 			, @RequestParam("type")String type, @RequestParam("brand")String brand
 			, @RequestParam("itemid")String itemid, @RequestParam("remark")String remark){
-		return initiationService.postinitiation(request,files,userid,phone,adminuser,level_1,level_2,description,type,brand,itemid,remark);
+		return initiationService.postinitiation(request,file,userid,phone,adminuser,level_1,level_2,description,type,brand,itemid,remark);
 	}
 }

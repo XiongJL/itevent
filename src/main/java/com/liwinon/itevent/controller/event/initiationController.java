@@ -33,10 +33,12 @@ public class initiationController {
 		}
 		
 		HttpSession session = request.getSession();
-		String models=session.getAttribute("AccessMode").toString();
+		String models=(String) session.getAttribute("AccessMode");
 		if("pc".equals(models)) {			
+			System.out.println("pc端=================");
 			return "event/initiationpc";
 		}else {
+			System.out.println("移动端--------------------");
 			return "event/initiation";
 		}
     }

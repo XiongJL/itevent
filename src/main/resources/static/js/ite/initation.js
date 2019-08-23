@@ -1,6 +1,8 @@
 var token = localStorage.getItem("token");
 //JavaScript代码区域
-var element,form,layer = null
+var element,
+form,
+layer = null
 $.ajax({
 	async : false,
 	type : "GET",
@@ -17,7 +19,7 @@ $.ajax({
 		$("#level_1").append(option);
 		chushihua(select2);
 	}
-});
+});	
 function chushihua(aaa){
 	var bb;
 	 $.ajax({
@@ -35,6 +37,7 @@ function chushihua(aaa){
 					option += '<option value="'+data[i]+'">' + data[i] + '</option>';
 				}
 				$("#level_2").append(option);
+			//	form.render('select');
 			}
 		});	
 	 $.ajax({
@@ -48,7 +51,7 @@ function chushihua(aaa){
 				data=res.data;
 				$("#description").val(data);
 			}
-		});
+		});	
 }
 $.ajax({
 	async : false,
@@ -105,7 +108,7 @@ function chushihuab(select2){
             }
         }
     })
-    form.render('select');
+   // form.render('select');
 }
 layui.use(['form','layer','element','laydate'], function(){
     element = layui.element,
@@ -237,16 +240,17 @@ $(function () {
     $("#eventManager-nav").removeClass("layui-nav-itemed");
     $("#assets-nav").addClass("layui-nav-itemed");
     //赋值初始化数值
-    	var files=[];
-    	var filesa=[];
-    	var result;
-    	var aa;
-        var dataArr = []; // 储存所选图片的结果(文件名和base64数据)
-    	var fd;
-        var that = this;
+    var files=[];
+    var filesa=[];
+    var result;
+    var aa;
+    var dataArr = []; // 储存所选图片的结果(文件名和base64数据)
+    var fd;
+    var that = this;
+
         var uploadBtn = document.querySelector('#upload');
         var previewImgList = document.querySelector('.preview_img_list');
-        var submitBtn = document.querySelector('#submit');
+
         imgArr = new Array();
         uploadBtn.addEventListener('change',function(){
         	fd = null ;
@@ -264,17 +268,6 @@ $(function () {
                 var aaaa=this.files[i].name;
                 console.log(this.files[i])
                 var ab="ok";
-               /* for(var j=0;j<filesa.length;j++){
-                	if(filesa[j]==aaaa){
-                		layer.msg("不能挑选重复图片", {
-                			  icon: 1,
-                			  time: 2000});
-                		ab="no";
-                	}
-                }
-                if(ab=="no"){
-                	continue;
-                }*/
                 fd.append("file",this.files[i]);
                 reader.readAsDataURL(this.files[i]);  //转成base64
                 reader.fileName = this.files[i].name;
@@ -351,7 +344,7 @@ $(function () {
                 data : fd,
                 processData: false,   //用FormData传fd时需有这两项
                 contentType: false,
-                timeout:60000,
+                timeout:600000,
                 beforeSend:function(XMLHttpRequest){
                 	XMLHttpRequest.setRequestHeader("token",token);
                 },
@@ -372,7 +365,7 @@ $(function () {
           			 });
                 }
             })
-        },false);
+        });
 
 
 

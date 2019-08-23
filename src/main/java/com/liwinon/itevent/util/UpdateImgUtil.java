@@ -25,9 +25,9 @@ public class UpdateImgUtil {
                     mf.transferTo(dest);
                     //上传后拼接路径
                     if(i==0) {
-                    	path=fileName;                    	
+                    	path=mf.getOriginalFilename();                    	
                     }else {
-                    	path=","+fileName;
+                    	path=","+mf.getOriginalFilename();
                     }
                 }catch (IllegalStateException e) {
                     return "文件过大,内存溢出异常";

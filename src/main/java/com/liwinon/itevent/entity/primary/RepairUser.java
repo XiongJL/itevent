@@ -17,6 +17,7 @@ public class RepairUser {
 	    private String name;	//姓名
 	    private int userlevel;//级别
 	    private String phone;    //电话
+		private String group; //组别
 		public String getUserid() {
 			return userid;
 		}
@@ -47,10 +48,24 @@ public class RepairUser {
 		public void setPhone(String phone) {
 			this.phone = phone;
 		}
-		@Override
-		public String toString() {
-			return "RepairUser [userid=" + userid + ", personid=" + personid + ", name=" + name + ", userlevel=" + userlevel
-					+ ", phone=" + phone + "]";
-		}
-	    
+
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
+
+	@Override
+	public String toString() {
+		return "RepairUser{" +
+				"userid='" + userid + '\'' +
+				", personid='" + personid + '\'' +
+				", name='" + name + '\'' +
+				", userlevel=" + userlevel +
+				", phone='" + phone + '\'' +
+				", group='" + group + '\'' +
+				'}';
+	}
 }

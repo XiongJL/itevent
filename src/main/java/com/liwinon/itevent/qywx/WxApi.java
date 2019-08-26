@@ -13,4 +13,7 @@ public interface WxApi {
     //给某个用户发送文本消息
     String sendTextToOne(String[] userid,String content);
 
+
+    //更新任务卡片消息状态为拒绝
+    String changeMissionToRefuse(String task_id,String clicked_key);
 }

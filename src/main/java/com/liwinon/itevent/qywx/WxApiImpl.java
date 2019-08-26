@@ -1,19 +1,32 @@
 package com.liwinon.itevent.qywx;
 
+import com.liwinon.itevent.dao.primaryRepo.EventDao;
+import com.liwinon.itevent.dao.primaryRepo.EventTypeDao;
+import com.liwinon.itevent.dao.primaryRepo.RepairUserDao;
+import com.liwinon.itevent.entity.primary.Event;
+import com.liwinon.itevent.entity.primary.EventType;
+import com.liwinon.itevent.entity.primary.RepairUser;
 import com.liwinon.itevent.util.HttpUtil;
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.liwinon.itevent.qywx.WxConfig.*;
 
 @Service
 public class WxApiImpl implements WxApi {
-
+    @Autowired
+    EventTypeDao eventTypeDao;
+    @Autowired
+    EventDao eventDao;
+    @Autowired
+    RepairUserDao repairUserDao;
     /**
      * 给IT事件服务APP的用户发送卡片消息
      */
@@ -26,7 +39,7 @@ public class WxApiImpl implements WxApi {
         if (!"0".equals(res.getString("errcode"))) {
             return userid.toString() + "发送卡票消息失败";
         }
-        return null;
+        return "ok";
     }
 
     @Override
@@ -34,18 +47,40 @@ public class WxApiImpl implements WxApi {
         String accesstoken = AccessToken.getAccessToken(Corpid.getValue(),IThelpSecret.getValue()).getString("access_token");
         JSONObject res = mission(userid,title,description,task_id,btnKey,btnName,btnReplace_name,IThelpId.getValue(),URL,accesstoken);
         if (!"0".equals(res.getString("errcode"))) {
+            System.out.println(userid.toString() + "发送任务失败!!");
             return userid.toString() + "发送任务失败!!";
         }
-        return null;
+        return "ok";
     }
 
     public String sendTextToOne(String[] userid,String content){
         String accesstoken = AccessToken.getAccessToken(Corpid.getValue(),IThelpSecret.getValue()).getString("access_token");
         JSONObject res =   text(userid, IThelpId.getValue(), accesstoken, content);
         if (!"0".equals(res.getString("errcode"))) {
-            return userid.toString() + "发送任务失败!!";
+            System.out.println(userid.toString() + "发送文本消息失败!!");
+            return userid.toString() + "发送文本消息失败!!";
         }
-        return null;
+        return "ok";
+    }
+
+    @Override
+    //更改任务状态为拒绝
+    public String changeMissionToRefuse(String task_id, String clicked_key) {
+        Event e= eventDao.findByUuid(task_id);
+        String team  =  eventTypeDao.findByETypeId(e.getEvent()).getTeam();
+        //获取所有team成员
+        List<RepairUser> teams =  repairUserDao.findByTeam(team);
+        String[] users = new String[teams.size()];;
+        for (int i= 0;i<teams.size();i++){
+            users[i] = teams.get(i).getUserid(); //获取企业微信账号
+        }
+        String accesstoken = AccessToken.getAccessToken(Corpid.getValue(),IThelpSecret.getValue()).getString("access_token");
+        JSONObject res = changeMissionState(users,IThelpId.getValue(),accesstoken,clicked_key,task_id);
+        if (!"0".equals(res.getString("errcode"))) {
+            System.out.println(task_id + "更改任务状态为拒绝失败!!");
+            return task_id + "更改任务状态为拒绝失败!!";
+        }
+        return "ok";
     }
 
     /**
@@ -161,6 +196,35 @@ public class WxApiImpl implements WxApi {
     }
 
     /**
+     * 更新任务卡片消息状态实现
+     * @return
+     */
+    static JSONObject changeMissionState(String[] userid,String agentid,String token,String clicked_key,
+                                         String task_id){
+        String users = "";
+        if (userid.length>1){
+            for (String user : userid){
+                users += user +"|";
+            }
+            users = users.substring(0,users.length()-1);
+        }else if (userid.length==1){
+            users = userid[0];
+        }else{
+            return null;
+        }
+        JSONObject json = new JSONObject();
+        json.accumulate("userids",users);
+        json.accumulate("agentid",agentid);
+        json.accumulate("task_id",task_id);
+        json.accumulate("clicked_key",clicked_key);
+        String param = json.toString();
+        System.out.println("json:" + param);
+        JSONObject res = JSONObject.fromObject(HttpUtil.reqPost(
+                "https://qyapi.weixin.qq.com/cgi-bin/message/update_taskcard?access_token=" + token, param));
+        System.out.println("WX返回的：" + res);
+        return res;
+    }
+    /**
      * 发送文本消息实现
      * @param userid
      * @param agentid
@@ -195,4 +259,7 @@ public class WxApiImpl implements WxApi {
 
         return res;
     }
+
+
+
 }

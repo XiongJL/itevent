@@ -76,6 +76,7 @@ public class ReceiveServiceImpl implements ReceiveService {
                 String event =  msg.getEvent();
                 String eventKey =  msg.getEventKey();
                 if ("click".equals(event)&& "1".equals(eventKey)){  //用户点击了查询 , 准备发送卡片消息(展示处理进度)
+                    System.out.println("接收到用户点击的查询事件");
                     String userid = msg.getFromUserName();      //查询当前用户的事件
                     //查询该企业微信对应的工号
                     RepairUser r =  repairDao.findByUserid(userid);
@@ -100,6 +101,7 @@ public class ReceiveServiceImpl implements ReceiveService {
                     }
                     return wxApi.sendCardToIT(new String[]{userid},title,description,URL,btntxt);
                 }else if ("taskcard_click".equals(event)){  //是任务卡片回调信息
+                    System.out.println("接收到任务卡片回调");
                     //获取卡片的task_id , 等同于事件的uuid.
                     String var = msg.getTaskId();
                     String[] str =  var.split("-");
@@ -153,8 +155,18 @@ public class ReceiveServiceImpl implements ReceiveService {
                             //发送文本消息给该人
                             e.setState("已拒绝");
                             eventDao.save(e);
+                            //请求更新任务卡片的信息
+                            String res = wxApi.changeMissionToRefuse(task_id,"1");
+                            if (res!="ok"){
+                                System.out.println("更新任务信息为拒接失败! : task_id:"+task_id);
+                            }
                             return wxApi.sendTextToOne(new String[]{msg.getFromUserName()},"您的申请已被拒绝,请尝试更改内容后重新申请.");
 
+                        }else{  //已有执行人, 无法拒绝
+                            //发送卡片信息,告知拒绝者已有人处理.
+                            return wxApi.sendCardToIT(new String[]{msg.getFromUserName()},"拒绝操作失败提示!"
+                                    ,"当前服务申请已有人接收受处理!",
+                                    WxConfig.QMissionURL.getValue()+task_id+"&qyid="+msg.getFromUserName(),"了解详情");
                         }
                     }else{
                         System.out.println("按钮值不对应!值为:"+EventKey);

@@ -15,4 +15,11 @@ public interface RepairUserDao extends JpaRepository<RepairUser,String>, JpaSpec
 	@Query(value = "select  userid from ITE_RepairUser where userlevel  = 1 ",nativeQuery = true)
 	 String[]  findAllUserid();
 
+	RepairUser findByPersonid(String personid);
+
+	@Query(value = "select u from RepairUser u where" +
+			" u.userlevel=:myLevel and u.team = :team")
+	List<RepairUser> findByUserlevelAndTeam(int myLevel, String team);
+
+	List<RepairUser> findByTeam(String team);
 }

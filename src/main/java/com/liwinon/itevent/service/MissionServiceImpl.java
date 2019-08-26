@@ -1,18 +1,21 @@
 package com.liwinon.itevent.service;
 
-import com.liwinon.itevent.dao.primaryRepo.EventDao;
-import com.liwinon.itevent.dao.primaryRepo.EventStepDao;
-import com.liwinon.itevent.dao.primaryRepo.EventTypeDao;
+import com.liwinon.itevent.dao.primaryRepo.*;
 import com.liwinon.itevent.dao.secondRepo.SapDao;
 import com.liwinon.itevent.entity.Model.MissionModel;
 import com.liwinon.itevent.entity.Model.MissionStepModel;
 import com.liwinon.itevent.entity.StepEnum;
 import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.EventStep;
+import com.liwinon.itevent.entity.primary.EventType;
+import com.liwinon.itevent.entity.primary.RepairUser;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +31,10 @@ public class MissionServiceImpl implements MissionService {
     EventTypeDao eventTypeDao;
     @Autowired
     SapDao sapDao;
+    @Autowired
+    AdminDao adminDao;
+    @Autowired
+    RepairUserDao repairUserDao;
 
 
     @Override
@@ -65,11 +72,62 @@ public class MissionServiceImpl implements MissionService {
         return res;
     }
 
+    /**
+     * 查询在当前时间段内可以转交的人员
+     * @param uuid
+     * @param qyid
+     * @param request
+     * @return
+     */
+    @Override
+    public JSONObject CanTurnOverUsers(String uuid, String qyid, HttpServletRequest request) {
+        List<EventStep> eSteps = eventStepDao.findByUuid(uuid);
+        //由于根据降序排序,第一个则是最后一次更新的步骤
+        EventStep last = eSteps.get(eSteps.size()-1);
+        JSONObject json = new JSONObject();
+        try {
+            //比对用户是否匹配
+            HttpSession session = request.getSession();
+            String username = (String) session.getAttribute("username");
+            String personid =  adminDao.findByUser(username).getUserid();
+            RepairUser me = repairUserDao.findByPersonid(personid);
+            String userid = me.getUserid();
+            if (!qyid.equals(userid)){  //如果和访问的用户不匹配, 不能发起转移
+                json.accumulate("code","err");
+                json.accumulate("data","企业微信账号和当前节点执行人不匹配");
+                return json;
+            }
+            //匹配成功,根据事件类型的组别和等级查找可转移对象,
+            int myLevel = me.getUserlevel();
+            List<RepairUser> canMoveUsers = null;
+            if (myLevel==1){
+                //查找1-2级同组的
+                canMoveUsers = repairUserDao.findByUserlevelAndTeam(myLevel,me.getTeam());
+            }else{
+                //除了1级, 2,3可以转移给 1,2,3级的同组
+                canMoveUsers = repairUserDao.findByTeam(me.getTeam());
+            }
+            json.accumulate("code","ok");
+            json.accumulate("data",canMoveUsers);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            JSONObject exception = new JSONObject();
+            exception.accumulate("code","exception");
+            exception.accumulate("data","有值为Null");
+            return exception;
+        }
+
+        return json;
+    }
+
+
+
     public MissionModel TransferToMission(Event event){
         if (event==null)
             return null;
+        EventType type = eventTypeDao.findByETypeId(event.getEvent());
         MissionModel model = new MissionModel(event.getUuid(),
-                eventTypeDao.findByETypeId(event.getEvent()).getLevel_2() ,
+                type.getLevel_2() ,type.getDescription(),
                 event.getUserid(),
                 sapDao.findNByUserId(event.getUserid()),
                 event.getPhone(),event.getItemid(),event.getDate(),event.getAdminuser(),

@@ -17,7 +17,7 @@ public class RepairUser {
 	    private String name;	//姓名
 	    private int userlevel;//级别
 	    private String phone;    //电话
-		private String group; //组别
+		private String team; //组别
 		public String getUserid() {
 			return userid;
 		}
@@ -49,12 +49,12 @@ public class RepairUser {
 			this.phone = phone;
 		}
 
-	public String getGroup() {
-		return group;
+	public String getTeam() {
+		return team;
 	}
 
-	public void setGroup(String group) {
-		this.group = group;
+	public void setTeam(String team) {
+		this.team = team;
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class RepairUser {
 				", name='" + name + '\'' +
 				", userlevel=" + userlevel +
 				", phone='" + phone + '\'' +
-				", group='" + group + '\'' +
+				", team='" + team + '\'' +
 				'}';
 	}
 }

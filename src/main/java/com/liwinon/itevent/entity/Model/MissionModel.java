@@ -5,6 +5,7 @@ import java.util.Date;
 public class MissionModel {
     private String uuid ;  //事件编号
     private String type; //事件类型
+    private String description; //事件描述
     private String userid; //申请人工号
     private String username; //申请人姓名
     private String phone;   //申请人电话
@@ -18,9 +19,10 @@ public class MissionModel {
     public MissionModel() {
     }
 
-    public MissionModel(String uuid, String type, String userid, String username, String phone, String itemid, Date date, String adminuser, String adminname, String state, String remark) {
+    public MissionModel(String uuid, String type, String description, String userid, String username, String phone, String itemid, Date date, String adminuser, String adminname, String state, String remark) {
         this.uuid = uuid;
         this.type = type;
+        this.description = description;
         this.userid = userid;
         this.username = username;
         this.phone = phone;
@@ -42,6 +44,14 @@ public class MissionModel {
 
     public String getRemark() {
         return remark;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setRemark(String remark) {
@@ -125,6 +135,7 @@ public class MissionModel {
         return "MissionModel{" +
                 "uuid='" + uuid + '\'' +
                 ", type='" + type + '\'' +
+                ", description='" + description + '\'' +
                 ", userid='" + userid + '\'' +
                 ", username='" + username + '\'' +
                 ", phone='" + phone + '\'' +

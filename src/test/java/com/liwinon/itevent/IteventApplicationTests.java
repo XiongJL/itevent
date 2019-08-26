@@ -37,7 +37,7 @@ public class IteventApplicationTests {
              " 申请类型: 软件无法正常工作<br> 申请描述: 用户填写的内容<br>" +
                      " 事件等级: 加急处理",
              "6",
-             new String[]{"1","2","3"},new String[]{"拒接","接收","忽略"},new String[]{"已拒接","开始处理","已忽略"},"http://www.baidu.com");
+             new String[]{"1","2"},new String[]{"拒接","接收"},new String[]{"已拒接","开始处理"},"http://www.baidu.com");
     }
 
 

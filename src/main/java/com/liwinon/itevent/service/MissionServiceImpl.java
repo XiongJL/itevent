@@ -93,7 +93,7 @@ public class MissionServiceImpl implements MissionService {
             RepairUser me = repairUserDao.findByPersonid(personid);
             String userid = me.getUserid();
             if (!qyid.equals(userid)){  //如果和访问的用户不匹配, 不能发起转移
-                json.accumulate("code","err");
+                json.accumulate("code","notMatch");
                 json.accumulate("data","企业微信账号和当前节点执行人不匹配");
                 return json;
             }

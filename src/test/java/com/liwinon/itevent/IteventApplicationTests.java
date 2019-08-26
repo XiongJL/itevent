@@ -40,5 +40,17 @@ public class IteventApplicationTests {
              new String[]{"1","2"},new String[]{"拒接","接收"},new String[]{"已拒接","开始处理"},"http://www.baidu.com");
     }
 
+    @Test
+    public void tes(){
+        String var = "20190822171725-135-13614136131";
+        String[] str =  var.split("-");
+        String task_id = "";
+        for (int i= 0;i<str.length-1;i++){ //拼接最后一个流水号, 防止发送的uuid不匹配.
+            task_id +=str[i] +"-";
+        }
+        task_id = task_id  +  "1";
+        System.out.println(task_id);
+    }
+
 
 }

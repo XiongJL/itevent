@@ -41,11 +41,11 @@ public class GetMSG {
 		
 	}
 	/**获取消息接收者id*/
-	public String getToUserNmae() {
+	public String getToUserName() {
 		return Root.getElementsByTagName("ToUserName").item(0).getTextContent(); 
 	}
 	/**获取消息发送者id*/
-	public String getFromUserNmae() {
+	public String getFromUserName() {
 		return Root.getElementsByTagName("FromUserName").item(0).getTextContent(); 
 	}
 	/**获取消息创建时间戳*/

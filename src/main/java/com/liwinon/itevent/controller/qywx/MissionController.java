@@ -38,6 +38,7 @@ public class MissionController {
         model.addAttribute("imgLength",res.get("imgLength"));
         model.addAttribute("qyid",qyid);
         HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("username");
         String AccessMode = (String)session.getAttribute("AccessMode");
         if ("pc".equals(AccessMode)){
             return "common/qMission-PC";
@@ -54,5 +55,15 @@ public class MissionController {
     public JSONObject CanTurnOverUsers(String uuid, String qyid, HttpServletRequest request){
 
         return mission.CanTurnOverUsers(uuid,qyid,request);
+    }
+
+
+    /**
+     * 页面选择移交处理
+     */
+    @GetMapping(value = "/mission/changeUser")
+    @ResponseBody
+    public JSONObject changeUser(String toPersonid, String fromPersonid, String uuid,String qyid,HttpServletRequest request){
+        return mission.changeUser(toPersonid,fromPersonid,uuid,qyid,request);
     }
 }

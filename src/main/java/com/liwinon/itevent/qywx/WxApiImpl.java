@@ -39,6 +39,15 @@ public class WxApiImpl implements WxApi {
         return null;
     }
 
+    public String sendTextToOne(String[] userid,String content){
+        String accesstoken = AccessToken.getAccessToken(Corpid.getValue(),IThelpSecret.getValue()).getString("access_token");
+        JSONObject res =   text(userid, IThelpId.getValue(), accesstoken, content);
+        if (!"0".equals(res.getString("errcode"))) {
+            return userid.toString() + "发送任务失败!!";
+        }
+        return null;
+    }
+
     /**
      *
      * @param userid    String[]  准备发送的用户
@@ -148,6 +157,42 @@ public class WxApiImpl implements WxApi {
         JSONObject res = JSONObject.fromObject(HttpUtil.reqPost(
                 "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + token, param));
         System.out.println("WX返回的：" + res);
+        return res;
+    }
+
+    /**
+     * 发送文本消息实现
+     * @param userid
+     * @param agentid
+     * @param token
+     * @param content
+     * @return
+     */
+    static JSONObject text(String[] userid,String agentid,String token,String content){
+        String users = "";
+        if (userid.length>1){
+            for (String user : userid){
+                users += user +"|";
+            }
+            users = users.substring(0,users.length()-1);
+        }else if (userid.length==1){
+            users = userid[0];
+        }else{
+            return null;
+        }
+        JSONObject json = new JSONObject();
+        JSONObject str = new JSONObject();
+        str.accumulate("content",content);
+        json.accumulate("touser",users);
+        json.accumulate("msgtype","text");
+        json.accumulate("agentid",agentid);
+        json.accumulate("text",str);
+        json.accumulate("safe",0);
+        String param = json.toString();
+        System.out.println("json:" + param);
+        JSONObject res = JSONObject.fromObject(HttpUtil.reqPost(
+                "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + token,param));
+
         return res;
     }
 }

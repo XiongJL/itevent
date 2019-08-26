@@ -74,7 +74,7 @@ public class ReceiveController {
 		System.out.println("sReqTimeStamp: "+timestamp);
 		System.out.println("sReqNonce: "+nonce);
         GetMSG msg = new GetMSG(msg_signature,timestamp,nonce,body,wxcpt);
-        if (WxConfig.Corpid.getValue().equals(msg.getToUserNmae())){
+        if (WxConfig.Corpid.getValue().equals(msg.getToUserName())){
             receiveService.GetCorp(msg);
         }
         return "ok";

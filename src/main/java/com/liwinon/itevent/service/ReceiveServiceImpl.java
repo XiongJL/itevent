@@ -75,7 +75,7 @@ public class ReceiveServiceImpl implements ReceiveService {
                 String event =  msg.getEvent();
                 String eventKey =  msg.getEventKey();
                 if ("click".equals(event)&& "1".equals(eventKey)){  //用户点击了查询 , 准备发送卡片消息(展示处理进度)
-                    String userid = msg.getFromUserNmae();      //查询当前用户的事件
+                    String userid = msg.getFromUserName();      //查询当前用户的事件
                     List<Event> events = eventDao.findByUseridEventIng(userid);
                     String title = "您进行中的申请有"+events.size()+"件";
                     String description,btntxt,URL;
@@ -93,7 +93,14 @@ public class ReceiveServiceImpl implements ReceiveService {
                     return wxApi.sendCardToIT(new String[]{userid},title,description,URL,btntxt);
                 }else if ("taskcard_click".equals(event)){  //是任务卡片回调信息
                     //获取卡片的task_id , 等同于事件的uuid.
-                    String task_id = msg.getTaskId();
+                    String var = msg.getTaskId();
+                    String[] str =  var.split("-");
+                    String task_id = "";
+                    for (int i= 0;i<str.length-1;i++){ //拼接最后一个流水号, 防止发送的uuid不匹配.
+                        task_id +=str[i] +"-";
+                    }
+                    task_id = task_id  +  "1";
+                    System.out.println(task_id);
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
                     Date date = new Date();
                     String dateStr =  sdf.format(date);
@@ -105,7 +112,7 @@ public class ReceiveServiceImpl implements ReceiveService {
                     if ("2".equals(EventKey)){ //如果本次回调是按得接受按钮
                         if (StringUtils.isEmpty(executorId)){  //尚未有任务执行人
                             //添加该人为执行人
-                            String FromUserName = msg.getFromUserNmae();
+                            String FromUserName = msg.getFromUserName();
                             //从维修人员表通过微信号获取人员工号姓名
                             RepairUser repairUser =  repairDao.findByPersonid(FromUserName);
                             String id = repairUser.getUserid() ;
@@ -120,21 +127,26 @@ public class ReceiveServiceImpl implements ReceiveService {
                             next.setExecutorId(id);
                             next.setImgurl(step.getImgurl());
                             next.setStepDate(date);
+                            e.setState("处理中");
+                            eventDao.save(e);
                             eventStepDao.save(step);
                             eventStepDao.save(next);
                             //回执卡片信息, 方便执行人查看详细数据,以及更新环节
                             EventType eType = eventTypeDao.findByETypeId(e.getEvent());
                             String title = "您已接受"+sapDao.findNByUserId(e.getUserid())+":"+e.getPhone()+"提出的申请";
-
                             String description = dateStr+"<br>"+"事件类型:"+eType.getLevel_2()+"<br>"+"用户描述:"+e.getRemark();
                             String btntxt = "查看详情";
-                            String URL = "?uuid="+task_id+"&qyid="+FromUserName;
+                            String URL = WxConfig.QMissionURL.getValue()+task_id+"&qyid="+FromUserName;
                             return wxApi.sendCardToIT(new String[]{FromUserName},title,description,URL,btntxt);
 
                         }
                     }else if ("1".equals(EventKey)){  //拒绝
                         if (StringUtils.isEmpty(executorId)){  //尚未有任务执行人
                             //发送文本消息给该人
+                            e.setState("已拒绝");
+                            eventDao.save(e);
+                            return wxApi.sendTextToOne(new String[]{msg.getFromUserName()},"您的申请已被拒绝,请尝试更改内容后重新申请.");
+
                         }
                     }else{
                         System.out.println("按钮值不对应!值为:"+EventKey);

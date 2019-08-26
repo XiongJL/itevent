@@ -46,6 +46,7 @@ public class IndexServiceImpl implements IndexService {
         //设置session保存用户名 , 只有API接口才使用token,其余有Session验证是否登录即可
         HttpSession session = request.getSession();
         session.setAttribute("username",JWT.decode(token).getAudience().get(0));
+        session.setAttribute("personid", admin.getUserid());
         //请求是否有消息推送
         List<Assets> assets = api.colseAssets();
         if (assets!=null){

@@ -35,4 +35,8 @@ public interface EventTypeDao extends JpaRepository<EventType,Integer>, JpaSpeci
 	//用详细描述查询事件对应的组别    运维   erp
 	@Query(value = "select team from ITE_EventType  where description = :description",nativeQuery = true)
 	String findallTeam(String description);
+	
+	//用事件id查询对应的事件数据
+	@Query(value = "select * from ITE_EventType  where eTypeId = :etypeid",nativeQuery = true)
+	EventType findAllEtypeide(int etypeid);
 }

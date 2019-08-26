@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -76,7 +77,14 @@ public class ReceiveServiceImpl implements ReceiveService {
                 String eventKey =  msg.getEventKey();
                 if ("click".equals(event)&& "1".equals(eventKey)){  //用户点击了查询 , 准备发送卡片消息(展示处理进度)
                     String userid = msg.getFromUserName();      //查询当前用户的事件
-                    List<Event> events = eventDao.findByUseridEventIng(userid);
+                    //查询该企业微信对应的工号
+                    RepairUser r =  repairDao.findByUserid(userid);
+                    List<Event> events = new ArrayList<>();
+                    if (r==null){
+                        events = eventDao.findByUseridEventIng(userid);
+                    }else{
+                        events = eventDao.findByUseridEventIng(r.getPersonid());
+                    }
                     String title = "您进行中的申请有"+events.size()+"件";
                     String description,btntxt,URL;
                     if (events.size()>0){

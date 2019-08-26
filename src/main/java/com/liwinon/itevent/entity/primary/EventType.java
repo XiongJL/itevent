@@ -15,7 +15,7 @@ public class EventType {
 	    private String level_1;
 	    private String level_2;
 	    private String description;
-	    private String group;
+	    private String team;
 		private int startLevel;
 		public int geteTypeId() {
 			return eTypeId;
@@ -42,12 +42,12 @@ public class EventType {
 			this.description = description;
 		}
 
-	public String getGroup() {
-		return group;
+	public String getTeam() {
+		return team;
 	}
 
-	public void setGroup(String group) {
-		this.group = group;
+	public void setTeam(String team) {
+		this.team = team;
 	}
 
 	public int getStartLevel() {
@@ -58,11 +58,14 @@ public class EventType {
 		this.startLevel = startLevel;
 	}
 
-	public EventType(String level_1, String level_2, String description, String group, int startLevel) {
+	public EventType() {
+	}
+
+	public EventType(String level_1, String level_2, String description, String team, int startLevel) {
 		this.level_1 = level_1;
 		this.level_2 = level_2;
 		this.description = description;
-		this.group = group;
+		this.team = team;
 		this.startLevel = startLevel;
 	}
 
@@ -73,10 +76,8 @@ public class EventType {
 				", level_1='" + level_1 + '\'' +
 				", level_2='" + level_2 + '\'' +
 				", description='" + description + '\'' +
-				", group='" + group + '\'' +
+				", team='" + team + '\'' +
 				", startLevel=" + startLevel +
 				'}';
 	}
-
-	    
 }

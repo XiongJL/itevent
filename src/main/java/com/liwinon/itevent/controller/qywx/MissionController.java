@@ -4,11 +4,13 @@ import com.liwinon.itevent.annotation.PasssToken;
 import com.liwinon.itevent.exception.MyException;
 import com.liwinon.itevent.service.MissionService;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -24,7 +26,7 @@ public class MissionController {
 
     @GetMapping(value = "/qMission")  //
     @PasssToken
-    public  String qMission(String uuid, HttpServletRequest request, Model model){
+    public  String qMission(String uuid,String qyid, HttpServletRequest request, Model model){
         System.out.println(uuid);
         Map<String,Object> res = mission.queryMission(uuid);
         if (res==null){
@@ -34,6 +36,7 @@ public class MissionController {
         model.addAttribute("ing",res.get("ing"));
         model.addAttribute("imgUrls",res.get("imgUrls"));
         model.addAttribute("imgLength",res.get("imgLength"));
+        model.addAttribute("qyid",qyid);
         HttpSession session = request.getSession();
         String AccessMode = (String)session.getAttribute("AccessMode");
         if ("pc".equals(AccessMode)){
@@ -42,4 +45,14 @@ public class MissionController {
         return "common/qMission";
     }
 
+    /**
+     * 查询在当前时间段内可以转交的人员
+     * @return
+     */
+    @GetMapping(value = "/mission/CanTurnOverUsers")
+    @ResponseBody
+    public JSONObject CanTurnOverUsers(String uuid, String qyid, HttpServletRequest request){
+
+        return mission.CanTurnOverUsers(uuid,qyid,request);
+    }
 }

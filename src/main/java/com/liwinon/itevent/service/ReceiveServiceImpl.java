@@ -128,7 +128,7 @@ public class ReceiveServiceImpl implements ReceiveService {
 
                             String description = dateStr+"<br>"+"事件类型:"+eType.getLevel_2()+"<br>"+"用户描述:"+e.getRemark();
                             String btntxt = "查看详情";
-                            String URL = "?uuid="+task_id;
+                            String URL = "?uuid="+task_id+"&qyid="+FromUserName;
                             return wxApi.sendCardToIT(new String[]{FromUserName},title,description,URL,btntxt);
 
                         }

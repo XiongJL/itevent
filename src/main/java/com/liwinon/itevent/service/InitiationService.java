@@ -17,7 +17,7 @@ public interface InitiationService {
 
 	JSONObject description(HttpServletRequest request);
 
-	JSONObject postinitiationapple(HttpServletRequest request, List<MultipartFile> files, String userid, String phone, String adminuser,String level_1, String level_2, String description, String type, String brand, String itemid, String remark);
-	JSONObject postinitiation(HttpServletRequest request, MultipartFile[] files, String userid, String phone, String adminuser,String level_1, String level_2, String description, String type, String brand, String itemid, String remark);
+	JSONObject initiationpc(HttpServletRequest request, MultipartFile[] files, String userid, String phone, String adminuser,String level_1, String level_2, String description, String type, String brand, String itemid, String remark);
+	JSONObject initiationmobile(HttpServletRequest request, List<MultipartFile> files, String userid, String phone, String adminuser,String level_1, String level_2, String description, String type, String brand, String itemid, String remark);
 
 }

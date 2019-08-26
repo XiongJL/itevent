@@ -12,11 +12,14 @@ import com.liwinon.itevent.entity.primary.RepairUser;
 
 public interface RepairUserDao extends JpaRepository<RepairUser,String>, JpaSpecificationExecutor<RepairUser>{
 	
-	@Query(value = "select  a.userid from ITE_RepairUser a where a.userlevel  = 1 and a.team= :team",nativeQuery = true)
-	 String[]  findAllUserid(String team);
+	@Query(value = "select top 1 min(a.userlevel) from ITE_RepairUser a where a.team = :team",nativeQuery = true)
+	int findAllmin(String team);
 	
-	@Query(value = "select  a.userid from ITE_RepairUser a where a.userlevel  = 2 and a.team= :team",nativeQuery = true)
-	String[]  findAllUseridrep(String team);
+	@Query(value = "select  a.userid from ITE_RepairUser a where a.userlevel  =:min and a.team = :team",nativeQuery = true)
+	 String[]  findAllUserid(int min,String team);
+	
+	@Query(value = "select  a.userid from ITE_RepairUser a where a.userlevel =:min and a.team = :team",nativeQuery = true)
+	String[]  findAllUseridrep(int min,String team);
 
 	RepairUser findByPersonid(String personid);
 

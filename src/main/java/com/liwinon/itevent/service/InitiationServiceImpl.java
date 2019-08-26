@@ -132,9 +132,11 @@ public class InitiationServiceImpl implements InitiationService {
         String team =eventTypeDao.findallTeam(description);
         String[] user ;
         if("erp".equals(team)) {
-        	 user =repairUserDao.findAllUseridrep(team);
+        	int min=repairUserDao.findAllmin(team);
+        	user =repairUserDao.findAllUseridrep(min,team);
         }else {
-        	 user =repairUserDao.findAllUserid(team);
+        	int min=repairUserDao.findAllmin(team);
+        	user =repairUserDao.findAllUserid(min,team);
         }
        /* https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?
         * access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD
@@ -207,9 +209,11 @@ public class InitiationServiceImpl implements InitiationService {
         String team =eventTypeDao.findallTeam(description);
         String[] user ;
         if("erp".equals(team)) {
-        	 user =repairUserDao.findAllUseridrep(team);
+        	int min=repairUserDao.findAllmin(team);
+        	user =repairUserDao.findAllUseridrep(min,team);
         }else {
-        	 user =repairUserDao.findAllUserid(team);
+        	int min=repairUserDao.findAllmin(team);
+        	user =repairUserDao.findAllUserid(min,team);
         }
        /* https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?
         * access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD

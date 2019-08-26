@@ -130,14 +130,8 @@ public class InitiationServiceImpl implements InitiationService {
         json.accumulate("msg","记录成功");
         json.accumulate("data","ok");
         String team =eventTypeDao.findallTeam(description);
-        String[] user ;
-        if("erp".equals(team)) {
-        	int min=repairUserDao.findAllmin(team);
-        	user =repairUserDao.findAllUseridrep(min,team);
-        }else {
-        	int min=repairUserDao.findAllmin(team);
-        	user =repairUserDao.findAllUserid(min,team);
-        }
+        int min=repairUserDao.findAllmin(team);
+    	String[]	user =repairUserDao.findAllUserid(min,team);
        /* https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?
         * access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD
         * ACCESS_TOKEN=wwbc7acf1bd2c6f766
@@ -207,14 +201,8 @@ public class InitiationServiceImpl implements InitiationService {
         json.accumulate("data","ok");
         
         String team =eventTypeDao.findallTeam(description);
-        String[] user ;
-        if("erp".equals(team)) {
-        	int min=repairUserDao.findAllmin(team);
-        	user =repairUserDao.findAllUseridrep(min,team);
-        }else {
-        	int min=repairUserDao.findAllmin(team);
-        	user =repairUserDao.findAllUserid(min,team);
-        }
+    	int min=repairUserDao.findAllmin(team);
+    	String[]	user =repairUserDao.findAllUserid(min,team);
        /* https://qyapi.weixin.qq.com/cgi-bin/user/simplelist?
         * access_token=ACCESS_TOKEN&department_id=DEPARTMENT_ID&fetch_child=FETCH_CHILD
         * ACCESS_TOKEN=wwbc7acf1bd2c6f766

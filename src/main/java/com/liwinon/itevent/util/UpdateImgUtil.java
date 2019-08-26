@@ -41,9 +41,9 @@ public class UpdateImgUtil {
 		                    mf.transferTo(dest);
 		                    //上传后拼接路径
 		                    if(i==0) {
-		                    	path=mf.getOriginalFilename();                    	
+		                    	path=newName;                    	
 		                    }else {
-		                    	path=","+mf.getOriginalFilename();
+		                    	path=","+newName;
 		                    }
 		                }catch (IllegalStateException e) {
 		                    return "文件过大,内存溢出异常";
@@ -91,9 +91,9 @@ public class UpdateImgUtil {
 		                    mf.transferTo(dest);
 		                    //上传后拼接路径
 		                    if(i==0) {
-		                    	path=mf.getOriginalFilename();                    	
+		                    	path=newName;                    	
 		                    }else {
-		                    	path=","+mf.getOriginalFilename();
+		                    	path=","+newName;
 		                    }
 		                }catch (IllegalStateException e) {
 		                    return "文件过大,内存溢出异常";

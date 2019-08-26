@@ -346,7 +346,7 @@ $("#submit").click(function() {
                  var remark = document.getElementById("remark").value;
                  formData.append("remark",remark);
                  $.ajax({
-                     url : '/itevent/initiation/postinitiationapple',
+                     url : '/itevent/initiation/initiationmobile',
                      type : 'post',
                      data : formData,
                      async: false,  

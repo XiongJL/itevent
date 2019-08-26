@@ -366,7 +366,7 @@ $("#submit").click(function() {
             var remark = document.getElementById("remark").value;
             fd.append("remark",remark);
             $.ajax({
-                url : '/itevent/initiation/postinitiation',
+                url : '/itevent/initiation/initiationpc',
                 type : 'post',
                 data : fd,
                 processData: false,   //用FormData传fd时需有这两项

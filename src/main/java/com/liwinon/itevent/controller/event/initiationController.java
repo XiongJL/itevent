@@ -43,10 +43,10 @@ public class initiationController {
 		String models=(String) session.getAttribute("AccessMode");
 		if("pc".equals(models)) {			
 			return "event/initiationpc";
-		}else if(userAgent.contains("apple")) {  //识别apple的访问页面问题   apple的微信  企业微信     浏览器统一范文这个页面
+		}/*else if(userAgent.contains("apple")) {  //识别apple的访问页面问题   apple的微信  企业微信     浏览器统一范文这个页面
 			return "event/initiationapple";  
-		}else {   //安卓   安卓微信    企业微信   都可以用这个也买你
-			return "event/initiation";
+		}*/else {   //安卓   安卓微信    企业微信   都可以用这个也买你
+			return "event/initiationmobile";
 		}
     }
 	
@@ -71,25 +71,26 @@ public class initiationController {
 	public JSONObject description(HttpServletRequest request,HttpServletResponse response){
 		return initiationService.description(request);
 	}
-	@PostMapping(value="/initiation/postinitiationapple")
+	@PostMapping(value="/initiation/initiationpc")
 	@PasssToken
 	@ResponseBody
-	public JSONObject postinitiationapple(HttpServletRequest request,HttpServletResponse response/*,
+	public JSONObject initiationpc(HttpServletRequest request,HttpServletResponse response,
 			@RequestParam("file")MultipartFile[] file, @RequestParam("userid")String userid
 			, @RequestParam("phone")String phone,@RequestParam("adminuser")String adminuser,
 			@RequestParam("level_1")String level_1
 			, @RequestParam("level_2")String level_2, @RequestParam("description")String description
 			, @RequestParam("type")String type, @RequestParam("brand")String brand
-			, @RequestParam("itemid")String itemid, @RequestParam("remark")String remark*/){
+			, @RequestParam("itemid")String itemid, @RequestParam("remark")String remark){
+		return initiationService.initiationpc(request,file,userid,phone,adminuser,level_1,level_2,description,type,brand,itemid,remark);
+	}
+	@PostMapping(value="/initiation/initiationmobile")
+	@PasssToken
+	@ResponseBody
+	public JSONObject initiationmobile(HttpServletRequest request,HttpServletResponse response){
 		//创建一个通用的多部分解析器
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(request.getSession().getServletContext());
         //判断request是否有文件需要上传
         List<MultipartFile> file = null ;
-        if(multipartResolver.isMultipart(request)){
-            //转换成多部分request
-            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
-            file = multiRequest.getFiles("file");
-        }
         String userid=request.getParameter("userid");
         String phone=request.getParameter("phone");
         String adminuser=request.getParameter("adminuser");
@@ -100,20 +101,12 @@ public class initiationController {
         String brand=request.getParameter("brand");
         String itemid=request.getParameter("itemid");
         String remark=request.getParameter("remark");
-		return initiationService.postinitiationapple(request,file,userid,phone,adminuser,level_1,level_2,description,type,brand,itemid,remark);
+        if(multipartResolver.isMultipart(request)){
+            //转换成多部分request
+            MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
+            file = multiRequest.getFiles("file");
+        }
+		return initiationService.initiationmobile(request,file,userid,phone,adminuser,level_1,level_2,description,type,brand,itemid,remark);
 	}
-	@PostMapping(value="/initiation/postinitiation")
-	@PasssToken
-	@ResponseBody
-	public JSONObject postinitiation(HttpServletRequest request,HttpServletResponse response,
-			@RequestParam("file")MultipartFile[] file, @RequestParam("userid")String userid
-			, @RequestParam("phone")String phone,@RequestParam("adminuser")String adminuser,
-			@RequestParam("level_1")String level_1
-			, @RequestParam("level_2")String level_2, @RequestParam("description")String description
-			, @RequestParam("type")String type, @RequestParam("brand")String brand
-			, @RequestParam("itemid")String itemid, @RequestParam("remark")String remark){
-		return initiationService.postinitiation(request,file,userid,phone,adminuser,level_1,level_2,description,type,brand,itemid,remark);
-	}
-	
 }
 	

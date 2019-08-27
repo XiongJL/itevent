@@ -82,14 +82,17 @@
 
                 </ul>
             </div>
-            <div class="layui-col-xs10 layui-col-xs-offset1">
-                <div class="layui-col-xs5 ">
-                    <button id="done" type="button" class="layui-btn layui-btn-primary layui-btn-fluid">完成</button>
-                </div>
-                <div class="layui-col-xs5 layui-col-xs-offset2">
-                    <button id="move" data-method="notice" class="layui-btn layui-btn-fluid">移交</button>
+            <div th:if="${start.state} == '受理中' or ${start.state} == '处理中'">
+                <div class="layui-col-xs10 layui-col-xs-offset1">
+                    <div class="layui-col-xs5 ">
+                        <button id="done" type="button" class="layui-btn layui-btn-primary layui-btn-fluid">完成</button>
+                    </div>
+                    <div class="layui-col-xs5 layui-col-xs-offset2">
+                        <button id="move" data-method="notice" class="layui-btn layui-btn-fluid">移交</button>
+                    </div>
                 </div>
             </div>
+
         </div>
 
     </div>

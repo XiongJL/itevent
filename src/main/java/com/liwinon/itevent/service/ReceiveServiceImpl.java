@@ -72,9 +72,12 @@ public class ReceiveServiceImpl implements ReceiveService {
         String AgentID = msg.getAgentID();
         if ("1000019".equals(AgentID)){  // 处理IT服务支持的应用消息
             String MsgType =  msg.getMsgType();
+            System.out.println("接收到的消息类型:"+MsgType);
             if ("event".equals(MsgType)){ //接收到的是事件
                 String event =  msg.getEvent();
                 String eventKey =  msg.getEventKey();
+                System.out.println("接收到的event:"+event);
+                System.out.println("接收到的eventKey:"+eventKey);
                 if ("click".equals(event)&& "1".equals(eventKey)){  //用户点击了查询 , 准备发送卡片消息(展示处理进度)
                     System.out.println("接收到用户点击的查询事件");
                     String userid = msg.getFromUserName();      //查询当前用户的事件

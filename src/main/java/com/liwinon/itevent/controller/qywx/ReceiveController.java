@@ -77,6 +77,6 @@ public class ReceiveController {
         if (WxConfig.Corpid.getValue().equals(msg.getToUserName())){
             receiveService.GetCorp(msg);
         }
-        return "ok";
+        return "200";
     }
 }

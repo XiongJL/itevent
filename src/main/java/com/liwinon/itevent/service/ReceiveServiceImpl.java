@@ -100,7 +100,7 @@ public class ReceiveServiceImpl implements ReceiveService {
                                 break;
                             }
                             String type =  eventTypeDao.findByETypeId(tmp.getEvent()).getLevel_1();
-                            description += "您的"+type+"相关的申请,处于: <div class=\"highlight\">"+tmp.getState()+"</div><br>";
+                            description += "您的"+type+"相关的申请,处于: "+tmp.getState()+"<br>";
                             times++;
                         }
                         URL = WxConfig.QEventURL.getValue();

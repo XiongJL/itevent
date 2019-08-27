@@ -92,12 +92,12 @@
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
+        <!-- json end -->
         <dependency>
 		    <groupId>commons-fileupload</groupId>
 		    <artifactId>commons-fileupload</artifactId>
-		    <version>1.2.2</version>
+		    <version>1.4</version>
 		</dependency>
-        <!-- json end -->
     </dependencies>
 
     <build>

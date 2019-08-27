@@ -14,12 +14,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+
 
 @Controller
 @RequestMapping("/itevent")
@@ -41,6 +40,7 @@ public class ReceiveController {
 		String time = "";
 		String non = "";
 		String echo = "";
+		System.out.println("echostr原来的:"+echostr);
 		try {
 			msg = URLDecoder.decode(msg_signature, "utf-8");
 			time = URLDecoder.decode(timestamp, "utf-8");
@@ -49,10 +49,11 @@ public class ReceiveController {
 			System.out.println("msg_signature:" + msg);
 			System.out.println("timestamp" + time);
 			System.out.println("nonce" + non);
-			System.out.println("echostr" + echo);
+			//解码后 + 号变空格, 关键接收的时候自动解码了???
+			System.out.println("echostr解码后的:" + echostr);
 			WXBizMsgCrypt wxcpt = new WXBizMsgCrypt(WxConfig.Token.getValue(), WxConfig.EncodingAESKey.getValue(), WxConfig.Corpid.getValue());
-			String result = wxcpt.VerifyURL(msg, time, non, echo);
-			// update用户
+			String result = wxcpt.VerifyURL(msg, time, non, echostr);
+			System.out.println("结果是:"+result);
 			return result;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -67,23 +68,24 @@ public class ReceiveController {
      */
     @PostMapping("/receive")
     @ResponseBody
-    @PasssToken
-    public String receive(String msg_signature, String timestamp, String nonce, @RequestBody String body, HttpServletResponse response) throws UnsupportedEncodingException, AesException {
+	@PasssToken
+    public String receive(String msg_signature,String timestamp,String nonce,@RequestBody String body){
         WXBizMsgCrypt wxcpt = null;
 		try {
 			wxcpt = new WXBizMsgCrypt(WxConfig.Token.getValue(), WxConfig.EncodingAESKey.getValue(), WxConfig.Corpid.getValue());
+			System.out.println("sReqMsgSig: "+msg_signature);
+			System.out.println("sReqTimeStamp: "+timestamp);
+			System.out.println("sReqNonce: "+nonce);
+			System.out.println("body: "+body);
+			GetMSG msg = new GetMSG(msg_signature,timestamp,nonce,body,wxcpt);
+			if (WxConfig.Corpid.getValue().equals(msg.getToUserName())){
+				receiveService.GetCorp(msg);
+			}
+			return "200";
 		} catch (AesException e1) {
 			e1.printStackTrace();
 		}
-		System.out.println("sReqMsgSig: "+msg_signature);
-		System.out.println("sReqTimeStamp: "+timestamp);
-		System.out.println("sReqNonce: "+nonce);
-        String echo = URLDecoder.decode(body, "utf-8");
-        GetMSG msg = new GetMSG(msg_signature,timestamp,nonce,body,wxcpt);
-        if (WxConfig.Corpid.getValue().equals(msg.getToUserName())){
-            receiveService.GetCorp(msg);
-        }
-        response.setStatus(200);
-        return wxcpt.VerifyURL(msg_signature, timestamp, nonce,echo);
+		//无论如何返回成功
+		return "200";
     }
 }

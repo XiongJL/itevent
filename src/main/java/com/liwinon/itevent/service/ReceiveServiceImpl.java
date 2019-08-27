@@ -81,13 +81,11 @@ public class ReceiveServiceImpl implements ReceiveService {
                 if ("click".equals(event)&& "1".equals(eventKey)){  //用户点击了查询 , 准备发送卡片消息(展示处理进度)
                     System.out.println("接收到用户点击的查询事件");
                     String userid = msg.getFromUserName();      //查询当前用户的事件
-                    //查询该企业微信对应的工号
-                    RepairUser r =  repairDao.findByUserid(userid);
+                    //查询该企业微信对应的工号 ,  普通用户只找qyid
                     List<Event> events = new ArrayList<>();
-                    if (r==null){
-                        events = eventDao.findByUseridEventIng(userid);
-                    }else{
-                        events = eventDao.findByUseridEventIng(r.getPersonid());
+                    events = eventDao.findByUseridEventIng(userid); //用工号找 , 通常企业微信号等同于工号
+                    if (events.size()<=0){
+                        events = eventDao.findByQyidEventIng(userid);  //用企业微信查
                     }
                     String title = "您进行中的申请有"+events.size()+"件";
                     String description,btntxt,URL;
@@ -103,7 +101,7 @@ public class ReceiveServiceImpl implements ReceiveService {
                             description += "您的"+type+"相关的申请,处于: "+tmp.getState()+"<br>";
                             times++;
                         }
-                        URL = WxConfig.QEventURL.getValue();
+                        URL = WxConfig.QEventURL.getValue()+"?qyid="+userid;
                         btntxt = "查看详情";
                     }else{
                         description = "您可以点击下边的'服务申请'前往申请页面";

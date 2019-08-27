@@ -81,4 +81,9 @@ public interface EventDao extends JpaRepository<Event,String>, JpaSpecificationE
     //查询事件状态为受理中的数据
     @Query(value = "select e.* from ITE_Event e where e.state = '受理中'",nativeQuery = true)
 	List<Event> findAllState();
+
+    //根据企业微信号查询
+    @Query(value = "select * from ITE_Event e where e.qyid =:qyid  and " +
+            "e.state <> '已结束' and e.state<>'' and e.state <> '已拒绝'",nativeQuery = true)
+    List<Event> findByQyidEventIng(String qyid);
 }

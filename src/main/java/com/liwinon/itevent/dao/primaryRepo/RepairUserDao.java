@@ -26,4 +26,6 @@ public interface RepairUserDao extends JpaRepository<RepairUser,String>, JpaSpec
 
 	List<RepairUser> findByTeam(String team);
 
+	RepairUser findByUserid(String userid);
+
 }

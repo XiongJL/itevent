@@ -12,4 +12,6 @@ public interface MissionService {
     JSONObject CanTurnOverUsers(String uuid, String qyid, HttpServletRequest request);
 
     JSONObject changeUser(String toPersonid, String fromPersonid, String uuid,String fromQyid,HttpServletRequest request);
+
+    Map<String, Object> queryEvent(String qyid);
 }

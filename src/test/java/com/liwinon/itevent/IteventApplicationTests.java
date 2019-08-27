@@ -14,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -42,14 +44,13 @@ public class IteventApplicationTests {
 
     @Test
     public void tes(){
-//        String var = "20190822171725-135-13614136131";
-//        String[] str =  var.split("-");
-//        String task_id = "";
-//        for (int i= 0;i<str.length-1;i++){ //拼接最后一个流水号, 防止发送的uuid不匹配.
-//            task_id +=str[i] +"-";
-//        }
-//        task_id = task_id  +  "1";
-//        System.out.println(task_id);
+        String echostr = "zRE%2BXwM0DGCwh5z1HL3521Or3ELFpY4dvDT1ERH27a9QRAtzfyorULiHoB5q0K%2BB1KyuZuIdjCezVmK4WA4N3w%3D%3D";
+        try {
+            String echo = URLDecoder.decode(echostr, "utf-8");
+            System.out.println(echo);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
 

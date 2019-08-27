@@ -1,6 +1,8 @@
 package com.liwinon.itevent.controller.qywx;
 
 import com.liwinon.itevent.annotation.PasssToken;
+import com.liwinon.itevent.entity.primary.Event;
+import com.liwinon.itevent.entity.primary.RepairUser;
 import com.liwinon.itevent.exception.MyException;
 import com.liwinon.itevent.service.MissionService;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.liwinon.itevent.exception.ResultEnum.ERROR_6;
@@ -66,4 +70,16 @@ public class MissionController {
     public JSONObject changeUser(String toPersonid, String fromPersonid, String uuid,String qyid,HttpServletRequest request){
         return mission.changeUser(toPersonid,fromPersonid,uuid,qyid,request);
     }
+
+    /**
+     * 查询用户的进行中事件
+     * @return
+     */
+    public String qEvent(String qyid,Model model){
+       Map<String,Object> res =  mission.queryEvent(qyid);
+       model.addAttribute("count",res.get("count"));
+       model.addAttribute("data",res.get("data"));
+       return "common/qEvent";
+    }
+
 }

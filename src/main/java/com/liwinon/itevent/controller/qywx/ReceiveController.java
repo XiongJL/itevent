@@ -13,6 +13,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
@@ -63,7 +64,7 @@ public class ReceiveController {
      */
     @PostMapping("/receive")
     @ResponseBody
-    public String receive(String msg_signature,String timestamp,String nonce,@RequestBody String body){
+    public String receive(String msg_signature, String timestamp, String nonce, @RequestBody String body, HttpServletResponse response){
         WXBizMsgCrypt wxcpt = null;
 		try {
 			wxcpt = new WXBizMsgCrypt(WxConfig.Token.getValue(), WxConfig.EncodingAESKey.getValue(), WxConfig.Corpid.getValue());
@@ -77,6 +78,7 @@ public class ReceiveController {
         if (WxConfig.Corpid.getValue().equals(msg.getToUserName())){
             receiveService.GetCorp(msg);
         }
+        response.setStatus(200);
         return "200";
     }
 }

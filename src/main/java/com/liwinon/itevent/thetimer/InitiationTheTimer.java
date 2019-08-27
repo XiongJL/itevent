@@ -117,7 +117,7 @@ public class InitiationTheTimer {
 	
 	//公用推送方法
 	public  void wxSenfMissionToIT(String[] user,String levent_1,String levent_2,String description,String uuid) {
-		 wxApi.sendMissionToIT(new String[]{"1907128000"},levent_1+"的服务申请",
+		 wxApi.sendMissionToIT(user,levent_1+"的服务申请",
 	    		"&nbsp;申请类型: "+levent_2+"<br> 申请描述: "+
 				description+"<br>" + " 事件等级: 一般",
 				uuid,

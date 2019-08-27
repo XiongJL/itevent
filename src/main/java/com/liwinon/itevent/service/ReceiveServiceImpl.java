@@ -93,12 +93,20 @@ public class ReceiveServiceImpl implements ReceiveService {
                     String description,btntxt,URL;
                     if (events.size()>0){
                         //可以循环赋值,展示每个事件的进度. 通过EventStep联合Event查询
-                        description = ">事件a 处于xxx状态 , 处理人: xxx, 发起时间:....";
-                        description = ">事件b 处于xxx状态.....";
+                        int times = 0;description="";
+                        for (Event tmp : events){
+                            if (times>4){
+                                description += "<br>...";
+                                break;
+                            }
+                            String type =  eventTypeDao.findByETypeId(tmp.getEvent()).getLevel_1();
+                            description += "您的"+type+"相关的申请,处于: <div class=\"highlight\">"+tmp.getState()+"</div><br>";
+                            times++;
+                        }
                         URL = WxConfig.QEventURL.getValue();
                         btntxt = "查看详情";
                     }else{
-                        description = "您可以点击下边的**'服务申请'**前往服务页面";
+                        description = "您可以点击下边的'服务申请'前往申请页面";
                         URL = WxConfig.ApplyURL.getValue();
                         btntxt = "服务申请";
                     }

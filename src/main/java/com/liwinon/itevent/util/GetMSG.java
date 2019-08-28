@@ -65,8 +65,8 @@ public class GetMSG {
 		return Root.getElementsByTagName("MsgId").item(0).getTextContent(); 
 	}
 	/**获取应用的id*/
-	public String getAgentID() {
-		return Root.getElementsByTagName("AgentID").item(0).getTextContent(); 
+	public String getAgentId() {
+		return Root.getElementsByTagName("AgentId").item(0).getTextContent();
 	}
 	/**获取事件类型*/
 	public String getEvent() {

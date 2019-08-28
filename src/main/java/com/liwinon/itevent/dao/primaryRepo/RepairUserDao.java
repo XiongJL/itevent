@@ -17,6 +17,8 @@ public interface RepairUserDao extends JpaRepository<RepairUser,String>, JpaSpec
 	//用等级和组别查询对应的维护人员的userid  
 	@Query(value = "select  a.userid from ITE_RepairUser a where a.userlevel  =:min and a.team = :team",nativeQuery = true)
 	 String[]  findAllUserid(int min,String team);
+
+
 	RepairUser findByUserid(String userid);
 
 	RepairUser findByPersonid(String personid);

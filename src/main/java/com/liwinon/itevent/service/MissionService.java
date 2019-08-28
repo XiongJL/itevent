@@ -12,4 +12,9 @@ public interface MissionService {
     JSONObject CanTurnOverUsers(String uuid, String qyid, HttpServletRequest request);
 
     JSONObject changeUser(String toPersonid, String fromPersonid, String uuid,String fromQyid,HttpServletRequest request);
+   
+    /**yanxy
+     * 页面选择完成处理
+     */
+	JSONObject complete(String fromPersonid, String uuid, String qyid, HttpServletRequest request);
 }

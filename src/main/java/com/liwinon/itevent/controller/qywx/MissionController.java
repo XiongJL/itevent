@@ -66,4 +66,14 @@ public class MissionController {
     public JSONObject changeUser(String toPersonid, String fromPersonid, String uuid,String qyid,HttpServletRequest request){
         return mission.changeUser(toPersonid,fromPersonid,uuid,qyid,request);
     }
+    
+    
+    /**   yanxy
+     * 页面选择完成处理
+     */
+    @GetMapping(value = "/mission/complete")
+    @ResponseBody
+    public JSONObject complete(String fromPersonid, String uuid,String qyid,HttpServletRequest request){
+    	return mission.complete(fromPersonid,uuid,qyid,request);
+    }
 }

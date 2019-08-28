@@ -4,10 +4,9 @@ import com.liwinon.itevent.dao.primaryRepo.EventDao;
 import com.liwinon.itevent.dao.primaryRepo.EventTypeDao;
 import com.liwinon.itevent.dao.primaryRepo.RepairUserDao;
 import com.liwinon.itevent.entity.primary.Event;
-import com.liwinon.itevent.entity.primary.EventType;
 import com.liwinon.itevent.entity.primary.RepairUser;
 import com.liwinon.itevent.util.HttpUtil;
-import net.sf.json.JSON;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -258,6 +257,27 @@ public class WxApiImpl implements WxApi {
                 "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=" + token,param));
 
         return res;
+    }
+
+    /**
+     * 通过code 换取 企业唯一userid,请做非空判断    https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=ID&corpsecret=SECRET
+     * @param code    https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo?access_token=ACCESS_TOKEN&code=CODE
+     * @return 企业唯一userid              "corpid="+corpid+"&corpsecret="+appsecret;
+     */ 
+    public String getUseridByCode(String code){
+    	JSONObject jsona =JSONObject.fromObject( HttpUtil.reqGet(WxConfig.TokenUrl.getValue(), "corpid="+WxConfig.Corpid.getValue()+"&corpsecret="+WxConfig.IThelpSecret.getValue() ));
+    	String access_token=String.valueOf(jsona.get("access_token"));
+    	String param = "access_token="+access_token+"&code="+code;
+    	JSONObject json = JSONObject.fromObject(HttpUtil.reqGet(WxConfig.UserIdURL.getValue(),param));
+    	System.out.println("useridAPI获取的json是: "+json);
+        if(json!=null && json.getInt("errcode")==0){
+            if(json.has("UserId")){   //是企业授权用户
+                return json.getString("UserId");
+            }else{  //不是企业授权用户
+                json.getString("OpenId");  //本次请求的用户openid
+            }
+        }
+        return null;
     }
 
 

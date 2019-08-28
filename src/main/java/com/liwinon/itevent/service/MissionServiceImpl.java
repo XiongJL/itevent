@@ -228,4 +228,14 @@ public class MissionServiceImpl implements MissionService {
         return  list;
 
     }
+
+	@Override
+	public JSONObject complete(String fromPersonid, String uuid, String qyid, HttpServletRequest request) {
+		JSONObject json = new JSONObject();
+		
+		
+		
+		
+		return json;
+	}
 }

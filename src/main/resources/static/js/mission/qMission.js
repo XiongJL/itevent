@@ -112,6 +112,33 @@ layui.use(['form','element', 'layer','carousel'], function(){
             })
         }
     }
-
+    
+    $('#done').on('click', function(){
+	    //请求移交人员
+	    $.ajax({
+	        url:"/itevent/mission/complete",
+	        data:{"fromPersonid":personid,"uuid":uuid
+	        ,"qyid":qyid},
+	        beforeSend:function(XMLHttpRequest){
+	            XMLHttpRequest.setRequestHeader("token",token);
+	        },
+	        success:function (res) {
+	            if (res.code =="ok"){
+	
+	                layer.msg("移交成功,即将刷新!");
+	                setTimeout(function () {
+	                    location.reload();
+	                },2000)
+	            }else{
+	                layer.msg(res.msg,{icon:5});
+	            }
+	            //关闭弹出层
+	            layer.close(index)
+	        },
+	        error : function (err) {
+	            console.log(err)
+	        }
+	    })
+    });
 
 });

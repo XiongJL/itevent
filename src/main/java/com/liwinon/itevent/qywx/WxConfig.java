@@ -12,6 +12,8 @@ public enum WxConfig {
     QEventURL("https://mesqrcode.liwinon.com/itevent/qevent"),  //点击 查询返回的事件进度页面
     //QMissionURL("https://mesqrcode.liwinon.com/itevent/qMission?uuid="),  //查询任务详细界面
     QMissionURL("http://172.60.45.198:8093/itevent/qMission?uuid="),  //测试
+    ApplyURLcs("http://10.205.48.59:8093/itevent/initiationindex"),  //测试
+    UserIdURL("https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo"),  //获取页面访问用户userid
     ;
     String value ;
     WxConfig(String value){

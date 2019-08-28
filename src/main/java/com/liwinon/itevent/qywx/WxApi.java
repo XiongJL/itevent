@@ -16,4 +16,10 @@ public interface WxApi {
 
     //更新任务卡片消息状态为拒绝
     String changeMissionToRefuse(String task_id,String clicked_key);
+    /**
+     * 通过code 换取 企业唯一userid,请做非空判断
+     * @param code
+     * @return 企业唯一userid
+     */
+    String getUseridByCode(String code);
 }

@@ -58,11 +58,11 @@ public class InitiationTheTimer {
 				if("erp".equals(eventType.getTeam())) {  //erp推送给最小级别人员
 					int min=repairUserDao.findAllmin(eventType.getTeam());
 					String[] user=repairUserDao.findAllUserid(min,eventType.getTeam());
-					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),event2.getUuid()+"1");					
+					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"2");					
 				}else {
 					int min=repairUserDao.findAllmin(eventType.getTeam());
 					String[] user=repairUserDao.findAllUserid(min+1,eventType.getTeam());
-					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),event2.getUuid()+"1");
+					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"2");
 				}
 			}
 		}
@@ -85,11 +85,11 @@ public class InitiationTheTimer {
 				if("erp".equals(eventType.getTeam())) {  //erp推送给最小级别人员
 					int min=repairUserDao.findAllmin(eventType.getTeam());
 					String[] user=repairUserDao.findAllUserid(min+1,eventType.getTeam());
-					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),event2.getUuid()+"1");					
+					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"3");					
 				}else {
 					int min=repairUserDao.findAllmin(eventType.getTeam());
 					String[] user=repairUserDao.findAllUserid(min+2,eventType.getTeam());
-					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),event2.getUuid()+"1");
+					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"3");
 				}
 			}
 		}
@@ -110,11 +110,18 @@ public class InitiationTheTimer {
 				int etypeid=event2.getEvent();
 				EventType eventType=eventTypeDao.findAllEtypeide(etypeid);
 			    String[] user=repairUserDao.findAllUserid(4,"经理");
-			    wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),event2.getUuid()+"1");
+			    wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"4");
 			}
 		}
 	}
-	
+	public String tookenid(String var) {
+        String[] str =  var.split("-");
+        String task_id = "";
+        for (int i= 0;i<str.length-1;i++){ //拼接最后一个流水号, 防止发送的uuid不匹配.
+            task_id +=str[i] +"-";
+        }
+        return task_id;
+	}
 	//公用推送方法
 	public  void wxSenfMissionToIT(String[] user,String levent_1,String levent_2,String description,String uuid) {
 		 wxApi.sendMissionToIT(user,levent_1+"的服务申请",

@@ -1,9 +1,7 @@
 package com.liwinon.itevent.service;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +18,6 @@ import com.liwinon.itevent.dao.primaryRepo.EventTypeDao;
 import com.liwinon.itevent.dao.primaryRepo.RepairUserDao;
 import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.EventStep;
-import com.liwinon.itevent.entity.primary.RepairUser;
 import com.liwinon.itevent.qywx.WxApi;
 import com.liwinon.itevent.util.UpdateImgUtil;
 
@@ -65,10 +62,12 @@ public class InitiationServiceImpl implements InitiationService {
 	
 	@Autowired
 	EventDao eventDao;
+	
 	@Autowired
 	EventStepDao eventStepDao;
 	@Autowired
 	WxApi wxApi;
+	
 	@Autowired
 	RepairUserDao repairUserDao;
 	 

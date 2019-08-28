@@ -108,6 +108,7 @@
          <div class="layui-row" >
 	        <form class="layui-form"  enctype="multipart/form-data"  id="initation">
 	        	<input  hidden="hidden" name="adminuser" id="adminuser" th:value="${adminuser}"/>
+	        	<input  hidden="hidden" name="wxuserid" id="wxuserid" th:value="${wxuserid}"/>
 		        <div class="layui-col-xs12  layui-col-md4" style="margin-top: 10px;">
 					    <label class="layui-form-label">选择事件</label>
 					    <div class="layui-input-block">
@@ -191,7 +192,7 @@
 <!-- jQuery-->
 <script th:src="@{../js/jquery-3.4.0.min.js}" type="text/javascript"></script>
 <script th:src="@{../js/layui.js}"  type="text/javascript"></script>
-<script th:src="@{../js/ite/initation.js}"></script>
+<script th:src="@{../js/ite/initiationpc.js}"></script>
  <script type="text/javascript">
     </script>
     <style>

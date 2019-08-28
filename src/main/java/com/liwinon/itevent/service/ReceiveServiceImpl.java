@@ -1,9 +1,6 @@
 package com.liwinon.itevent.service;
 
-import com.liwinon.itevent.dao.primaryRepo.EventDao;
-import com.liwinon.itevent.dao.primaryRepo.EventStepDao;
-import com.liwinon.itevent.dao.primaryRepo.EventTypeDao;
-import com.liwinon.itevent.dao.primaryRepo.RepairDao;
+import com.liwinon.itevent.dao.primaryRepo.*;
 import com.liwinon.itevent.dao.secondRepo.SapDao;
 import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.EventStep;
@@ -35,7 +32,7 @@ public class ReceiveServiceImpl implements ReceiveService {
     @Autowired
     WxApi wxApi;
     @Autowired
-    RepairDao repairDao;
+    RepairUserDao repairUserDao;
     /**
      * 接收并处理企业微信发送的消息/事件
      * @param msg
@@ -131,12 +128,13 @@ public class ReceiveServiceImpl implements ReceiveService {
                        String executorName = step.getExecutorName();
                        String EventKey = msg.getEventKey();
                        if ("2".equals(EventKey)){ //如果本次回调是按得接受按钮
-                           if (StringUtils.isEmpty(executorId)){  //尚未有任务执行人
+                           //尚未有任务执行人
+                           if (StringUtils.isEmpty(executorId)){
                                //添加该人为执行人
                                String FromUserName = msg.getFromUserName();
                                //从维修人员表通过微信号获取人员工号姓名
-                               RepairUser repairUser =  repairDao.findByPersonid(FromUserName);
-                               String id = repairUser.getUserid() ;
+                               RepairUser repairUser =  repairUserDao.findByUserid(FromUserName);
+                               String id = repairUser.getPersonid() ;
                                String name = repairUser.getName();
 
                                step.setExecutorId(id);
@@ -160,9 +158,14 @@ public class ReceiveServiceImpl implements ReceiveService {
                                String URL = WxConfig.QMissionURL.getValue()+task_id+"&qyid="+FromUserName;
                                return wxApi.sendCardToIT(new String[]{FromUserName},title,description,URL,btntxt);
 
+                           }else{
+                               //已经被人接收. 回执
+                               System.out.println(task_id+" : 已被其他人接收");
+                               return wxApi.sendTextToOne(new String[]{msg.getFromUserName()},"该申请已由"+executorName+"处理");
                            }
                        }else if ("1".equals(EventKey)){  //拒绝
-                           if (StringUtils.isEmpty(executorId)){  //尚未有任务执行人
+                           //尚未有任务执行人
+                           if (StringUtils.isEmpty(executorId)){
                                //发送文本消息给该人
                                e.setState("已拒绝");
                                eventDao.save(e);

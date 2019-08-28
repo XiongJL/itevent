@@ -208,7 +208,7 @@ public class InitiationServiceImpl implements InitiationService {
         * ACCESS_TOKEN=wwbc7acf1bd2c6f766
         * department_id=2
         * fetch_child =     是否递归获取子部门下面的成员：1-递归获取，0-只获取本部门*/  
-    	String name=sapDao.findNByUserId(userid);
+    	String name=sapDao.findNByUserId(qyuserid);
         wxApi.sendMissionToIT(user,name+"的服务申请", "&nbsp;类型: "+level_2+"<br> 申请描述: "+description+"<br>" + " 事件等级: 一般",
         		uuid,
         		new String[]{"1","2"},new String[]{"拒接","接收"},new String[]{"已拒接","开始处理"},"");

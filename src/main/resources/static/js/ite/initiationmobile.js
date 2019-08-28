@@ -331,7 +331,6 @@ $("#submit").click(function() {
             	layer.msg("请选择要上传的图片", {
         			  icon: 2,
           			  time: 1500});
-                return false;
             }
           		var formData = new FormData();
           		for(var i = 0;i<fileArr.length;i++){
@@ -353,8 +352,6 @@ $("#submit").click(function() {
                  }
                  formData.append("userid",userid);
                  formData.append("phone",phone);
-                 var wxuserid = document.getElementById("wxuserid").value;
-                 formData.append("wxuserid",wxuserid);
                  var adminuser = document.getElementById("adminuser").value;
                  formData.append("adminuser",adminuser);
                  var level_1 = document.getElementById("level_1").value;
@@ -382,14 +379,11 @@ $("#submit").click(function() {
                      	XMLHttpRequest.setRequestHeader("token",token);
                      },
                      success : function(res){
-                    	 alert(aaa);
                      	if(res.code=="200"){
-                     		alert(aaaddd);
                      		layer.msg(res.msg, {
                    			  icon: 1
                    			 });
                      	}else if(res.code=="400"){
-                     		alert(aaadddccc);
                      		layer.msg(res.msg, {
                      			  icon: 2
                      			 });

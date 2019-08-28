@@ -54,21 +54,27 @@ public class initiationController {
 	@GetMapping(value = "/initiationindex")
 	@PasssToken
 	public String Oauth2API(HttpServletRequest request,HttpServletResponse res) {
-		HttpSession session = request.getSession();
-		String models=(String) session.getAttribute("AccessMode");
-		if("pc".equals(models)) {			
+		String userAgent = request.getHeader("user-agent").toLowerCase();
+		System.out.println(userAgent);
+		if(userAgent.indexOf("windows")!=-1) {			
 			return "event/initiationpc";
 		}else {   //安卓   安卓微信    企业微信   都可以用这个也买你
 			System.out.println("=========---------------------");
 				String corpid="wwbc7acf1bd2c6f766";
-		        String redirect_uri = "https://mesqrcode.liwinon.com/itevent/initiation";
-		        System.out.println("转码后的uri为:"+redirect_uri);
-		        String URL = "https://open.weixin.qq.com/connect/oauth2/authorize?"+
+		        String redirect_uri = "http://10.205.48.59:8093/itevent/initiation";
+		        System.out.println("redirect_uri为:"+redirect_uri);
+		       /* String URL = "https://open.weixin.qq.com/connect/oauth2/authorize?"+
 		                "appid="+corpid+
 		                "&redirect_uri="+redirect_uri+
 		                "&response_type=code"+
 		                "&scope=snsapi_base"+
-		                "&state=STATE#wechat_redirect";  //state不是必须,重定向后会带上state参数，企业可以填写a-zA-Z0-9的参数值，长度不可超过128个字节
+		                "&state=STATE#wechat_redirect"; */ //state不是必须,重定向后会带上state参数，企业可以填写a-zA-Z0-9的参数值，长度不可超过128个字节
+		        String URL = "https://open.weixin.qq.com/connect/oauth2/authorize?"+
+		        		"appid="+corpid+
+		        		"&redirect_uri="+redirect_uri+
+		        		"&response_type=code"+
+		        		"&scope=snsapi_base"+
+		        		"&state=STATE#wechat_redirect";  //state不是必须,重定向后会带上state参数，企业可以填写a-zA-Z0-9的参数值，长度不可超过128个字节
 		        //员工点击后，页面将跳转至 redirect_uri?code=CODE&state=STATE    code用以换取userid
 		        try {
 		            res.sendRedirect(URL); //重定向
@@ -89,9 +95,10 @@ public class initiationController {
 	@GetMapping(value = "/initiation")
     @PasssToken
     public String initiation(String code, String state, HttpServletRequest request,Model model){
-		HttpSession session = request.getSession();
-		String models=(String) session.getAttribute("AccessMode");
-		if("pc".equals(models)) {			
+		String userAgent = request.getHeader("user-agent").toLowerCase();
+		System.out.println(userAgent);
+		if(userAgent.indexOf("windows")!=-1) {			
+			System.out.println("=============================");
 			return "event/initiationpc";
 		}else {   //安卓   安卓微信    企业微信   都可以用这个也买你
 			String userid = wxApi.getUseridByCode(code);

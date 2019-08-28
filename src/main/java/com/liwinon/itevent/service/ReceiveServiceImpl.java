@@ -157,11 +157,12 @@ public class ReceiveServiceImpl implements ReceiveService {
                                String btntxt = "查看详情";
                                String URL = WxConfig.QMissionURL.getValue()+task_id+"&qyid="+FromUserName;
                                return wxApi.sendCardToIT(new String[]{FromUserName},title,description,URL,btntxt);
-
                            }else{
                                //已经被人接收. 回执
                                System.out.println(task_id+" : 已被其他人接收");
-                               return wxApi.sendTextToOne(new String[]{msg.getFromUserName()},"该申请已由"+executorName+"处理");
+                               return wxApi.sendCardToIT(new String[]{msg.getFromUserName()},"接收申请操作失败提示!"
+                                       ,"当前服务申请已有人接收受处理!",
+                                       WxConfig.QMissionURL.getValue()+task_id+"&qyid="+msg.getFromUserName(),"了解详情");
                            }
                        }else if ("1".equals(EventKey)){  //拒绝
                            //尚未有任务执行人

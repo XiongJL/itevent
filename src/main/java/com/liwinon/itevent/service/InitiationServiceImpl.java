@@ -157,6 +157,7 @@ public class InitiationServiceImpl implements InitiationService {
 			String level_1, String level_2, String description, 
 			String type, String brand, String itemid,
 			String remark) {
+		String qyuserid=cookieExistUtil.getcookie(request,response);
 		UpdateImgUtil updateImgUtil=new UpdateImgUtil();
 		String path=updateImgUtil.updateImg(files);
 		JSONObject json=new JSONObject();
@@ -184,10 +185,9 @@ public class InitiationServiceImpl implements InitiationService {
 		eventStep.setImgurl(path);
 		eventStepDao.save(eventStep);
 		event.setUuid(uuid);
-    	String qyuserid=cookieExistUtil.getcookie(request,response);
     	event.setQyid(qyuserid);
 		event.setEvent(etypeid);
-		event.setUserid(userid);
+		event.setUserid(qyuserid);
 		event.setPhone(phone);
 		event.setAdminuser(adminuser);        	
 		event.setDate(new Date());

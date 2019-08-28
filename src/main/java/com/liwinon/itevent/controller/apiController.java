@@ -1,5 +1,6 @@
 package com.liwinon.itevent.controller;
 
+import com.liwinon.itevent.annotation.PasssToken;
 import com.liwinon.itevent.dao.secondRepo.SapDao;
 import com.liwinon.itevent.entity.Model.BackModel;
 import com.liwinon.itevent.entity.second.Sap_Users;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping(value = "/itevent/api")
@@ -65,8 +68,14 @@ public class apiController {
     
     //获取有没有名字
     @GetMapping(value = "/getNamePersonid")
-    public String getNamePersonid(String userid){
-    	return sapDao.findNByUserId(userid);
+    @PasssToken
+    public JSONObject getNamePersonid(HttpServletRequest request){
+    	String userid=request.getParameter("userid").toString();
+    	String data=sapDao.findNByUserId(userid);
+    	JSONObject json=new JSONObject();
+		json.accumulate("code",200);
+        json.accumulate("data",data);
+		return  json;
     }
 
 

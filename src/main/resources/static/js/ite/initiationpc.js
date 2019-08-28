@@ -255,7 +255,7 @@ $(function () {
             if(aa>5){
             	layer.alert("最多上传5张图片", {
       			  icon: 1,
-      			  time: 2000});
+      			  time: 1500});
             	return false;
             }
             for(var i=0;i<iLen;i++){
@@ -325,74 +325,97 @@ $(function () {
 
 	}
 })
-
+function gonghaoid(id){
+	var da;
+	var y=document.getElementById(id).value
+		$.ajax({
+				async : false,
+				type : "GET",
+				url : "/itevent/api/getNamePersonid",
+				data : {userid:y},
+				 beforeSend:function(XMLHttpRequest){
+	                   	XMLHttpRequest.setRequestHeader("token",token);
+	                   },
+				success : function(res) {
+		        	da=res.data;
+				}
+			});
+		if(da==null||da==undefined||da==""){
+    		layer.msg("请填写正确的工号", {
+			  icon: 2,
+  			  time: 1500
+			 });
+    		$("#userid").val("");
+    	}
+}
 $("#submit").click(function() {
-            if(!filesa.length){
+          /*  if(!filesa.length){
             	layer.msg("请选择要上传的图片", {
         			  icon: 2,
-          			  time: 2000});
+          			  time: 1500});
                 return false;
+            }*/
+            var phone = document.getElementById("phone").value;
+            if(phone==""||phone==null||phone==undefined){
+            	layer.msg("请填写发起人电话", {
+    			  icon: 2,
+    			  time: 1500});
+            	return false;
             }
             var userid = document.getElementById("userid").value;
             if(userid==""||userid==null||userid==undefined){
             	layer.msg("请填写发起人工号", {
       			  icon: 2,
-      			  time: 2000});
+      			  time: 1500});
             	return false;
-            }
-            var phone = document.getElementById("phone").value;
-            if(phone==""||phone==null||phone==undefined){
-            	layer.msg("请填写发起人电话", {
-      			  icon: 2,
-      			  time: 2000});
-            	return false;
-            }
-            fd.append("userid",userid);
-            fd.append("phone",phone);
-            var adminuser = document.getElementById("adminuser").value;
-            fd.append("adminuser",adminuser);
-            var level_1 = document.getElementById("level_1").value;
-            fd.append("level_1",level_1);
-            var level_2 = document.getElementById("level_2").value;
-            fd.append("level_2",level_2);
-            var description = document.getElementById("description").value;
-            fd.append("description",description);
-            var type = document.getElementById("type").value;
-            fd.append("type",type);
-            var brand = document.getElementById("brand").value;
-            fd.append("brand",brand);
-            var itemid = document.getElementById("itemid").value;
-            fd.append("itemid",itemid);
-            var remark = document.getElementById("remark").value;
-            fd.append("remark",remark);
-            $.ajax({
-                url : '/itevent/initiation/initiationpc',
-                type : 'post',
-                data : fd,
-                processData: false,   //用FormData传fd时需有这两项
-                contentType: false,
-                timeout:600000,
-                beforeSend:function(XMLHttpRequest){
-                	XMLHttpRequest.setRequestHeader("token",token);
-                },
-                success : function(res){
-                	if(res.data=="ok"){
-                		layer.msg(res.msg, {
-              			  icon: 1
-              			 });
-                	}else if(res.data=="no1"){
-                		layer.alert(res.msg, {
-                			  icon: 2
-                			 });
-                	}
-                },
-                error: function (err) {
-                	layer.alert('数据上传失败', {
-          			  icon: 2
-          			 });
-                }
-            });
-        });
+            }else{
+  		               fd.append("userid",userid);
+  		               fd.append("phone",phone);
+  		               var adminuser = document.getElementById("adminuser").value;
+  		               fd.append("adminuser",adminuser);
+  		               var level_1 = document.getElementById("level_1").value;
+  		               fd.append("level_1",level_1);
+  		               var level_2 = document.getElementById("level_2").value;
+  		               fd.append("level_2",level_2);
+  		               var description = document.getElementById("description").value;
+  		               fd.append("description",description);
+  		               var type = document.getElementById("type").value;
+  		               fd.append("type",type);
+  		               var brand = document.getElementById("brand").value;
+  		               fd.append("brand",brand);
+  		               var itemid = document.getElementById("itemid").value;
+  		               fd.append("itemid",itemid);
+  		               var remark = document.getElementById("remark").value;
+  		               fd.append("remark",remark);
+  		               $.ajax({
+  		                   url : '/itevent/initiation/initiationpc',
+  		                   type : 'post',
+  		                   data : fd,
+  		                   processData: false,   //用FormData传fd时需有这两项
+  		                   contentType: false,
+  		                   timeout:600000,
+  		                   beforeSend:function(XMLHttpRequest){
+  		                   	XMLHttpRequest.setRequestHeader("token",token);
+  		                   },
+  		                   success : function(res){
+  		                   	if(res.data=="ok"){
+  		                   		layer.msg(res.msg, {
+  		                 			  icon: 1
+  		                 			 });
+  		                   	}else if(res.data=="no1"){
+  		                   		layer.alert(res.msg, {
+  		                   			  icon: 2
+  		                   			 });
+  		                   	}
+  		                   },
+  		                   error: function (err) {
+  		                   	layer.alert('数据上传失败', {
+  		             			  icon: 2
+  		             			 });
+  		                   }
+  		               });
+  		        	}
+ });
 /*
 document.getElementById("gallery").innerHTML="";
 var img=this.files; 

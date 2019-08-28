@@ -149,8 +149,8 @@
 			    </div>
 			     <div class="layui-col-xs12  layui-col-md4" style="margin-top: 10px;">
 				    <label class="layui-form-label" style="margin-top: -10px;">事件发起人工号</label>
-				    <div class="layui-input-block">
-					    	<input name="userid" id="userid"class="layui-input"  lay-verify="" lay-filter="" style="margin-right: 10px"/>
+				    <div class="layui-input-block"> <!--  onchange="gonghaoid(this.id)"  -->
+					    	<input name="userid" id="userid" class="layui-input"  lay-verify="" lay-filter="" style="margin-right: 10px"/>
 				    </div>
 			    </div>
 			     <div class="layui-col-xs12  layui-col-md4" style="margin-top: 10px;">
@@ -196,7 +196,7 @@
 			    </div>
 			    <div  class="layui-form-item model-form-footer "   >
 				    <div class="layui-input-block tc" style="padding-top: 20px">
-				      <button class="layui-btn layui-btn-fluid" style="text-align: center;margin-left: -100px;width: auto;" id="submit" >提交</button>
+				      <button  class="layui-btn" style="text-align: center;margin-left: -100px;width: auto;"  id="submit" >提交</button>
 				    </div>
 				</div>
 		    </form>

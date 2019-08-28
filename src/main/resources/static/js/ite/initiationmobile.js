@@ -302,11 +302,35 @@ $(function () {
 	
 		}
 })
+/*var da=null;
+function gonghaoid(id){
+	var y=document.getElementById(id).value
+	$.ajax({
+		async : false,
+		type : "GET",
+		url : "/itevent/api/getNamePersonid",
+		data : {userid:y},
+		 beforeSend:function(XMLHttpRequest){
+               	XMLHttpRequest.setRequestHeader("token",token);
+               },
+		success : function(res) {
+        	da=res.data;
+		}
+	});
+}*/
 $("#submit").click(function() {
+/*	if(da==null||da==undefined||da==""){
+		layer.msg("请填写正确的工号", {
+		  icon: 2,
+			  time: 1500
+		 });
+		$("#userid").val("");
+		return false;
+	}*/
             if(!fileArr.length){
             	layer.msg("请选择要上传的图片", {
         			  icon: 2,
-          			  time: 2000});
+          			  time: 1500});
                 return false;
             }
           		var formData = new FormData();
@@ -317,30 +341,14 @@ $("#submit").click(function() {
                  if(userid==""||userid==null||userid==undefined){
                  	layer.msg("请填写发起人工号", {
            			  icon: 2,
-           			  time: 2000});
+           			  time: 1500});
                  	return false;
-                 }else{
-                	 $.ajax({
-                		async : false,
-         		        url:"/itevent/api/getNamePersonid",
-         		        data: {userid:userid},
-         		        beforeSend:function(XMLHttpRequest){
-         		            XMLHttpRequest.setRequestHeader("token",token);
-         		        },
-         		        success:function (data) {
-         		        	if(data==""||data==null||data==undefined){
-         		        		layer.alert("请填写正确的工号", {
-                       			  icon: 2
-                       			 });
-         		        	}
-         		        }
-         		    })
                  }
                  var phone = document.getElementById("phone").value;
                  if(phone==""||phone==null||phone==undefined){
                  	layer.msg("请填写发起人电话", {
            			  icon: 2,
-           			  time: 2000});
+           			  time: 1500});
                  	return false;
                  }
                  formData.append("userid",userid);
@@ -367,8 +375,6 @@ $("#submit").click(function() {
                      url : '/itevent/initiation/initiationmobile',
                      type : 'post',
                      data : formData,
-                     async: false,  
-					 cache: false,
                      processData: false,   //用FormData传fd时需有这两项
                      contentType: false,
                      timeout:600000,
@@ -376,12 +382,15 @@ $("#submit").click(function() {
                      	XMLHttpRequest.setRequestHeader("token",token);
                      },
                      success : function(res){
-                     	if(res.data=="ok"){
+                    	 alert(aaa);
+                     	if(res.code=="200"){
+                     		alert(aaaddd);
                      		layer.msg(res.msg, {
                    			  icon: 1
                    			 });
-                     	}else if(res.data=="no1"){
-                     		layer.alert(res.msg, {
+                     	}else if(res.code=="400"){
+                     		alert(aaadddccc);
+                     		layer.msg(res.msg, {
                      			  icon: 2
                      			 });
                      	}

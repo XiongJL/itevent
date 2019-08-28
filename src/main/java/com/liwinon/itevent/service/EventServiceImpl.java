@@ -221,7 +221,7 @@ public class EventServiceImpl implements EventService {
             //获取操作人员
             HttpSession session = request.getSession();
             String adminuser = (String)session.getAttribute("username");
-            Event e = new Event(uuid,event,itemid,count,unit,userid,phone,adminuser,date,null,null,null,null);
+            Event e = new Event(uuid,event,itemid,count,unit,userid,null,phone,adminuser,date,null,null,null,null,null);
             System.out.println("e:"+e);
             //准备入库的资产
             Assets a ;
@@ -397,8 +397,8 @@ public class EventServiceImpl implements EventService {
             //获取操作人员
             HttpSession session = request.getSession();
             String adminuser = (String)session.getAttribute("username");
-            Event e = new Event(uuid,event,item.getItemid(),count,unit,userid,phone,adminuser,date,applydate,oaid,orderid,remark);
-            Event ex = new Event(uuidNew,event,exitem.getItemid(),excount,exunit,userid,phone,adminuser,date,applydate,oaid,orderid,remark);
+            Event e = new Event(uuid,event,item.getItemid(),count,unit,userid,null,phone,adminuser,date,applydate,oaid,orderid,remark,null);
+            Event ex = new Event(uuidNew,event,exitem.getItemid(),excount,exunit,userid,null,phone,adminuser,date,applydate,oaid,orderid,remark,null);
             System.out.println("e:"+e);
             System.out.println("ex:"+e);
             //所有准备换入的资产
@@ -576,7 +576,7 @@ public class EventServiceImpl implements EventService {
             //记录事件
             String uuidtmp = uuid+"-"+eventTime;
             eventTime ++;
-            Event e = new Event(uuid,event,a.getItemid(),count,unit,userid,phone,adminuser,date,applydate,oaid,orderid,"");
+            Event e = new Event(uuid,event,a.getItemid(),count,unit,userid,null,phone,adminuser,date,applydate,oaid,orderid,null,null);
             eventDao.save(e);
             //记录出入
             Access access = new Access();
@@ -682,7 +682,7 @@ public class EventServiceImpl implements EventService {
             //获取操作人员
             HttpSession session = request.getSession();
             String adminuser = (String)session.getAttribute("username");
-            Event e = new Event(uuid,event,itemid,count,unit,userid,phone,adminuser,date,applydate,oaid,orderid,remark);
+            Event e = new Event(uuid,event,itemid,count,unit,userid,null,phone,adminuser,date,applydate,oaid,orderid,remark,null);
             //保存事件
             eventDao.save(e);
             //更改资产为报废 ,记录出入记录
@@ -825,7 +825,7 @@ public class EventServiceImpl implements EventService {
             //获取操作人员
             HttpSession session = request.getSession();
             String adminuser = (String)session.getAttribute("username");
-            Event e = new Event(uuid,event,item.getItemid(),count,unit,userid,phone,adminuser,date,applydate,oaid,orderid,remark);
+            Event e = new Event(uuid,event,item.getItemid(),count,unit,userid,null,phone,adminuser,date,applydate,oaid,orderid,remark,null);
             System.out.println("e:"+e);
             //所有准备出的资产
             List<Assets> out = new ArrayList<>(count);

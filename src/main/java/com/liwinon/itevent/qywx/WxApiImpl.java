@@ -46,7 +46,7 @@ public class WxApiImpl implements WxApi {
         String accesstoken = AccessToken.getAccessToken(Corpid.getValue(),IThelpSecret.getValue()).getString("access_token");
         JSONObject res = mission(userid,title,description,task_id,btnKey,btnName,btnReplace_name,IThelpId.getValue(),URL,accesstoken);
         if (!"0".equals(res.getString("errcode"))) {
-            System.out.println(userid.toString() + "发送任务失败!!");
+            System.out.println(userid + "发送任务失败!!");
             return userid.toString() + "发送任务失败!!";
         }
         return "ok";

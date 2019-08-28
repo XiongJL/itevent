@@ -4,6 +4,7 @@ import com.liwinon.itevent.dao.primaryRepo.*;
 import com.liwinon.itevent.dao.secondRepo.SapDao;
 import com.liwinon.itevent.entity.Model.MissionModel;
 import com.liwinon.itevent.entity.Model.MissionStepModel;
+import com.liwinon.itevent.entity.Model.QEventModel;
 import com.liwinon.itevent.entity.StepEnum;
 import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.EventStep;
@@ -13,6 +14,7 @@ import com.liwinon.itevent.qywx.WxApi;
 import com.liwinon.itevent.qywx.WxConfig;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import net.sf.json.JSONObject;
+import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -183,6 +186,51 @@ public class MissionServiceImpl implements MissionService {
             return json;
         }
 
+    }
+
+    /**
+     * 返回用户的进行中任务.
+     * @param qyid
+     * @return
+     */
+    @Override
+    public Map<String, Object> queryEvent(String qyid) {
+        Map<String,Object> res = new HashMap<>();
+        List<QEventModel> data = new ArrayList<>();
+        List<Event> events = new ArrayList<>();
+        events = eventDao.findByUseridEventIng(qyid); //去工号找  通常企业微信号等同于工号
+        if (events.size()<=0){
+            events = eventDao.findByQyidEventIng(qyid);  //用企业微信查
+        }
+        if (events.size()>0){
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            //可以循环赋值,展示每个事件的进度. 通过EventStep联合Event查询
+            for (Event e : events){
+                String type =  eventTypeDao.findByETypeId(e.getEvent()).getLevel_2();
+                List<EventStep> list =  eventStepDao.findByUuid(e.getUuid());
+                EventStep  last = list.get(0);
+                String stepStr = StepEnum.getStep(last.getStep());
+                if(stepStr==null || stepStr ==""){
+                    stepStr ="处理中";
+                }
+                String phone = "";
+                if (last.getExecutorId()!=null && last.getExecutorId()!=""){
+                    phone = repairUserDao.findByPersonid(last.getExecutorId()).getPhone();
+                }
+                String name = "暂无";
+                if (!StringUtils.isEmpty(last.getExecutorName())){
+                    name = last.getExecutorName();
+                }
+                QEventModel model = new QEventModel(e.getUuid(),type,e.getState(),
+                        simpleDateFormat.format(e.getDate()),simpleDateFormat.format(last.getStepDate()),
+                        name,
+                        phone);
+                data.add(model);
+            }
+        }
+        res.put("count",data.size());
+        res.put("data",data);
+        return res;
     }
 
 

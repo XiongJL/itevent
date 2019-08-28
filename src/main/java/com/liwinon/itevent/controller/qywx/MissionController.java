@@ -1,11 +1,14 @@
 package com.liwinon.itevent.controller.qywx;
 
 import com.liwinon.itevent.annotation.PasssToken;
+import com.liwinon.itevent.entity.primary.Event;
+import com.liwinon.itevent.entity.primary.RepairUser;
 import com.liwinon.itevent.exception.MyException;
 import com.liwinon.itevent.service.MissionService;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.liwinon.itevent.exception.ResultEnum.ERROR_6;
@@ -76,4 +81,18 @@ public class MissionController {
     public JSONObject complete(String fromPersonid, String uuid,String qyid,HttpServletRequest request){
     	return mission.complete(fromPersonid,uuid,qyid,request);
     }
+
+    /**
+     * 查询用户的进行中事件
+     * @return
+     */
+    @GetMapping(value = "/qEvent")
+    @PasssToken
+    public String qEvent(String qyid,Model model){
+       Map<String,Object> res =  mission.queryEvent(qyid);
+       model.addAttribute("count",res.get("count"));
+       model.addAttribute("data",res.get("data"));
+       return "common/qEvent";
+    }
+
 }

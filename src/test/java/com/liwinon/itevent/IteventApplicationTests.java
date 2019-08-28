@@ -14,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.StringUtils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
 
@@ -33,23 +35,22 @@ public class IteventApplicationTests {
     @Test
     public void contextLoads() {
         //URL是点击任务卡片本身跳转的页面 , 回调接口依然是接收服务器端口
-     wxApi.sendMissionToIT(new String[]{"1902268014","1907128000"},"某某的服务申请",
-             " 申请类型: 软件无法正常工作<br> 申请描述: 用户填写的内容<br>" +
-                     " 事件等级: 加急处理",
-             "6",
-             new String[]{"1","2"},new String[]{"拒接","接收"},new String[]{"已拒接","开始处理"},"http://www.baidu.com");
+//     wxApi.sendMissionToIT(new String[]{"1902268014","1907128000"},"某某的服务申请",
+//             " 申请类型: 软件无法正常工作<br> 申请描述: 用户填写的内容<br>" +
+//                     " 事件等级: 加急处理",
+//             "6",
+//             new String[]{"1","2"},new String[]{"拒接","接收"},new String[]{"已拒接","开始处理"},"http://www.baidu.com");
     }
 
     @Test
     public void tes(){
-        String var = "20190822171725-135-13614136131";
-        String[] str =  var.split("-");
-        String task_id = "";
-        for (int i= 0;i<str.length-1;i++){ //拼接最后一个流水号, 防止发送的uuid不匹配.
-            task_id +=str[i] +"-";
+        String echostr = "zRE%2BXwM0DGCwh5z1HL3521Or3ELFpY4dvDT1ERH27a9QRAtzfyorULiHoB5q0K%2BB1KyuZuIdjCezVmK4WA4N3w%3D%3D";
+        try {
+            String echo = URLDecoder.decode(echostr, "utf-8");
+            System.out.println(echo);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
-        task_id = task_id  +  "1";
-        System.out.println(task_id);
     }
 
 

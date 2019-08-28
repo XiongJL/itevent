@@ -34,7 +34,7 @@ public class AuthenticTokenInterceptor implements HandlerInterceptor {
         String url=request.getRequestURL().toString();
         System.out.println("拦截器:"+url);
         //不需要拦截的页面
-        String[] not = new String[]{"login","initiation","getTypes","getItemId","getBrands"};
+        String[] not = new String[]{"qEvent","login","receive","initiation","getTypes","getItemId","getBrands"};
         if (isNeed(not,url)){  //登录页面不做验证
             return true;
         }
@@ -51,6 +51,7 @@ public class AuthenticTokenInterceptor implements HandlerInterceptor {
                 trueURL += "?"+parma;
             }
             session.setAttribute("OriginUrl",trueURL);
+            //request.getRequestDispatcher(request.getContextPath()+"/itevent/login").forward(request,response);
             response.sendRedirect("/itevent/login");
             return true;
         }

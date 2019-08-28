@@ -15,6 +15,7 @@ public class Event {
     private int count;
     private String unit;
     private String userid;  //提单人工号
+    private String qyid;  //提单人企业微信号
     private String phone;  //联系方式
     private String adminuser;  //操作人账号
     private Date date;
@@ -23,6 +24,14 @@ public class Event {
     private String orderid; //请购单单号
     private String remark;
     private String state;//事件状态
+
+    public String getQyid() {
+        return qyid;
+    }
+
+    public void setQyid(String qyid) {
+        this.qyid = qyid;
+    }
 
     public Event() {
     }
@@ -35,13 +44,14 @@ public class Event {
         this.phone = phone;
     }
 
-    public Event(String uuid, int event, String itemid, int count, String unit, String userid, String phone, String adminuser, Date date, Date applydate, String oaid, String orderid, String remark) {
+    public Event(String uuid, int event, String itemid, int count, String unit, String userid, String qyid, String phone, String adminuser, Date date, Date applydate, String oaid, String orderid, String remark, String state) {
         this.uuid = uuid;
         this.event = event;
         this.itemid = itemid;
         this.count = count;
         this.unit = unit;
         this.userid = userid;
+        this.qyid = qyid;
         this.phone = phone;
         this.adminuser = adminuser;
         this.date = date;
@@ -49,6 +59,7 @@ public class Event {
         this.oaid = oaid;
         this.orderid = orderid;
         this.remark = remark;
+        this.state = state;
     }
 
     public String getState() {
@@ -164,11 +175,15 @@ public class Event {
                 ", count=" + count +
                 ", unit='" + unit + '\'' +
                 ", userid='" + userid + '\'' +
+                ", qyid='" + qyid + '\'' +
+                ", phone='" + phone + '\'' +
                 ", adminuser='" + adminuser + '\'' +
                 ", date=" + date +
+                ", applydate=" + applydate +
                 ", oaid='" + oaid + '\'' +
                 ", orderid='" + orderid + '\'' +
                 ", remark='" + remark + '\'' +
+                ", state='" + state + '\'' +
                 '}';
     }
 }

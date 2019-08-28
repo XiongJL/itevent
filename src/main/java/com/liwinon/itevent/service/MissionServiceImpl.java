@@ -206,7 +206,8 @@ public class MissionServiceImpl implements MissionService {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             //可以循环赋值,展示每个事件的进度. 通过EventStep联合Event查询
             for (Event e : events){
-                String type =  eventTypeDao.findByETypeId(e.getEvent()).getLevel_2();
+                EventType eventType = eventTypeDao.findByETypeId(e.getEvent());
+                String type =  eventType.getLevel_1()+"-"+eventType.getLevel_2();
                 List<EventStep> list =  eventStepDao.findByUuid(e.getUuid());
                 EventStep  last = list.get(0);
                 String stepStr = StepEnum.getStep(last.getStep());

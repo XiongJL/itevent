@@ -8,6 +8,7 @@ import com.liwinon.itevent.service.MissionService;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -75,6 +76,8 @@ public class MissionController {
      * 查询用户的进行中事件
      * @return
      */
+    @GetMapping(value = "/qEvent")
+    @PasssToken
     public String qEvent(String qyid,Model model){
        Map<String,Object> res =  mission.queryEvent(qyid);
        model.addAttribute("count",res.get("count"));

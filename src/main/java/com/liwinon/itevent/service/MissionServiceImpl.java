@@ -14,6 +14,7 @@ import com.liwinon.itevent.qywx.WxApi;
 import com.liwinon.itevent.qywx.WxConfig;
 import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import net.sf.json.JSONObject;
+import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -205,17 +206,25 @@ public class MissionServiceImpl implements MissionService {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             //可以循环赋值,展示每个事件的进度. 通过EventStep联合Event查询
             for (Event e : events){
-                String type =  eventTypeDao.findByETypeId(e.getEvent()).getLevel_1();
+                String type =  eventTypeDao.findByETypeId(e.getEvent()).getLevel_2();
                 List<EventStep> list =  eventStepDao.findByUuid(e.getUuid());
                 EventStep  last = list.get(0);
                 String stepStr = StepEnum.getStep(last.getStep());
                 if(stepStr==null || stepStr ==""){
                     stepStr ="处理中";
                 }
+                String phone = "";
+                if (last.getExecutorId()!=null && last.getExecutorId()!=""){
+                    phone = repairUserDao.findByPersonid(last.getExecutorId()).getPhone();
+                }
+                String name = "暂无";
+                if (!StringUtils.isEmpty(last.getExecutorName())){
+                    name = last.getExecutorName();
+                }
                 QEventModel model = new QEventModel(e.getUuid(),type,e.getState(),
                         simpleDateFormat.format(e.getDate()),simpleDateFormat.format(last.getStepDate()),
-                        stepStr,last.getExecutorName(),
-                        repairUserDao.findByPersonid(last.getExecutorId()).getPhone());
+                        name,
+                        phone);
                 data.add(model);
             }
         }

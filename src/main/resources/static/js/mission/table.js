@@ -1,5 +1,5 @@
-   //table转ul函数
-   $.fn.setTable = function () {
+//table转ul函数
+$.fn.setTable = function () {
     var el=this;
     this.start=function(){
         $(el).find("ul").remove();
@@ -17,7 +17,7 @@
                 var ul = '<ul>';
                 $(this).find("td").map(function (index, item) {
                     if(name) {
-                        ul += '<li>' + name[index] + ":&nbsp;" + $(this).html() + '</li>';
+                        ul += '<li style="border-bottom:1px #bddbf2 solid;"><span style="font-weight: bold;">' + name[index] + ":&nbsp;"+'</span><span style="float: right;">' + $(this).html() + '</span></li>';
                     }else{
                         ul += '<li>' +"&nbsp;" + $(this).html() + '</li>';
                     }
@@ -30,10 +30,10 @@
         })
     }
     var _this=this;
-   $(window).resize(function(){
+    $(window).resize(function(){
         if($(window).width()<767){
-           _this.start();
-           }else{
+            _this.start();
+        }else{
             $(el).find("table").show();
             $(el).find("ul").hide();
         }
@@ -42,4 +42,3 @@
         _this.start();
     }
 };
-

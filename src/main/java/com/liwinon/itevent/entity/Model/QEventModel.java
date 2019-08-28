@@ -3,21 +3,19 @@ package com.liwinon.itevent.entity.Model;
 public class QEventModel {
     private String uuid;
     private String type;
-    private String state;
+    private String state;  // 事件状态
     private String applyDate;
     private String stepDate;
-    private String step;
     private String executorName;
     private String phone; //处理人电话
 
     public QEventModel(){};
-    public QEventModel(String uuid, String type, String state, String applyDate, String stepDate, String step, String executorName, String phone) {
+    public QEventModel(String uuid, String type, String state, String applyDate, String stepDate,  String executorName, String phone) {
         this.uuid = uuid;
         this.type = type;
         this.state = state;
         this.applyDate = applyDate;
         this.stepDate = stepDate;
-        this.step = step;
         this.executorName = executorName;
         this.phone = phone;
     }
@@ -62,13 +60,7 @@ public class QEventModel {
         this.stepDate = stepDate;
     }
 
-    public String getStep() {
-        return step;
-    }
 
-    public void setStep(String step) {
-        this.step = step;
-    }
 
     public String getExecutorName() {
         return executorName;
@@ -94,7 +86,6 @@ public class QEventModel {
                 ", state='" + state + '\'' +
                 ", applyDate='" + applyDate + '\'' +
                 ", stepDate='" + stepDate + '\'' +
-                ", step='" + step + '\'' +
                 ", executorName='" + executorName + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';

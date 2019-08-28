@@ -1,32 +1,53 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>IT事件管理系统</title>
-    <link th:href="@{../css/layui.css}" href="../css/layui.css" rel="stylesheet" type="text/css">
+    <link th:href="@{../css/ite/style.css}" href="../css/ite/style.css" rel="stylesheet" type="text/css">
 <!--    <link th:href="@{../css/ite/common.css}" rel="stylesheet" type="text/css">-->
 </head>
-<body class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
+<body>
     <!--一页两用-->
-    <div class="layui-body">
-        <!-- 内容主体区域 -->
-        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 1%">
-            <legend>此处应展示表格或历史瀑布记录</legend>
-        </fieldset>
+    <!-- 内容主体区域 -->
+    <h2 align="center">您流程中的服务</h2>
+    <div class="table-list">
+        <table>
+            <thead>
+            <tr>
+                <th>申请服务类型</th>
+                <th>处理状态</th>
+                <th>申请时间</th>
+                <th>当前处理人</th>
+                <th>处理人联系方式</th>
+                <th>当前环节开始事件</th>
+            </tr>
+            </thead>
+            <p th:if="${count}<=0" style="text-align: center">您没有任何进行中的申请</p>
+            <tbody th:if="${count} >0">
+                <tr th:each="event,eventState : ${data}">
+                    <td th:text="${event.type}"></td>
+                    <td th:text="${event.state}"></td>
+                    <td th:text="${event.applyDate}"></td>
+                    <td th:text="${event.executorName}"></td>
+                    <td th:text="${event.phone}"></td>
+                    <td th:text="${event.stepDate}"></td>
+                </tr>
 
-
+            </tbody>
+        </table>
     </div>
 
 
-</div>
-
 <!-- jQuery-->
 <script th:src="@{../js/jquery-3.4.0.min.js}" type="text/javascript"></script>
-<script th:src="@{../js/layui.js}"  type="text/javascript"></script>
-<script th:src="@{../js/ite/addItem.js}"></script>
-
-
+<script th:src="@{../js/mission/table.js}"></script>
+<script th:inline="javascript">
+    $(".table-list").setTable();
+    var count = [[${count}]];
+    var data = [[${data}]];
+    console.log(count)
+    console.log(data)
+</script>
 </body>
 </html>

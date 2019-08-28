@@ -319,6 +319,22 @@ $("#submit").click(function() {
            			  icon: 2,
            			  time: 2000});
                  	return false;
+                 }else{
+                	 $.ajax({
+                		async : false,
+         		        url:"/itevent/api/getNamePersonid",
+         		        data: {userid:userid},
+         		        beforeSend:function(XMLHttpRequest){
+         		            XMLHttpRequest.setRequestHeader("token",token);
+         		        },
+         		        success:function (data) {
+         		        	if(data==""||data==null||data==undefined){
+         		        		layer.alert("请填写正确的工号", {
+                       			  icon: 2
+                       			 });
+         		        	}
+         		        }
+         		    })
                  }
                  var phone = document.getElementById("phone").value;
                  if(phone==""||phone==null||phone==undefined){
@@ -329,6 +345,8 @@ $("#submit").click(function() {
                  }
                  formData.append("userid",userid);
                  formData.append("phone",phone);
+                 var wxuserid = document.getElementById("wxuserid").value;
+                 formData.append("wxuserid",wxuserid);
                  var adminuser = document.getElementById("adminuser").value;
                  formData.append("adminuser",adminuser);
                  var level_1 = document.getElementById("level_1").value;

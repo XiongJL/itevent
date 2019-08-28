@@ -265,11 +265,11 @@ public class WxApiImpl implements WxApi {
      * @return 企业唯一userid              "corpid="+corpid+"&corpsecret="+appsecret;
      */ 
     public String getUseridByCode(String code){
-    	JSONObject jsona =JSONObject.fromObject( HttpUtil.reqGet(WxConfig.TokenUrl.getValue(), "corpid="+WxConfig.Corpid.getValue()+"&corpsecret="+WxConfig.IThelpSecret.getValue() ));
-    	String access_token=String.valueOf(jsona.get("access_token"));
-    	String param = "access_token="+access_token+"&code="+code;
+    	String accesstoken = AccessToken.getAccessToken(Corpid.getValue(),IThelpSecret.getValue()).getString("access_token");
+    	String param = "access_token="+accesstoken+"&code="+code;
+    	System.out.println("----------------------------------"+param);
     	JSONObject json = JSONObject.fromObject(HttpUtil.reqGet(WxConfig.UserIdURL.getValue(),param));
-    	System.out.println("useridAPI获取的json是: "+json);
+    	System.out.println("useridAPI获取的json是:======================= "+json);
         if(json!=null && json.getInt("errcode")==0){
             if(json.has("UserId")){   //是企业授权用户
                 return json.getString("UserId");

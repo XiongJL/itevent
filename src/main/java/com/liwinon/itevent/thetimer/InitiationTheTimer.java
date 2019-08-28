@@ -3,6 +3,7 @@ package com.liwinon.itevent.thetimer;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.poi.hssf.eventusermodel.EventWorkbookBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.liwinon.itevent.dao.primaryRepo.EventDao;
 import com.liwinon.itevent.dao.primaryRepo.EventTypeDao;
 import com.liwinon.itevent.dao.primaryRepo.RepairUserDao;
+import com.liwinon.itevent.dao.secondRepo.SapDao;
 import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.EventType;
 import com.liwinon.itevent.qywx.WxApi;
@@ -25,6 +27,8 @@ public class InitiationTheTimer {
 	RepairUserDao repairUserDao;
 	@Autowired
 	WxApi wxApi;
+	@Autowired
+	SapDao sapDao;
 	
 	/**总共七位，分别表示秒（0-59），分（0-59），时（0-23），
 	 * 日期天/日（1-31），月份）（1-12），星期（1-7,1表示星晴天，7表示星期六），
@@ -58,11 +62,11 @@ public class InitiationTheTimer {
 				if("erp".equals(eventType.getTeam())) {  //erp推送给最小级别人员
 					int min=repairUserDao.findAllmin(eventType.getTeam());
 					String[] user=repairUserDao.findAllUserid(min,eventType.getTeam());
-					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"2");					
+					wxSenfMissionToIT(user,getname(event2.getUserid()),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"2");					
 				}else {
 					int min=repairUserDao.findAllmin(eventType.getTeam());
 					String[] user=repairUserDao.findAllUserid(min+1,eventType.getTeam());
-					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"2");
+					wxSenfMissionToIT(user,getname(event2.getUserid()),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"2");
 				}
 			}
 		}
@@ -85,11 +89,11 @@ public class InitiationTheTimer {
 				if("erp".equals(eventType.getTeam())) {  //erp推送给最小级别人员
 					int min=repairUserDao.findAllmin(eventType.getTeam());
 					String[] user=repairUserDao.findAllUserid(min+1,eventType.getTeam());
-					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"3");					
+					wxSenfMissionToIT(user,getname(event2.getUserid()),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"3");					
 				}else {
 					int min=repairUserDao.findAllmin(eventType.getTeam());
 					String[] user=repairUserDao.findAllUserid(min+2,eventType.getTeam());
-					wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"3");
+					wxSenfMissionToIT(user,getname(event2.getUserid()),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"3");
 				}
 			}
 		}
@@ -110,7 +114,7 @@ public class InitiationTheTimer {
 				int etypeid=event2.getEvent();
 				EventType eventType=eventTypeDao.findAllEtypeide(etypeid);
 			    String[] user=repairUserDao.findAllUserid(4,"经理");
-			    wxSenfMissionToIT(user,eventType.getLevel_1(),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"4");
+			    wxSenfMissionToIT(user,getname(event2.getUserid()),eventType.getLevel_2(),eventType.getDescription(),tookenid(event2.getUuid())+"4");
 			}
 		}
 	}
@@ -121,6 +125,9 @@ public class InitiationTheTimer {
             task_id +=str[i] +"-";
         }
         return task_id;
+	}
+	public String getname(String userid) {
+		return sapDao.findNByUserId(userid);
 	}
 	//公用推送方法
 	public  void wxSenfMissionToIT(String[] user,String levent_1,String levent_2,String description,String uuid) {

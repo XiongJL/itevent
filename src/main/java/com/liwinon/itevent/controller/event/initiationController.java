@@ -6,6 +6,7 @@ import com.liwinon.itevent.qywx.WxApi;
 import com.liwinon.itevent.qywx.WxConfig;
 import com.liwinon.itevent.service.InitiationService;
 import com.liwinon.itevent.util.HttpUtil;
+import com.liwinon.itevent.util.cookieExistUtil;
 
 import net.sf.json.JSONObject;
 
@@ -14,6 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -53,62 +55,47 @@ public class initiationController {
 	 */
 	@GetMapping(value = "/initiationindex")
 	@PasssToken
-	public String Oauth2API(HttpServletRequest request,HttpServletResponse res) {
+	public String Oauth2API(HttpServletRequest request,HttpServletResponse response) {
 		String userAgent = request.getHeader("user-agent").toLowerCase();
 		System.out.println(userAgent);
 		if(userAgent.indexOf("windows")!=-1) {			
 			return "event/initiationpc";
 		}else {   //安卓   安卓微信    企业微信   都可以用这个也买你
-			System.out.println("=========---------------------");
-				String corpid="wwbc7acf1bd2c6f766";
-		        String redirect_uri = "http://10.205.48.59:8093/itevent/initiation";
-		        System.out.println("redirect_uri为:"+redirect_uri);
-		       /* String URL = "https://open.weixin.qq.com/connect/oauth2/authorize?"+
-		                "appid="+corpid+
-		                "&redirect_uri="+redirect_uri+
-		                "&response_type=code"+
-		                "&scope=snsapi_base"+
-		                "&state=STATE#wechat_redirect"; */ //state不是必须,重定向后会带上state参数，企业可以填写a-zA-Z0-9的参数值，长度不可超过128个字节
-		        String URL = "https://open.weixin.qq.com/connect/oauth2/authorize?"+
-		        		"appid="+corpid+
-		        		"&redirect_uri="+redirect_uri+
-		        		"&response_type=code"+
-		        		"&scope=snsapi_base"+
-		        		"&state=STATE#wechat_redirect";  //state不是必须,重定向后会带上state参数，企业可以填写a-zA-Z0-9的参数值，长度不可超过128个字节
-		        //员工点击后，页面将跳转至 redirect_uri?code=CODE&state=STATE    code用以换取userid
-		        try {
-		            res.sendRedirect(URL); //重定向
-		        } catch (IOException e) {
-		            System.out.println("重定向到OAutho2.0失败!");
-		            e.printStackTrace();
-		        } catch (IllegalStateException e){
-		            System.out.println("捕获到 sendRedirect异常!");
-		            //重定向到 err?  ,错误页面直接跳转到主页?  cookie 永久保存(最后做.)?
-		        }
+			String qyid = cookieExistUtil.cookieExist(request,response);
+	        if(qyid==null){
+	            return "err";
+	        }else {
+	        	return "event/initiationmobile";
+	        }
 		}
 		// 此处可以添加获取持久化的数据，如企业号id等相关信息
-		return null;
 	}
  
 	@Autowired
 	WxApi wxApi;
+	
 	@GetMapping(value = "/initiation")
     @PasssToken
-    public String initiation(String code, String state, HttpServletRequest request,Model model){
+    @ResponseBody
+    public String initiation(String code, String state, HttpServletRequest request,Model model,HttpServletResponse res){
 		String userAgent = request.getHeader("user-agent").toLowerCase();
 		System.out.println(userAgent);
-		if(userAgent.indexOf("windows")!=-1) {			
-			System.out.println("=============================");
-			return "event/initiationpc";
-		}else {   //安卓   安卓微信    企业微信   都可以用这个也买你
 			String userid = wxApi.getUseridByCode(code);
-			System.out.println("====================="+userid+"===========================");
-			String wxuserid=userid;    //获取访问人员userid
-			if(!"".equals(wxuserid)) {
-				model.addAttribute("wxuserid", wxuserid);
-			}
-			return "event/initiationmobile";
-		}
+	        if(userid ==null){
+	            return "redirect:/app/err";
+	        }
+	        Cookie cookie = new Cookie("userid",userid);
+	        cookie.setMaxAge(Integer.MAX_VALUE); //永久
+	       // cookie.setMaxAge(600);  //-1关闭浏览器就失效
+	        res.addCookie(cookie);
+	        System.out.println("已保存cookie");
+	        try {
+	            res.sendRedirect("https://mesqrcode.liwinon.com/itevent/initiationindex");
+	        } catch (Exception e) {
+	            System.out.println("跳转主页失败!");
+	            e.printStackTrace();
+	        }
+			return null;
     }
 	
 	@Autowired
@@ -167,7 +154,7 @@ public class initiationController {
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
             file = multiRequest.getFiles("file");
         }
-		return initiationService.initiationmobile(request,file,userid,phone,adminuser,level_1,level_2,description,type,brand,itemid,remark);
+		return initiationService.initiationmobile(request,response,file,userid,phone,adminuser,level_1,level_2,description,type,brand,itemid,remark);
 	}
 	
 	/**

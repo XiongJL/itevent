@@ -1,5 +1,6 @@
 package com.liwinon.itevent.controller;
 
+import com.liwinon.itevent.dao.secondRepo.SapDao;
 import com.liwinon.itevent.entity.Model.BackModel;
 import com.liwinon.itevent.entity.second.Sap_Users;
 import com.liwinon.itevent.service.ApiService;
@@ -16,6 +17,8 @@ import java.util.List;
 public class apiController {
     @Autowired
     ApiService api;
+    @Autowired
+    SapDao sapDao;
     @GetMapping(value = "/getNameDepart")
     public JSONObject getNameDepart(String userid){
         return api.getUserInfoById(userid);
@@ -58,6 +61,12 @@ public class apiController {
     @GetMapping(value = "/getUnit")
     public String unit(String type){
         return api.getUnit(type);
+    }
+    
+    //获取有没有名字
+    @GetMapping(value = "/getNamePersonid")
+    public String getNamePersonid(String userid){
+    	return sapDao.findNByUserId(userid);
     }
 
 

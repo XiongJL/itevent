@@ -9,7 +9,7 @@ public enum WxConfig {
     IThelpSecret("bnhD7cALjA5yLjzUsdd-eZAmObJw87dGRO-d8dsBUow"), // it服务支持应用秘钥
     TokenUrl("https://qyapi.weixin.qq.com/cgi-bin/gettoken") ,  //获取Token的接口地址
     ApplyURL("https://mesqrcode.liwinon.com/itevent/initiation"),      //申请服务的地址
-    QEventURL("https://mesqrcode.liwinon.com/itevent/qevent"),  //点击 查询返回的事件进度页面
+    QEventURL("https://mesqrcode.liwinon.com/itevent/qEvent"),  //点击 查询返回的事件进度页面
     //QMissionURL("https://mesqrcode.liwinon.com/itevent/qMission?uuid="),  //查询任务详细界面
     QMissionURL("http://172.60.45.198:8093/itevent/qMission?uuid="),  //测试
     ;

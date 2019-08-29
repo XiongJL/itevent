@@ -402,7 +402,10 @@ $("#submit").click(function() {
   		                   		layer.msg(res.msg, {
   		                 			  icon: 1
   		                 			 });
-  		                   		location.reload();
+  		                   		setTimeout( function(){
+                     			//1.5秒后实现的方法写在这个方法里面     延时刷新
+                     			location.reload();
+                     			}, 1500 );
   		                   	}else if(res.data=="no1"){
   		                   		layer.alert(res.msg, {
   		                   			  icon: 2

@@ -175,7 +175,11 @@ public class ReceiveServiceImpl implements ReceiveService {
                                if (res!="ok"){
                                    System.out.println("更新任务信息为拒接失败! : task_id:"+task_id);
                                }
-                               return wxApi.sendTextToOne(new String[]{msg.getFromUserName()},"您的申请已被拒绝,请尝试更改内容后重新申请.");
+                               String qyid = e.getQyid();
+                               if (StringUtils.isEmpty(qyid)){
+                                   qyid = e.getUserid();
+                               }
+                               return wxApi.sendTextToOne(new String[]{qyid},"您的申请已被拒绝,请尝试更改内容后重新申请.");
 
                            }else{  //已有执行人, 无法拒绝
                                //发送卡片信息,告知拒绝者已有人处理.

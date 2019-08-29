@@ -111,6 +111,14 @@ public class InitiationServiceImpl implements InitiationService {
         eventStep.setUuid(uuid);
 		eventStep.setStep(1);
 		eventStep.setImgurl(path);
+		Event uu=null;
+		uu=eventDao.findAllUuid(uuid);
+		if(uu!=null) {
+			json.accumulate("code",400);
+	        json.accumulate("msg","请勿重复提交");
+	        json.accumulate("data","no1");
+			return  json;
+		}
 		eventStepDao.save(eventStep);
 		event.setUuid(uuid);
 		event.setEvent(etypeid);
@@ -183,6 +191,14 @@ public class InitiationServiceImpl implements InitiationService {
         eventStep.setUuid(uuid);
 		eventStep.setStep(1);
 		eventStep.setImgurl(path);
+		Event uu=null;
+		uu=eventDao.findAllUuid(uuid);
+		if(uu!=null) {
+			json.accumulate("code",400);
+	        json.accumulate("msg","请勿重复提交");
+	        json.accumulate("data","no1");
+			return  json;
+		}
 		eventStepDao.save(eventStep);
 		event.setUuid(uuid);
     	event.setQyid(qyuserid);

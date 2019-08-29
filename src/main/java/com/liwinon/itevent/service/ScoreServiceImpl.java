@@ -22,6 +22,13 @@ public class ScoreServiceImpl implements ScoreService{
 	@Transactional
 	public JSONObject Save(String uuid, String qyid, String phone,String userid, String score, String remark, HttpServletRequest request) {
 		JSONObject json=new JSONObject();
+		String uu=scoreDao.findAllUuid(uuid);
+		if(uu!=null||!"".equals(uu)) {
+			json.accumulate("code",400);
+			json.accumulate("msg","请勿重复填写评论");
+			json.accumulate("data","no");
+			return json;
+		}
 		Score score1=new Score();
 		score1.setUuid(uuid);
 		score1.setQyid(qyid);

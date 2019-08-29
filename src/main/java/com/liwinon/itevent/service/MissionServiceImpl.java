@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -222,8 +223,19 @@ public class MissionServiceImpl implements MissionService {
                 if (!StringUtils.isEmpty(last.getExecutorName())){
                     name = last.getExecutorName();
                 }
+                String stepDate ,eventDate;
+                if (last.getStepDate()==null){
+                    stepDate = "未知";
+                }else{
+                    stepDate = simpleDateFormat.format(last.getStepDate());
+                }
+                if (StringUtils.isEmpty(e.getDate())){
+                    eventDate = "未知";
+                }else{
+                    eventDate = simpleDateFormat.format(e.getDate());
+                }
                 QEventModel model = new QEventModel(e.getUuid(),type,e.getState(),
-                        simpleDateFormat.format(e.getDate()),simpleDateFormat.format(last.getStepDate()),
+                        eventDate ,stepDate,
                         name,
                         phone);
                 data.add(model);

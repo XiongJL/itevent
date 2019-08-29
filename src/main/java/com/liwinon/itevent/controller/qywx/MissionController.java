@@ -78,7 +78,7 @@ public class MissionController {
      */
     @GetMapping(value = "/mission/complete")
     @ResponseBody
-    public JSONObject complete(String fromPersonid, String uuid,String qyid,HttpServletRequest request){
+    public String complete(String fromPersonid, String uuid,String qyid,HttpServletRequest request){
     	return mission.complete(fromPersonid,uuid,qyid,request);
     }
 

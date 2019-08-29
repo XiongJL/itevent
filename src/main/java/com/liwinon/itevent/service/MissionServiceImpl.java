@@ -277,14 +277,31 @@ public class MissionServiceImpl implements MissionService {
         return  list;
 
     }
-
+    
+    //完成事件   工号，，事件号    微信userid
 	@Override
-	public JSONObject complete(String fromPersonid, String uuid, String qyid, HttpServletRequest request) {
+	@Transactional
+	public String complete(String fromPersonid, String uuid, String qyid, HttpServletRequest request) {
 		JSONObject json = new JSONObject();
-		
-		
-		
-		
-		return json;
+		String[] str =  uuid.split("-");
+		String task_id="";
+		for (int i= 0;i<str.length-1;i++){ //拼接最后一个流水号, 防止发送的uuid不匹配.
+			task_id +=str[i] +"-";
+		}
+		task_id = task_id  +  "1";
+		Event event=eventDao.findAllUuid(task_id); //事件主体
+		List<EventStep> eventStep1=eventStepDao.findByUuid(task_id);
+		EventStep eventStep=eventStep1.get(0);  //事件环节执行
+		EventType eventType=eventTypeDao.findAllEtypeide(event.getEvent());  //事件描述
+		event.setState("结束");  //事件结束标记
+		eventDao.save(event);
+		eventStep.setStep(30);  //回访标记
+		eventStepDao.save(eventStep);
+		String title = eventType.getLevel_1()+"的服务处理回访";
+		String description = "事件类型:"+eventType.getLevel_2()+"<br>"+"用户描述:"+event.getRemark();
+		String btntxt = "查看详情";
+		String URL = WxConfig.QMissioncompleteURL.getValue()+task_id+"&qyid="+event.getQyid();
+		wxApi.sendCardToIT(new String[]{event.getQyid()},title,description,URL,btntxt);
+		return wxApi.sendTextToOne(new String[]{eventStep.getExecutorId()},"您的任务"+eventType.getLevel_1()+"已处理完成，谢谢");
 	}
 }

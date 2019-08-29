@@ -10,8 +10,10 @@ public enum WxConfig {
     TokenUrl("https://qyapi.weixin.qq.com/cgi-bin/gettoken") ,  //获取Token的接口地址
     ApplyURL("https://mesqrcode.liwinon.com/itevent/initiation"),      //申请服务的地址
     QEventURL("https://mesqrcode.liwinon.com/itevent/qEvent"),  //点击 查询返回的事件进度页面
+    AccessURL("https://mesqrcode.liwinon.com/itevent/access?uuid="),
     //QMissionURL("https://mesqrcode.liwinon.com/itevent/qMission?uuid="),  //查询任务详细界面
     QMissionURL("http://172.60.45.198:8093/itevent/qMission?uuid="),  //测试
+    QMissioncompleteURL("http://10.205.48.59:8093/itevent/access?uuid="),  //测试
     ApplyURLcs("http://10.205.48.59:8093/itevent/initiationindex"),  //测试
     UserIdURL("https://qyapi.weixin.qq.com/cgi-bin/user/getuserinfo"),  //获取页面访问用户userid
     ;

@@ -302,9 +302,9 @@ $(function () {
 	
 		}
 })
-/*var da=null;
-function gonghaoid(id){
-	var y=document.getElementById(id).value
+var da=null;
+function gonghaoid(){
+	var y= $("#userid").val();
 	$.ajax({
 		async : false,
 		type : "GET",
@@ -317,16 +317,16 @@ function gonghaoid(id){
         	da=res.data;
 		}
 	});
-}*/
-$("#submit").click(function() {
-/*	if(da==null||da==undefined||da==""){
+	if(da==null||da==undefined||da==""){
 		layer.msg("请填写正确的工号", {
 		  icon: 2,
 			  time: 1500
 		 });
 		$("#userid").val("");
 		return false;
-	}*/
+	}
+}
+$("#submit").click(function() {
             if(!fileArr.length){
             	layer.msg("请选择要上传的图片", {
         			  icon: 2,
@@ -383,6 +383,10 @@ $("#submit").click(function() {
                      		layer.msg(res.msg, {
                    			  icon: 1
                    			 });
+                     		setTimeout( function(){
+                     			//1.5秒后实现的方法写在这个方法里面     延时刷新
+                     			location.reload();
+                     			}, 1500 );
                      	}else if(res.code=="400"){
                      		layer.msg(res.msg, {
                      			  icon: 2

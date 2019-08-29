@@ -325,9 +325,9 @@ $(function () {
 
 	}
 })
-function gonghaoid(id){
+function gonghaoid(){
 	var da;
-	var y=document.getElementById(id).value
+	var y=$("#userid").val();
 		$.ajax({
 				async : false,
 				type : "GET",
@@ -402,6 +402,7 @@ $("#submit").click(function() {
   		                   		layer.msg(res.msg, {
   		                 			  icon: 1
   		                 			 });
+  		                   		location.reload();
   		                   	}else if(res.data=="no1"){
   		                   		layer.alert(res.msg, {
   		                   			  icon: 2

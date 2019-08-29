@@ -66,7 +66,12 @@ public class GetMSG {
 	}
 	/**获取应用的id*/
 	public String getAgentId() {
-		return Root.getElementsByTagName("AgentId").item(0).getTextContent();
+		/*傻逼腾讯传两种ID ,Id**/
+		if (Root.getElementsByTagName("AgentId").item(0) == null){
+			return Root.getElementsByTagName("AgentID").item(0).getTextContent();
+		}else{
+			return Root.getElementsByTagName("AgentId").item(0).getTextContent();
+		}
 	}
 	/**获取事件类型*/
 	public String getEvent() {

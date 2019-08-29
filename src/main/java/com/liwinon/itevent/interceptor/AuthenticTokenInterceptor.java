@@ -41,6 +41,7 @@ public class AuthenticTokenInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         if (session==null ||session.getAttribute("username")==null||session.getAttribute("username")=="" ){
             String  parma = request.getQueryString();
+           // System.out.println("request获取到的路径:"+request.getContextPath());
             System.out.println("param:"+parma);
             if (url.indexOf("login")>=0){  //登录页面不做验证
                 System.out.println("之前进入的登录页面,不做保存");
@@ -52,7 +53,10 @@ public class AuthenticTokenInterceptor implements HandlerInterceptor {
             }
             session.setAttribute("OriginUrl",trueURL);
             //request.getRequestDispatcher(request.getContextPath()+"/itevent/login").forward(request,response);
-            response.sendRedirect("/itevent/login");
+            response.setStatus(302);
+            response.setHeader("location",
+                    request.getContextPath()+"/itevent/login");
+            //response.sendRedirect("/itevent/login");
             return true;
         }
         // 如果不是映射到方法直接通过

@@ -29,7 +29,8 @@ public class UpdateImgUtil {
 		                String da = format.format(date);
 		                //重命名上传后的文件
 		                String newName = da+ getRandomString2(4) + "." + type;
-		                String filePath = "D:\\ITEvent\\file\\export\\img\\";
+		                //D:\qrcode\itevent\img
+		                String filePath = "D:\\qrcode\\itevent\\img\\";
 		                fileName=filePath+newName;
 		                File dest = new File(fileName);
 		                // 检测是否存在目录
@@ -79,7 +80,7 @@ public class UpdateImgUtil {
 		                String da = format.format(date);
 		                //重命名上传后的文件
 		                String newName = da+ getRandomString2(4) + "." + type;
-		                String filePath = "D:\\ITEvent\\file\\export\\img\\";
+		                String filePath = "D:\\qrcode\\itevent\\img\\";
 		                fileName=filePath+newName;
 		                File dest = new File(fileName);
 		                // 检测是否存在目录

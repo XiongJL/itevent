@@ -297,10 +297,10 @@ public class MissionServiceImpl implements MissionService {
 		eventDao.save(event);
 		eventStep.setStep(30);  //回访标记
 		eventStepDao.save(eventStep);
-		String title = eventType.getLevel_1()+"的服务处理回访";
-		String description = "事件类型:"+eventType.getLevel_2()+"<br>"+"用户描述:"+event.getRemark();
+		String title = eventType.getLevel_1()+"的服务处理完成回访";
+		String description = "你申请类型:"+eventType.getLevel_2()+"<br>"+"你的描述:"+event.getRemark();
 		String btntxt = "查看详情";
-		String URL = WxConfig.QMissioncompleteURL.getValue()+task_id+"&qyid="+event.getQyid();
+		String URL = WxConfig.ScoreURL.getValue()+task_id+"&qyid="+event.getQyid()+"&phone="+event.getPhone()+"&userid="+event.getUserid();
 		wxApi.sendCardToIT(new String[]{event.getQyid()},title,description,URL,btntxt);
 		return wxApi.sendTextToOne(new String[]{eventStep.getExecutorId()},"您的任务"+eventType.getLevel_1()+"已处理完成，谢谢");
 	}

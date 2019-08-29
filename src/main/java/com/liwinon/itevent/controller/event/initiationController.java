@@ -79,16 +79,14 @@ public class initiationController {
     @ResponseBody
     public String initiation(String code, String state, HttpServletRequest request,Model model,HttpServletResponse res){
 		String userAgent = request.getHeader("user-agent").toLowerCase();
-		System.out.println(userAgent);
 			String userid = wxApi.getUseridByCode(code);
 	        if(userid ==null){
-	            return "redirect:/app/err";
+	            return "redirect:err";
 	        }
 	        Cookie cookie = new Cookie("userid",userid);
 	        cookie.setMaxAge(Integer.MAX_VALUE); //永久
 	       // cookie.setMaxAge(600);  //-1关闭浏览器就失效
 	        res.addCookie(cookie);
-	        System.out.println("已保存cookie");
 	        try {
 	            res.sendRedirect("https://mesqrcode.liwinon.com/itevent/initiationindex");
 	        } catch (Exception e) {

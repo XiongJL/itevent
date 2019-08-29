@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.liwinon.itevent.dao.primaryRepo.EventDao;
+import com.liwinon.itevent.dao.primaryRepo.EventStepDao;
 import com.liwinon.itevent.dao.primaryRepo.ScoreDao;
+import com.liwinon.itevent.entity.primary.Event;
+import com.liwinon.itevent.entity.primary.EventStep;
 import com.liwinon.itevent.entity.primary.Score;
 
 import net.sf.json.JSONObject;
@@ -17,6 +21,10 @@ public class ScoreServiceImpl implements ScoreService{
 	
 	@Autowired
 	ScoreDao scoreDao;
+	@Autowired
+	EventStepDao eventStepDao;
+	@Autowired
+	EventDao eventDao;
 	
 	@Override
 	@Transactional
@@ -37,6 +45,12 @@ public class ScoreServiceImpl implements ScoreService{
 		score1.setScore(score);
 		score1.setRemark(remark);
 		try {
+			Event event=eventDao.findAllUuid(uuid);
+			event.setState("结束");  //结束标记
+			eventDao.save(event);
+			EventStep eventStep=eventStepDao.findAlluuid(uuid);
+			eventStep.setStep(40);  //事件结束标记
+			eventStepDao.save(eventStep);
 			scoreDao.save(score1);
 			json.accumulate("code",200);
 	        json.accumulate("msg","评价完成");

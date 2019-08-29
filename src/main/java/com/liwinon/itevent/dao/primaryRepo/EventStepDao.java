@@ -19,4 +19,8 @@ public interface EventStepDao extends JpaRepository<EventStep,Integer>, JpaSpeci
     @Query(value = "select * from ITE_EventStep where uuid=:uuid order by stepId desc ",nativeQuery = true)
     List<EventStep> findByUuid(String uuid);
     
+    //事件回访时搜索事件
+    @Query(value = "select * from ITE_EventStep where uuid=:uuid",nativeQuery = true)
+    EventStep findAlluuid(String uuid);
+    
 }

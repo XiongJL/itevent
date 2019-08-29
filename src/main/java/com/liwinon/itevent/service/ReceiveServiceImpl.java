@@ -179,6 +179,11 @@ public class ReceiveServiceImpl implements ReceiveService {
                                if (StringUtils.isEmpty(qyid)){
                                    qyid = e.getUserid();
                                }
+                               List<EventStep> eventStep = eventStepDao.findByUuid(e.getUuid());
+                                for(EventStep tmp:eventStep){
+                                    tmp.setStep(40); //步骤设为40 结束
+                                    eventStepDao.save(tmp);
+                                }
                                return wxApi.sendTextToOne(new String[]{qyid},"您的申请已被拒绝,请尝试更改内容后重新申请.");
 
                            }else{  //已有执行人, 无法拒绝

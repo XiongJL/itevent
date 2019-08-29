@@ -30,12 +30,23 @@ function login(){
                 localStorage.setItem("token",token);
                 $.ajax({  //获取用户之前打算访问的页面
                     url:'/itevent/originURL',
+                    //   https://mesqrcode.liwinon.com/itevent/login
                     success:function (res) {
                         var url = "/itevent/index";
                         if (res!=null && res!="" && res.indexOf("login")==-1){ //如果第一次进入的是登录页面不跳转回去
-                            url = res;
+                            if (res.indexOf("mesqrcode")!=-1){
+                                var tmp ="";
+                                var urls =  res.split("/");
+                                if (urls.length>2){
+                                    for(var index=3;index<urls.length;index++){
+                                        tmp += "/"+urls[index]
+                                    }
+                                }
+                                console.log("tmp:"+tmp)
+                                url = tmp;
+                            }
                         }
-                        console.log(res)
+                        console.log("修改后的路径:"+url)
                         window.location.href = url;
                     }
                 })

@@ -122,7 +122,21 @@ public class ReceiveServiceImpl implements ReceiveService {
                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分");
                        Date date = new Date();
                        String dateStr =  sdf.format(date);
-                       EventStep step = eventStepDao.findByUuidAndStep1(task_id);
+                       //注意判断是否被拒绝,或者被接收
+                       List<EventStep> steps = eventStepDao.findByUuid(task_id);
+                       EventStep step ;
+                       if (steps.size()>0){
+                           step =steps.get(0); //倒叙查询,获取第一个.根据step字段判断当前环节
+                           if (step.getStep()!=1){
+                               //已经被人接收,或者拒绝
+                               System.out.println(task_id+" : 已被其他人处理");
+                               return wxApi.sendCardToIT(new String[]{msg.getFromUserName()},"接收申请失败提示!"
+                                       ,"当前服务申请已有人处理!",
+                                       WxConfig.QMissionURL.getValue()+task_id+"&qyid="+msg.getFromUserName(),"了解详情");
+                           }
+                       }else{
+                           return wxApi.sendTextToOne(new String[]{msg.getFromUserName()},"该申请异常,未初始化步骤.");
+                       }
                        Event e = eventDao.findByUuid(task_id);
                        String executorId = step.getExecutorId();
                        String executorName = step.getExecutorName();
@@ -157,7 +171,7 @@ public class ReceiveServiceImpl implements ReceiveService {
                                String btntxt = "查看详情";
                                String URL = WxConfig.QMissionURL.getValue()+task_id+"&qyid="+FromUserName;
                                return wxApi.sendCardToIT(new String[]{FromUserName},title,description,URL,btntxt);
-                           }else{
+                           }else{  //step为 1 受理中,但是却已有执行人
                                //已经被人接收. 回执
                                System.out.println(task_id+" : 已被其他人接收");
                                return wxApi.sendCardToIT(new String[]{msg.getFromUserName()},"接收申请操作失败提示!"

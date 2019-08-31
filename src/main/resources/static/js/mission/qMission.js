@@ -114,7 +114,7 @@ layui.use(['form','element', 'layer','carousel'], function(){
     }
     
     $('#done').on('click', function(){
-	    //请求移交人员
+	    //请求完成
 	    $.ajax({
 	        url:"/itevent/mission/complete",
 	        data:{"fromPersonid":personid,"uuid":uuid
@@ -123,11 +123,9 @@ layui.use(['form','element', 'layer','carousel'], function(){
 	            XMLHttpRequest.setRequestHeader("token",token);
 	        },
 	        success:function (res) {
-	            if (res.code =="ok"){
-	
-	                layer.msg("移交成功,即将刷新!");
+	        	if (res.code =="ok"){
+	                layer.msg(res.msg);
 	                setTimeout(function () {
-	                    location.reload();
 	                },2000)
 	            }else{
 	                layer.msg(res.msg,{icon:5});

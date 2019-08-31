@@ -210,7 +210,53 @@ public class ReceiveServiceImpl implements ReceiveService {
                            System.out.println("按钮值不对应!值为:"+EventKey);
                        }
 
-                   }
+                   } /*<xml><ToUserName><![CDATA[wwbc7acf1bd2c6f766]]></ToUserName><FromUserName>
+                  		<![CDATA[1902268014]]></FromUserName><CreateTime>1567070282</CreateTime><MsgType>
+                  		<![CDATA[text]]></MsgType><Content>
+                  		<![CDATA[1024]]></Content>
+	                  		<MsgId>1528608496</MsgId>
+	                  		<AgentID>1000019</AgentID></xml>*/
+               }else if("text".equals(MsgType)) {   //接受文本消息
+            	   String qywxid=  msg.getFromUserName();  //获取消息发送人
+            	   String text=msg.getContent();        //获取发送内容
+            	   if("1024".equals(text)) {
+            		   RepairUser repairUser=  repairUserDao.findByUserid(qywxid);       
+            		   List<EventStep> listEventStep= eventStepDao.findByqywxid(qywxid);
+            		   List<Event> events = new ArrayList<>();
+            		   for (int i = 0; i < listEventStep.size(); i++) {
+            			   events.add(eventDao.findByUuid(listEventStep.get(i).getUuid()));
+            			  /* EventStep eventStep=listEventStep.get(i);
+            			   Event event = eventDao.findAllUuid(eventStep.getUuid());
+            			   EventType eventType=eventTypeDao.findAllEtypeide(event.getEvent());
+            			   String title = eventType.getLevel_1()+"的服务处理信息";
+            			   String description ="申请人员:"+sapDao.findNByUserId(event.getUserid())+"<br>"+ "申请类型:"+eventType.getLevel_2()+"<br>"+"申请描述:"+event.getRemark();
+            			   String btntxt = "查看详细信息";
+            			   String URL = WxConfig.DetailsURL.getValue()+eventStep.getUuid()+"&qyid="+event.getQyid()+"&userid="+event.getUserid();
+            			   wxApi.sendCardToIT(new String[]{event.getQyid()},title,description,URL,btntxt);*/
+            		   }
+                       String title = "您进行中的申请有"+events.size()+"件";
+                       String description,btntxt,URL;
+                       if (events.size()>0){
+                           //可以循环赋值,展示每个事件的进度. 通过EventStep联合Event查询
+                           int times = 0;description="";
+                           for (Event tmp : events){
+                               if (times>4){
+                                   description += "<br>...";
+                                   break;
+                               }
+                               String type =  eventTypeDao.findByETypeId(tmp.getEvent()).getLevel_1();
+                               description += "您有一个关于"+type+"任务,处于: "+tmp.getState()+"<br>";
+                               times++;
+                           }
+                           URL = WxConfig.DetailsURL.getValue()+"?qywxid="+qywxid;
+                           btntxt = "查看处理详情";
+                       }else{
+                           return wxApi.sendTextToOne(new String[]{msg.getFromUserName()},"您当前没有可进行处理的事件");
+                       }
+                       return wxApi.sendCardToIT(new String[]{qywxid},title,description,URL,btntxt);
+            		}else {
+            			 return wxApi.sendTextToOne(new String[]{msg.getFromUserName()},"不支持此类消息");
+            		}
                }
            }
        }catch (Exception e){

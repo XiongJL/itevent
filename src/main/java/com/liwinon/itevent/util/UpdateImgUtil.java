@@ -44,7 +44,7 @@ public class UpdateImgUtil {
 		                    if(i==0) {
 		                    	path=newName;                    	
 		                    }else {
-		                    	path=","+newName;
+		                    	path=path+","+newName;
 		                    }
 		                }catch (IllegalStateException e) {
 		                    return "文件过大,内存溢出异常";
@@ -94,7 +94,7 @@ public class UpdateImgUtil {
 		                    if(i==0) {
 		                    	path=newName;                    	
 		                    }else {
-		                    	path=","+newName;
+		                    	path=path+","+newName;
 		                    }
 		                }catch (IllegalStateException e) {
 		                    return "文件过大,内存溢出异常";

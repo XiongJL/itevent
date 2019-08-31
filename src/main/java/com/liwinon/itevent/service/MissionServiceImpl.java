@@ -293,7 +293,7 @@ public class MissionServiceImpl implements MissionService {
     //完成事件   工号，，事件号    微信userid
 	@Override
 	@Transactional
-	public String complete(String fromPersonid, String uuid, String qyid, HttpServletRequest request) {
+	public JSONObject complete(String fromPersonid, String uuid, String qyid, HttpServletRequest request) {
 		JSONObject json = new JSONObject();
 		String[] str =  uuid.split("-");
 		String task_id="";
@@ -304,16 +304,33 @@ public class MissionServiceImpl implements MissionService {
 		Event event=eventDao.findAllUuid(task_id); //事件主体
 		List<EventStep> eventStep1=eventStepDao.findByUuid(task_id);
 		EventStep eventStep=eventStep1.get(0);  //事件环节执行
-		EventType eventType=eventTypeDao.findAllEtypeide(event.getEvent());  //事件描述
-		event.setState("结束");  //事件结束标记
-		eventDao.save(event);
-		eventStep.setStep(30);  //回访标记
-		eventStepDao.save(eventStep);
-		String title = eventType.getLevel_1()+"的服务处理完成回访";
-		String description = "你申请类型:"+eventType.getLevel_2()+"<br>"+"你的描述:"+event.getRemark();
-		String btntxt = "查看详情";
-		String URL = WxConfig.ScoreURL.getValue()+task_id+"&qyid="+event.getQyid()+"&phone="+event.getPhone()+"&userid="+event.getUserid();
-		wxApi.sendCardToIT(new String[]{event.getQyid()},title,description,URL,btntxt);
-		return wxApi.sendTextToOne(new String[]{eventStep.getExecutorId()},"您的任务"+eventType.getLevel_1()+"已处理完成，谢谢");
+		if(eventStep.getStep()==1) {
+			json.accumulate("code","no");
+	        json.accumulate("msg","请勿重读操作，该事件还未有处理执行人员");
+	        return json;
+		}else if(eventStep.getStep()==30) {
+			json.accumulate("code","no");
+	        json.accumulate("msg","请勿重读操作，该事件已经进入回访环节");
+	        return json;
+		}else if(eventStep.getStep()==40){
+			json.accumulate("code","no");
+	        json.accumulate("msg","请勿重读操作，该事件已经结束");
+	        return json;
+		}else {
+			EventType eventType=eventTypeDao.findAllEtypeide(event.getEvent());  //事件描述
+			event.setState("结束");  //事件结束标记
+			eventDao.save(event);
+			eventStep.setStep(30);  //回访标记
+			eventStepDao.save(eventStep);
+			String title = eventType.getLevel_1()+"的服务处理完成回访";
+			String description = "你申请类型:"+eventType.getLevel_2()+"<br>"+"你的描述:"+event.getRemark();
+			String btntxt = "请满意度调查填写";
+			String URL = WxConfig.ScoreURL.getValue()+task_id+"&qyid="+event.getQyid()+"&phone="+event.getPhone()+"&userid="+event.getUserid();
+			wxApi.sendCardToIT(new String[]{event.getQyid()},title,description,URL,btntxt);
+			wxApi.sendTextToOne(new String[]{qyid},"您的任务"+eventType.getLevel_2()+"已处理完成，谢谢");
+			json.accumulate("code","ok");
+			json.accumulate("msg","操作成功");
+			return json;
+		}
 	}
 }

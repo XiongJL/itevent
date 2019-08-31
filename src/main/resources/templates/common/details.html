@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>IT事件管理系统</title>
+    <link th:href="@{../css/layui.css}" href="../css/layui.css" rel="stylesheet" type="text/css">
+<!--    <link th:href="@{../css/ite/common.css}" rel="stylesheet" type="text/css">-->
+</head>
+<body >
+
+    <!--一页两用-->
+<!--    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">-->
+<!--        <legend>任务进程</legend>-->
+<!--    </fieldset>-->
+    <div th:fragment="datails">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-md12" >
+                <div class="layui-card layui-col-md12 layui-col-xs12" th:each="start,eventState : ${data}">
+                    <div class="layui-card-header">任务进程</div>
+                    <div class="layui-card-body">
+                        <div>申请人: <span th:text="${start.username}"></span></div>
+                        <div>申请人工号: <span th:text="${start.userid}"></span></div>
+                        <div>申请时间: <span th:text="${start.date}"></span></div>
+                        <div>联系方式: <span th:text="${start.phone}"></span></div>
+                        <div>任务状态: <span th:text="${start.state}"></span></div>
+                        <!--折叠卡片开始-->
+                        <div class="layui-collapse" lay-filter="test">
+                            <div class="layui-colla-item">
+                                <h2 class="layui-colla-title">详细信息</h2>
+                                <div class="layui-colla-content">
+                                    <div><b>事件类型: </b><span th:text="${start.type}"></span> </div>
+                                    <div><b>事件描述: </b><span th:text="${start.description}"></span> </div>
+                                    <div><b>物料ID: </b><span th:text="${start.itemid}"></span></div>
+                                    <div><b>用户描述: </b><span th:text="${start.remark}"></span></div>
+                                    <div><b>填单人: </b><span th:text="${start.adminuser}"></span></div>
+                                    <div><b>图片描述:</b></div>
+                                    <div class=""  id="photos" >
+                                        <div >
+                                        <img th:each="url : ${start.imgurl}" src="../images/face/0.gif" th:src="'../itevent/img/'+${url}" style="height: 8rem">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--折叠卡片结束-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- jQuery-->
+<script th:src="@{../js/jquery-3.4.0.min.js}" type="text/javascript"></script>
+<script th:src="@{../js/layui.js}"  type="text/javascript"></script>
+<script th:inline="javascript">
+    var qywxid = [[${qywxid}]];
+    var personid = [[${personid}]]
+</script>
+<script th:src="@{../js/mission/details.js}" type="text/javascript"></script>
+</body>
+</html>

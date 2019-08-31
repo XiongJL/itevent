@@ -1,30 +1,26 @@
 var token = localStorage.getItem("token");
 var toUser = "";
-layui.use(['form','element', 'layer','carousel','rate'], function(){
-    var element = layui.element
-        ,layer = layui.layer
-        ,form = layui.form,
-     rate = layui.rate;
-  //自定义文本
-    rate.render({
-      elem: '#test5'
-      ,value: 5
-      ,text: true
-      ,setText: function(value){ //自定义文本的回调
-        var arrs = {
-          '1': '极差'
-          ,'2': '差'
-          ,'3': '中等'
-          ,'4': '好'
-          ,'5': '极好'
-        };
-        this.span.text(arrs[value] || ( value + "星"));
-      },choose:function(value){
-    	  score=value;
-      }
-    })
-});
-var score;
+var score=3;
+	layui.use(['form','element', 'layer','carousel','rate'], function(){
+	    var element = layui.element
+	        ,layer = layui.layer
+	        ,form = layui.form,
+	     rate = layui.rate;
+	  //自定义文本
+	    rate.render({
+	      elem: '#test5'
+	      ,value: 3 ,length: 3
+	      ,text: true,half: true
+	      ,setText: function(value){ //自定义文本的回调
+	        var arrs = {
+	          '1': '差','2': '中等','3': '好',
+	        };
+	        this.span.text(arrs[value] || ( value + "分"));
+	      },choose:function(value){
+	    	  score=value;
+	      }
+	    })
+	});
 $("#submit").click(function() {
 	 if(score==""||score==null||score==undefined){
       	layer.msg("请对此次服务打分", {
@@ -32,13 +28,10 @@ $("#submit").click(function() {
 			  time: 1500});
       	return false;
       }
-         var remark = document.getElementById("remark").value;
+         var remark = $("#remark").val();
          $.ajax({
-        		async : false,
-        		type : "GET",
-        		url : "/itevent/score/save",
-        		dataType : "json",
-        		data : {qyid:qyid,uuid:uuid,phone:phone,userid:userid,score:score,remark:remark},
+    		url : "/itevent/score/save",
+    		data : {qyid:qyid,uuid:uuid,score:score,remark:remark},
              beforeSend:function(XMLHttpRequest){
              	XMLHttpRequest.setRequestHeader("token",token);
              },

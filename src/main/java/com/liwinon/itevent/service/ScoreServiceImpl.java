@@ -28,10 +28,11 @@ public class ScoreServiceImpl implements ScoreService{
 	
 	@Override
 	@Transactional
-	public JSONObject Save(String uuid, String qyid, String phone,String userid, String score, String remark, HttpServletRequest request) {
+	public JSONObject Save(String qyid, String uuid, String score, String remark, HttpServletRequest request) {
 		JSONObject json=new JSONObject();
-		String uu=scoreDao.findAllUuid(uuid);
-		if(uu!=null||!"".equals(uu)) {
+		String uu=null;
+		 uu=scoreDao.findByUuid(uuid);
+		if(uu!=null) {
 			json.accumulate("code",400);
 			json.accumulate("msg","请勿重复填写评论");
 			json.accumulate("data","no");
@@ -40,18 +41,21 @@ public class ScoreServiceImpl implements ScoreService{
 		Score score1=new Score();
 		score1.setUuid(uuid);
 		score1.setQyid(qyid);
-		score1.setPhone(phone);
-		score1.setUserid(userid);
 		score1.setScore(score);
 		score1.setRemark(remark);
 		try {
-			Event event=eventDao.findAllUuid(uuid);
-			event.setState("结束");  //结束标记
-			eventDao.save(event);
-			EventStep eventStep=eventStepDao.findAlluuid(uuid);
+			EventStep eventStep=eventStepDao.findAlluuidAndstep(uuid);
 			eventStep.setStep(40);  //事件结束标记
 			eventStepDao.save(eventStep);
+			Event event=eventDao.findAllUuid(uuid);
+			score1.setPhone(event.getPhone());
+			score1.setUserid(event.getUserid());
+			event.setState("结束");  //结束标记
+			eventDao.save(event);
+			System.out.println("-------------------------1---------------------");
+			System.out.println(score.toString());
 			scoreDao.save(score1);
+			System.out.println("-------------------------2---------------------");
 			json.accumulate("code",200);
 	        json.accumulate("msg","评价完成");
 	        json.accumulate("data","ok");

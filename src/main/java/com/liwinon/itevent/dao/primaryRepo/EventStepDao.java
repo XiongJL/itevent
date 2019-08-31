@@ -31,4 +31,7 @@ public interface EventStepDao extends JpaRepository<EventStep,Integer>, JpaSpeci
     @Query(value = "select * from ITE_EventStep where   step > 1 and step < 40 and uuid=:uuid and executorId=:userid",nativeQuery = true)
 	EventStep findByUuidAndUserid(String uuid, String userid);
     
+    @Query(value = "select * from ITE_EventStep where step=30 and  uuid=:uuid",nativeQuery = true)
+	EventStep findAlluuidAndstep(String uuid);
+    
 }

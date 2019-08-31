@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liwinon.itevent.annotation.PasssToken;
 import com.liwinon.itevent.service.ScoreService;
@@ -28,7 +29,7 @@ public class ScoreController {
         String userAgent = request.getHeader("user-agent").toLowerCase();
 		System.out.println(userAgent);
 		if(userAgent.indexOf("windows")!=-1) {			
-			return "common/score";
+			return "common/scorepc";
 		}
         return "common/score";
     }
@@ -38,8 +39,9 @@ public class ScoreController {
 	
 	@GetMapping(value = "/score/save")  //  事件号      qyid
     @PasssToken
-    public  JSONObject Save(String uuid,String qyid,String phone,String userid,String score,String remark,HttpServletRequest request){
-        return scoreService.Save(uuid,qyid,phone,userid,score,remark,request);
+    @ResponseBody
+    public  JSONObject Save(String qyid,String uuid,String score,String remark,HttpServletRequest request){
+        return scoreService.Save(qyid,uuid,score,remark,request);
     }
 	
 }

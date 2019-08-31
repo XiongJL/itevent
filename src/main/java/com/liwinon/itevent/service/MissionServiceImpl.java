@@ -318,7 +318,7 @@ public class MissionServiceImpl implements MissionService {
 	        return json;
 		}else {
 			EventType eventType=eventTypeDao.findAllEtypeide(event.getEvent());  //事件描述
-			event.setState("结束");  //事件结束标记
+			event.setState("回访");  //事件结束标记
 			eventDao.save(event);
 			eventStep.setStep(30);  //回访标记
 			eventStepDao.save(eventStep);

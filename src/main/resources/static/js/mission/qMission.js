@@ -125,8 +125,11 @@ layui.use(['form','element', 'layer','carousel'], function(){
 	        success:function (res) {
 	        	if (res.code =="ok"){
 	                layer.msg(res.msg);
-	                setTimeout(function () {
-	                },2000)
+                	setTimeout( function(){
+             			window.opener=null;      //关闭页面   2秒
+             			window.open("","_self");    
+             			window.close();
+             			}, 2500 );
 	            }else{
 	                layer.msg(res.msg,{icon:5});
 	            }

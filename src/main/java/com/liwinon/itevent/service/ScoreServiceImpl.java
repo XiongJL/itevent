@@ -9,10 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.liwinon.itevent.dao.primaryRepo.EventDao;
 import com.liwinon.itevent.dao.primaryRepo.EventStepDao;
+import com.liwinon.itevent.dao.primaryRepo.EventTypeDao;
 import com.liwinon.itevent.dao.primaryRepo.ScoreDao;
 import com.liwinon.itevent.entity.primary.Event;
 import com.liwinon.itevent.entity.primary.EventStep;
+import com.liwinon.itevent.entity.primary.EventType;
 import com.liwinon.itevent.entity.primary.Score;
+import com.liwinon.itevent.qywx.WxApi;
 
 import net.sf.json.JSONObject;
 
@@ -25,6 +28,10 @@ public class ScoreServiceImpl implements ScoreService{
 	EventStepDao eventStepDao;
 	@Autowired
 	EventDao eventDao;
+	@Autowired
+	WxApi wxApi;
+	@Autowired
+	EventTypeDao eventTypeDao;
 	
 	@Override
 	@Transactional
@@ -52,10 +59,10 @@ public class ScoreServiceImpl implements ScoreService{
 			score1.setUserid(event.getUserid());
 			event.setState("结束");  //结束标记
 			eventDao.save(event);
-			System.out.println("-------------------------1---------------------");
 			System.out.println(score.toString());
 			scoreDao.save(score1);
-			System.out.println("-------------------------2---------------------");
+			EventType eventType=eventTypeDao.findAllEtypeide(event.getEvent()); 
+			wxApi.sendTextToOne(new String[]{eventStep.getExecutorId()},"您处理的任务"+eventType.getLevel_2()+"已完成回访，谢谢");
 			json.accumulate("code",200);
 	        json.accumulate("msg","评价完成");
 	        json.accumulate("data","ok");

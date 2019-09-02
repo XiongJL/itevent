@@ -72,7 +72,6 @@ public class DetailsServiceImpl implements DetailsService {
 	            }else{
 	                imgUrls = new String[]{};
 	            }
-	            System.out.println(aaaaa +"-------------这是第"+i+"-------------图片地址名称--------");
 	            String aaa=sapDao.findNByUserId(events.getUserid());
 			   model.add(new DetailsModel(events.getDate(),aaa,events.getUserid(),events.getPhone(),
 					   stepStr,type.getLevel_2(),type.getDescription(),events.getItemid(),

@@ -43,12 +43,7 @@
 
     <div class="layui-body"style=" bottom: 0px">
         <div class="layui-container" >
-    <!--一页两用-->
-<!--    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">-->
-<!--        <legend>任务进程</legend>-->
-<!--    </fieldset>-->
-    <!-- 内容主体区域 -->
-            <div th:include="common/datails :: datails"></div>
+            <div th:include="common/details :: datails"></div>
         </div>
     </div>
 </div>
@@ -59,6 +54,6 @@
 var qywxid = [[${qywxid}]];
 var personid = [[${personid}]]
 </script>
-<script th:src="@{../js/mission/datails.js}" type="text/javascript"></script>
+<script th:src="@{../js/mission/details.js}" type="text/javascript"></script>
 </body>
 </html>

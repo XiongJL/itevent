@@ -1,6 +1,7 @@
 package com.liwinon.itevent.controller.qywx;
 
 import com.liwinon.itevent.annotation.PasssToken;
+import com.liwinon.itevent.qywx.AccessToken;
 import com.liwinon.itevent.qywx.WxConfig;
 import com.liwinon.itevent.service.ReceiveService;
 import com.liwinon.itevent.qywx.WxApi;
@@ -18,6 +19,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
 import java.net.URLDecoder;
+
+import static com.liwinon.itevent.qywx.WxConfig.Corpid;
+import static com.liwinon.itevent.qywx.WxConfig.IThelpSecret;
 
 
 @Controller
@@ -89,4 +93,20 @@ public class ReceiveController {
 		//无论如何返回成功
 		return "200";
     }
+
+	/**
+	 * 测试token接口, 后续删除
+	 * @return
+	 */
+	@GetMapping("/receive/token")
+	@ResponseBody
+	@PasssToken
+	public String testToken(){
+		String accesstoken = AccessToken.getAccessToken(Corpid.getValue(),IThelpSecret.getValue()).getString("access_token");
+
+		return accesstoken;
+	}
+
 }
+
+

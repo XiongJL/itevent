@@ -84,7 +84,7 @@ public class InitiationServiceImpl implements InitiationService {
 	public JSONObject initiationpc(HttpServletRequest request, MultipartFile[] files,
 			String userid, String phone,String adminuser,
 			String level_1, String level_2, String description, 
-			String type, String brand, String itemid,
+			String location,
 			String remark) {
 		UpdateImgUtil updateImgUtil=new UpdateImgUtil();
 		String path=updateImgUtil.updateImg(files);
@@ -135,7 +135,6 @@ public class InitiationServiceImpl implements InitiationService {
 		event.setDate(new Date());
 		event.setRemark(remark);
 		event.setState("受理中");
-		event.setItemid(itemid);
 		eventDao.save(event);
 		
 		json.accumulate("code",200);
@@ -163,7 +162,7 @@ public class InitiationServiceImpl implements InitiationService {
 	public JSONObject initiationmobile(HttpServletRequest request,HttpServletResponse response, List<MultipartFile> files,
 			String userid, String phone,String adminuser,
 			String level_1, String level_2, String description, 
-			String type, String brand, String itemid,
+			String location,
 			String remark) {
 		String qyuserid=cookieExistUtil.getcookie(request,response);
 		UpdateImgUtil updateImgUtil=new UpdateImgUtil();
@@ -209,7 +208,6 @@ public class InitiationServiceImpl implements InitiationService {
 		event.setDate(new Date());
 		event.setRemark(remark);
 		event.setState("受理中");
-		event.setItemid(itemid);
 		eventDao.save(event);
 		
 		json.accumulate("code",200);

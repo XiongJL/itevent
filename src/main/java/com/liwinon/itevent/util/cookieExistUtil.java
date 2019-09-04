@@ -6,6 +6,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.liwinon.itevent.qywx.WxConfig;
+
 
 public class cookieExistUtil {
 	
@@ -49,13 +51,13 @@ public class cookieExistUtil {
 	 
 	 public static void getCode(HttpServletRequest request, HttpServletResponse response) {
 		        String corpid ="wwbc7acf1bd2c6f766";
-		        String redirect_uri ="https://mesqrcode.liwinon.com/itevent/initiation";
+		        String redirect_uri =WxConfig.ApplyURL.getValue();
 		        System.out.println("转码后的uri为:"+redirect_uri);
-		        String URL = "https://open.weixin.qq.com/connect/oauth2/authorize?" +
-		                "appid="+corpid +
-		                "&redirect_uri="+redirect_uri +
-		                "&response_type=code" +
-		                "&scope=snsapi_base" +
+		        String URL = WxConfig.Oauth2URL.getValue() +
+		                "appid="+corpid+
+		                "&redirect_uri="+redirect_uri+
+		                "&response_type=code"+
+		                "&scope=snsapi_base"+
 		                "&state=STATE#wechat_redirect";  //state不是必须,重定向后会带上state参数，企业可以填写a-zA-Z0-9的参数值，长度不可超过128个字节
 		        //员工点击后，页面将跳转至 redirect_uri?code=CODE&state=STATE    code用以换取userid
 		        try {

@@ -52,7 +52,7 @@ function chushihua(aaa){
 			}
 		});	
 }
-$.ajax({
+/*$.ajax({
 	async : false,
 	type : "GET",
 	url : "/itevent/api/getTypes",   //物料名称
@@ -107,7 +107,7 @@ function chushihuab(select2){
             }
         }
     })
-}
+}*/
 layui.use(['form','layer','element','laydate'], function(){
     element = layui.element,
         form = layui.form,
@@ -175,7 +175,7 @@ layui.use(['form','layer','element','laydate'], function(){
 				}
 			});	
 		}); 
-    form.on('select(type1)', function(data){
+   /* form.on('select(type1)', function(data){
 		// alert(data.value); //得到被选中的值
     	var bb;
 		 var aaa=data.value;
@@ -228,7 +228,7 @@ layui.use(['form','layer','element','laydate'], function(){
 	            }
 	        }
 	    })
-    });
+    });*/
 });
 //赋值初始化数值
 var files=[];
@@ -379,12 +379,14 @@ $("#submit").click(function() {
   		               fd.append("level_2",level_2);
   		               var description = document.getElementById("description").value;
   		               fd.append("description",description);
-  		               var type = document.getElementById("type").value;
+  		              /* var type = document.getElementById("type").value;
   		               fd.append("type",type);
   		               var brand = document.getElementById("brand").value;
   		               fd.append("brand",brand);
   		               var itemid = document.getElementById("itemid").value;
-  		               fd.append("itemid",itemid);
+  		               fd.append("itemid",itemid);*/
+  		               var location = document.getElementById("location").value;
+  		               fd.append("location",location);
   		               var remark = document.getElementById("remark").value;
   		               fd.append("remark",remark);
   		               $.ajax({

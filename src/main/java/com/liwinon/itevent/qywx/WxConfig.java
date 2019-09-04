@@ -9,6 +9,8 @@ public enum WxConfig {
     IThelpSecret("bnhD7cALjA5yLjzUsdd-eZAmObJw87dGRO-d8dsBUow"), // it服务支持应用秘钥
     TokenUrl("https://qyapi.weixin.qq.com/cgi-bin/gettoken") ,  //获取Token的接口地址
     ApplyURL("https://mesqrcode.liwinon.com/itevent/initiation"),      //申请服务的地址
+    Oauth2URL("https://open.weixin.qq.com/connect/oauth2/authorize?"),      //微信用户访问页面oauth2认证，获取查询用户的code码，做获取用户信息
+    redirect_uri("https://mesqrcode.liwinon.com/itevent/initiation"),
     QEventURL("https://mesqrcode.liwinon.com/itevent/qEvent"),  //点击 查询返回的事件进度页面
     ScoreURL("https://mesqrcode.liwinon.com/itevent/score?uuid="),		//回访页面
     DetailsURL("https://mesqrcode.liwinon.com/itevent/details"), //查看处理中事件的详情

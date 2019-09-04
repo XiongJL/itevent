@@ -20,7 +20,35 @@ public class EventStep {
 	    private String executorName;
 	    private Date stepDate;
 	    private String imgurl;
-		public int getStepId() {
+	    private String remark; //处理人员对事件进行描述
+		private String assetsid; //资产牌
+		private String location; //位置
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String getAssetsid() {
+		return assetsid;
+	}
+
+	public void setAssetsid(String assetsid) {
+		this.assetsid = assetsid;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public int getStepId() {
 			return stepId;
 		}
 		public void setStepId(int stepId) {
@@ -62,11 +90,20 @@ public class EventStep {
 		public void setImgurl(String imgurl) {
 			this.imgurl = imgurl;
 		}
-		@Override
-		public String toString() {
-			return "EventStep [stepId=" + stepId + ", uuid=" + uuid + ", step=" + step + ", executorId=" + executorId
-					+ ", executorName=" + executorName + ", stepDate=" + stepDate + ", imgurl=" + imgurl + "]";
-		}
-		
-	    
+
+	@Override
+	public String toString() {
+		return "EventStep{" +
+				"stepId=" + stepId +
+				", uuid='" + uuid + '\'' +
+				", step=" + step +
+				", executorId='" + executorId + '\'' +
+				", executorName='" + executorName + '\'' +
+				", stepDate=" + stepDate +
+				", imgurl='" + imgurl + '\'' +
+				", remark='" + remark + '\'' +
+				", assetsid='" + assetsid + '\'' +
+				", location='" + location + '\'' +
+				'}';
+	}
 }

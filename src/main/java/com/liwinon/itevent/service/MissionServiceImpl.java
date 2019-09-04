@@ -303,7 +303,12 @@ public class MissionServiceImpl implements MissionService {
 		task_id = task_id  +  "1";
 		Event event=eventDao.findAllUuid(task_id); //事件主体
 		List<EventStep> eventStep1=eventStepDao.findByUuid(task_id);
-		EventStep eventStep=eventStep1.get(0);  //事件环节执行
+		EventStep eventStep=eventStep1.get(0);  //事件当前环节执行  
+		if(!fromPersonid.equals(eventStep.getExecutorId())) {
+			json.accumulate("code","no");
+	        json.accumulate("msg","你不是当前任务处理人员，请确认后操作");
+	        return json;
+		}
 		if(eventStep.getStep()==1) {
 			json.accumulate("code","no");
 	        json.accumulate("msg","请勿重读操作，该事件还未有处理执行人员");

@@ -52,7 +52,7 @@ function chushihua(aaa){
 			}
 		});	
 }
-$.ajax({
+/*$.ajax({
 	async : false,
 	type : "GET",
 	url : "/itevent/api/getTypes",   //物料名称
@@ -107,7 +107,7 @@ function chushihuab(select2){
             }
         }
     })
-}
+}*/
 layui.use(['form','layer','element','laydate'], function(){
     element = layui.element,
         form = layui.form,
@@ -175,7 +175,7 @@ layui.use(['form','layer','element','laydate'], function(){
 				}
 			});	
 		}); 
-    form.on('select(type1)', function(data){
+    /*form.on('select(type1)', function(data){
 		// alert(data.value); //得到被选中的值
     	var bb;
 		 var aaa=data.value;
@@ -228,7 +228,7 @@ layui.use(['form','layer','element','laydate'], function(){
 	            }
 	        }
 	    })
-    });
+    });*/
 });
 //赋值初始化数值
 var files=[];
@@ -327,11 +327,11 @@ function gonghaoid(){
 	}
 }
 $("#submit").click(function() {
-            if(!fileArr.length){
+            /*if(!fileArr.length){
             	layer.msg("请选择要上传的图片", {
         			  icon: 2,
           			  time: 1500});
-            }
+            }*/
           		var formData = new FormData();
           		for(var i = 0;i<fileArr.length;i++){
           			formData.append("file",fileArr[i]);
@@ -360,12 +360,10 @@ $("#submit").click(function() {
                  formData.append("level_2",level_2);
                  var description = document.getElementById("description").value;
                  formData.append("description",description);
-                 var type = document.getElementById("type").value;
-                 formData.append("type",type);
-                 var brand = document.getElementById("brand").value;
-                 formData.append("brand",brand);
-                 var itemid = document.getElementById("itemid").value;
-                 formData.append("itemid",itemid);
+                 var assetsid = document.getElementById("assetsid").value;
+                 formData.append("assetsid",assetsid);
+                 var location = document.getElementById("location").value;
+                 formData.append("location",location);
                  var remark = document.getElementById("remark").value;
                  formData.append("remark",remark);
                  $.ajax({

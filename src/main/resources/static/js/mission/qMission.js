@@ -120,7 +120,7 @@ layui.use(['form','element', 'layer','carousel'], function(){
 	    $.ajax({
 	        url:"/itevent/mission/complete",
 	        data:{"fromPersonid":personid,"uuid":uuid
-	        ,"qyid":qyid},
+	        ,"qyid":qyid,'':"评论"},
 	        beforeSend:function(XMLHttpRequest){
 	            XMLHttpRequest.setRequestHeader("token",token);
 	        },

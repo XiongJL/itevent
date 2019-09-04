@@ -385,6 +385,8 @@ $("#submit").click(function() {
   		               fd.append("brand",brand);
   		               var itemid = document.getElementById("itemid").value;
   		               fd.append("itemid",itemid);*/
+  		               var assetsid = document.getElementById("assetsid").value;
+  		               fd.append("assetsid",assetsid);
   		               var location = document.getElementById("location").value;
   		               fd.append("location",location);
   		               var remark = document.getElementById("remark").value;

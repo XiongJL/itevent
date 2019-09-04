@@ -84,17 +84,18 @@ public class InitiationServiceImpl implements InitiationService {
 	public JSONObject initiationpc(HttpServletRequest request, MultipartFile[] files,
 			String userid, String phone,String adminuser,
 			String level_1, String level_2, String description, 
-			String location,
+			String assetsid,String location,
 			String remark) {
-		UpdateImgUtil updateImgUtil=new UpdateImgUtil();
-		String path=updateImgUtil.updateImg(files);
+		String path = null;
+		if(files ==null|| files.length ==0 ){
+		//为空的情况
+			path="";
+		}else{
+			UpdateImgUtil updateImgUtil=new UpdateImgUtil();
+			path=updateImgUtil.updateImg(files);
+		}
 		JSONObject json=new JSONObject();
-		if(path==null) {
-			json.accumulate("code",400);
-	        json.accumulate("msg","图片存储失败，请重新填写事件，上传图片");
-	        json.accumulate("data","no1");
-			return  json;
-		}else if("文件过大,内存溢出异常".equals(path)||"文件路径错误,IO异常".equals(path)){
+		if("文件过大,内存溢出异常".equals(path)||"文件路径错误,IO异常".equals(path)){
 			json.accumulate("code",400);
 	        json.accumulate("msg",path);
 	        json.accumulate("data","no1");
@@ -111,6 +112,8 @@ public class InitiationServiceImpl implements InitiationService {
         eventStep.setUuid(uuid);
 		eventStep.setStep(1);
 		eventStep.setImgurl(path);
+		eventStep.setAssetsid(assetsid);
+		eventStep.setLocation(location);
 		Event uu=null;
 		uu=eventDao.findAllUuid(uuid);
 		if(uu!=null) {
@@ -162,18 +165,19 @@ public class InitiationServiceImpl implements InitiationService {
 	public JSONObject initiationmobile(HttpServletRequest request,HttpServletResponse response, List<MultipartFile> files,
 			String userid, String phone,String adminuser,
 			String level_1, String level_2, String description, 
-			String location,
+			String assetsid,String location,
 			String remark) {
 		String qyuserid=cookieExistUtil.getcookie(request,response);
-		UpdateImgUtil updateImgUtil=new UpdateImgUtil();
-		String path=updateImgUtil.updateImg(files);
+		String path = null;
+		if(null == files || files.size() ==0 ){
+		//为空的情况
+			path="";
+		}else{
+			UpdateImgUtil updateImgUtil=new UpdateImgUtil();
+			path=updateImgUtil.updateImg(files);
+		}
 		JSONObject json=new JSONObject();
-		if(path==null) {
-			json.accumulate("code",400);
-	        json.accumulate("msg","图片存储失败，请重新填写事件，上传图片");
-	        json.accumulate("data","no1");
-			return  json;
-		}else if("文件过大,内存溢出异常".equals(path)||"文件路径错误,IO异常".equals(path)){
+		if("文件过大,内存溢出异常".equals(path)||"文件路径错误,IO异常".equals(path)){
 			json.accumulate("code",400);
 	        json.accumulate("msg",path);
 	        json.accumulate("data","no1");
@@ -190,6 +194,8 @@ public class InitiationServiceImpl implements InitiationService {
         eventStep.setUuid(uuid);
 		eventStep.setStep(1);
 		eventStep.setImgurl(path);
+		eventStep.setAssetsid(assetsid);
+		eventStep.setLocation(location);
 		Event uu=null;
 		uu=eventDao.findAllUuid(uuid);
 		if(uu!=null) {

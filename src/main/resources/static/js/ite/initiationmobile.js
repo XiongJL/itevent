@@ -360,6 +360,8 @@ $("#submit").click(function() {
                  formData.append("level_2",level_2);
                  var description = document.getElementById("description").value;
                  formData.append("description",description);
+                 var assetsid = document.getElementById("assetsid").value;
+                 formData.append("assetsid",assetsid);
                  var location = document.getElementById("location").value;
                  formData.append("location",location);
                  var remark = document.getElementById("remark").value;

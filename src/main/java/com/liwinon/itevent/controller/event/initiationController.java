@@ -125,9 +125,9 @@ public class initiationController {
 			, @RequestParam("phone")String phone,@RequestParam("adminuser")String adminuser,
 			@RequestParam("level_1")String level_1
 			, @RequestParam("level_2")String level_2, @RequestParam("description")String description
-			/*, @RequestParam("type")String type, @RequestParam("brand")String brand*/
+			, @RequestParam("assetsid")String assetsid
 			, @RequestParam("location")String location, @RequestParam("remark")String remark){
-		return initiationService.initiationpc(request,file,userid,phone,adminuser,level_1,level_2,description,location,remark);
+		return initiationService.initiationpc(request,file,userid,phone,adminuser,level_1,level_2,description,assetsid,location,remark);
 	}
 	@PostMapping(value="/initiation/initiationmobile")
 	@PasssToken
@@ -143,6 +143,7 @@ public class initiationController {
         String level_1=request.getParameter("level_1");
         String level_2=request.getParameter("level_2");
         String description=request.getParameter("description");
+        String assetsid=request.getParameter("assetsid");
         String location=request.getParameter("location");
         String remark=request.getParameter("remark");
         if(multipartResolver.isMultipart(request)){
@@ -150,7 +151,7 @@ public class initiationController {
             MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest)request;
             file = multiRequest.getFiles("file");
         }
-		return initiationService.initiationmobile(request,response,file,userid,phone,adminuser,level_1,level_2,description,location,remark);
+		return initiationService.initiationmobile(request,response,file,userid,phone,adminuser,level_1,level_2,description,assetsid,location,remark);
 	}
 	
 	/**

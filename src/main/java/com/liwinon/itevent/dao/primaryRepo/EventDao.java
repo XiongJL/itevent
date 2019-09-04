@@ -68,7 +68,7 @@ public interface EventDao extends JpaRepository<Event,String>, JpaSpecificationE
 
     //查找该用户发起的未结束事件
     @Query(value = "select * from ITE_Event e where e.userid =:userid  and " +
-            "e.state <> '已结束' and e.state<>'' and e.state <> '已拒绝'",nativeQuery = true)
+            "e.state <> '结束' and e.state<>'' and e.state <> '已拒绝'",nativeQuery = true)
     List<Event> findByUseridEventIng(String userid);
 
     //根据事件流水号查找
@@ -84,7 +84,7 @@ public interface EventDao extends JpaRepository<Event,String>, JpaSpecificationE
 
     //根据企业微信号查询
     @Query(value = "select * from ITE_Event e where e.qyid =:qyid  and " +
-            "e.state <> '已结束' and e.state<>'' and e.state <> '已拒绝'",nativeQuery = true)
+            "e.state <> '结束' and e.state<>'' and e.state <> '已拒绝'",nativeQuery = true)
     List<Event> findByQyidEventIng(String qyid);
     
     //根据事件号查询wxqyid

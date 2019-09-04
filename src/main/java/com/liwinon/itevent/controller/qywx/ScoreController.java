@@ -20,9 +20,10 @@ public class ScoreController {
 	
 	@GetMapping(value = "/score")  //  事件号      qyid
     @PasssToken
-    public  String access(String uuid,String qyid, String phone,String userid,HttpServletRequest request, Model model){
+    public  String access(String uuid,String qyid, String phone,String userid,String level_2,HttpServletRequest request, Model model){
         System.out.println(uuid);
         model.addAttribute("uuid",uuid);
+        model.addAttribute("level_2",level_2);
         model.addAttribute("qyid",qyid);
         model.addAttribute("phone",phone);
         model.addAttribute("userid",userid);

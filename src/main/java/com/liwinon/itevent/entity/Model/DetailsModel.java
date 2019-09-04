@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class DetailsModel {
+	private String uuid; //事件id
 	private Date date; //申请人姓名
 	private String username; //申请人姓名
 	private String userid; //申请人工号
@@ -19,12 +20,13 @@ public class DetailsModel {
     
 	@Override
 	public String toString() {
-		return "DetailsModel [date"+date+"username=" + username + ", userid=" + userid + ", phone=" + phone + ", state=" + state
+		return "DetailsModel [uuid="+uuid+"date="+date+"username=" + username + ", userid=" + userid + ", phone=" + phone + ", state=" + state
 				+ ", type=" + type + ", description=" + description + ", itemid=" + itemid + ", remark=" + remark
 				+ ", adminuser=" + adminuser + ", imgurl=" + Arrays.toString(imgurl) + "]";
 	}
-	public DetailsModel(Date date,String username, String userid, String phone, String state, String type, String description,
+	public DetailsModel(String Uuid,Date date,String username, String userid, String phone, String state, String type, String description,
 			String itemid, String remark, String adminuser, String[] imgurl) {
+		this.uuid = uuid;
 		this.date = date;
 		this.username = username;
 		this.userid = userid;
@@ -38,6 +40,12 @@ public class DetailsModel {
 		this.imgurl = imgurl;
 	}
 	
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
 	public Date getDate() {
 		return date;
 	}

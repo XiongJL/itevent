@@ -73,7 +73,7 @@ public class DetailsServiceImpl implements DetailsService {
 	                imgUrls = new String[]{};
 	            }
 	            String aaa=sapDao.findNByUserId(events.getUserid());
-			   model.add(new DetailsModel(events.getDate(),aaa,events.getUserid(),events.getPhone(),
+			   model.add(new DetailsModel(events.getUuid(),events.getDate(),aaa,events.getUserid(),events.getPhone(),
 					   stepStr,type.getLevel_2(),type.getDescription(),events.getItemid(),
 					   events.getRemark(),events.getAdminuser(),imgUrls));
 			   /* EventStep eventStep=listEventStep.get(i);

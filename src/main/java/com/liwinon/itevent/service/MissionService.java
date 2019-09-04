@@ -16,7 +16,7 @@ public interface MissionService {
     /**yanxy
      * 页面选择完成处理
      */
-	JSONObject complete(String fromPersonid, String uuid, String qyid, HttpServletRequest request);
+	JSONObject complete(String fromPersonid, String uuid, String qyid,String remark, HttpServletRequest request);
 
     Map<String, Object> queryEvent(String qyid);
 }

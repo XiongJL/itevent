@@ -114,11 +114,12 @@ layui.use(['form','element', 'layer','carousel'], function(){
     }
     
     $('#done').on('click', function(){
+    	remark=$("#remark").val();
 	    //请求完成
 	    $.ajax({
 	        url:"/itevent/mission/complete",
 	        data:{"fromPersonid":personid,"uuid":uuid
-	        ,"qyid":qyid,'':"评论"},
+	        ,"qyid":qyid,remark:remark},
 	        beforeSend:function(XMLHttpRequest){
 	            XMLHttpRequest.setRequestHeader("token",token);
 	        },

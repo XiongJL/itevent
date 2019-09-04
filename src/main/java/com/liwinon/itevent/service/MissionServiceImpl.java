@@ -293,7 +293,7 @@ public class MissionServiceImpl implements MissionService {
     //完成事件   工号，，事件号    微信userid
 	@Override
 	@Transactional
-	public JSONObject complete(String fromPersonid, String uuid, String qyid, HttpServletRequest request) {
+	public JSONObject complete(String fromPersonid, String uuid, String qyid,String remark, HttpServletRequest request) {
 		JSONObject json = new JSONObject();
 		String[] str =  uuid.split("-");
 		String task_id="";
@@ -326,11 +326,13 @@ public class MissionServiceImpl implements MissionService {
 			event.setState("回访");  //事件结束标记
 			eventDao.save(event);
 			eventStep.setStep(30);  //回访标记
+			eventStep.setRemark(remark); //处理备注
 			eventStepDao.save(eventStep);
-			String title = eventType.getLevel_1()+"的服务处理完成回访";
+			String title = eventType.getLevel_1()+"的服务申请已处理完成，请填写回访评价";
 			String description = "你申请类型:"+eventType.getLevel_2()+"<br>"+"你的描述:"+event.getRemark();
 			String btntxt = "请满意度调查填写";
-			String URL = WxConfig.ScoreURL.getValue()+task_id+"&qyid="+event.getQyid()+"&phone="+event.getPhone()+"&userid="+event.getUserid();
+			String URL = WxConfig.ScoreURL.getValue()+task_id+"&qyid="+event.getQyid()
+					+"&phone="+event.getPhone()+"&userid="+event.getUserid()+"&level_2="+eventType.getLevel_2();
 			wxApi.sendCardToIT(new String[]{event.getQyid()},title,description,URL,btntxt);
 			wxApi.sendTextToOne(new String[]{qyid},"您的任务"+eventType.getLevel_2()+"已处理完成，谢谢");
 			json.accumulate("code","ok");

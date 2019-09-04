@@ -27,7 +27,6 @@
                                 <div class="layui-colla-content">
                                     <div><b>事件类型: </b><span th:text="${start.type}"></span> </div>
                                     <div><b>事件描述: </b><span th:text="${start.description}"></span> </div>
-                                    <div><b>物料ID: </b><span th:text="${start.itemid}"></span></div>
                                     <div><b>用户描述: </b><span th:text="${start.remark}"></span></div>
                                     <div><b>填单人: </b><span th:text="${start.adminuser}"></span></div>
                                     <div><b>图片描述:</b></div>
@@ -39,8 +38,9 @@
                                 </div>
                             </div>
                         </div>
+                        <button class="layui-btn"  th:onclick="'javascript:UuisQmission('+${start.uuid}+')' "
+                        style="text-align: center;width: auto;" type="button" >提交</button>
                         <!--折叠卡片结束-->
-                        
                     </div>
                 </div>
             </div>

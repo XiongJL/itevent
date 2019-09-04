@@ -16,7 +16,7 @@
 	<div th:fragment="score">
 		<form class="layui-form" action="">
 			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-			  <legend>评分</legend>
+			  <legend>评分 <span th:text="${level_2}"></span></legend>
 			</fieldset>
 				<label class="layui-form-label">打分</label>
 			    <div class="layui-input-block">
@@ -39,6 +39,7 @@
 <script th:src="@{../js/layui.js}"  type="text/javascript"></script>
 <script th:inline="javascript">
     var qyid = [[${qyid}]];
+    var level_2 = [[${level_2}]];
     var uuid = [[${uuid}]];
     var phone = [[${phone}]];
     var userid = [[${userid}]];

@@ -13,15 +13,15 @@ layui.use(['form','element', 'layer','carousel'], function(){
         photos: '#photos'
         ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
     });
-    //点击移交
-    $('#move').on('click', function(){
-        var othis = $(this), method = othis.data('method');
-        active[method] ? active[method].call(this, othis) : '';
-    });
     //监听下拉框
     form.on('select(toUser)', function(data){
         console.log(data.value); //得到被选中的值
         toUser = data.value;
+    });
+    //点击移交
+    $('#move').on('click', function(){
+        var othis = $(this), method = othis.data('method');
+        active[method] ? active[method].call(this, othis) : '';
     });
     var active = {
         notice: function(){
@@ -43,6 +43,8 @@ layui.use(['form','element', 'layer','carousel'], function(){
                     }
                     else if (res.code=="ok"){
                         var option = "";
+                        toUser = res.data[0].personid;
+                        console.log(toUser)
                         for (var x in res.data){
                             option += "<option value='"+res.data[x].personid+"'>"+res.data[x].name+"</option>"
                         }

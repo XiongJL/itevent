@@ -117,6 +117,12 @@ layui.use(['form','element', 'layer','carousel'], function(){
     
     $('#done').on('click', function(){
     	remark=$("#remark").val();
+    	if(remark==""||remark==null||remark==undefined){
+    		layer.msg("请填写事件处理备注信息", {
+     			  icon: 2,
+     			  time: 1500});
+           	return false;
+    	}
 	    //请求完成
 	    $.ajax({
 	        url:"/itevent/mission/complete",

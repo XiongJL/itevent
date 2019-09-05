@@ -70,7 +70,7 @@ public class AccessToken {
 
             /**根据需求不同!还可以增加通讯的 token! 或者其他需要缓存的数据!
              *
-             * map.accumulate("member_token", String.valueOf( HttpUtil.reqGet(TokenUrl, memberParam); );
+             * map.put("member_token", String.valueOf( HttpUtil.reqGet(TokenUrl, memberParam); );
              * */
 
         }catch (Exception e){

@@ -35,30 +35,45 @@ public class AccessToken {
         String accessToken = (String) map.get("access_token");//从缓存中拿数据
         Long nowDate = new Date().getTime();
         if (accessToken != null && time != null && nowDate - Long.parseLong(time) < 6000 * 1000) {
+            if (nowDate - Long.parseLong(time) < 3000 * 1000){  //3000 S 就验证token 的有效性
+                JSONObject json = JSONObject.fromObject(HttpUtil.reqGet("https://qyapi.weixin.qq.com/cgi-bin/agent/get",
+                        "access_token=" + map.getString("access_token") + "&agentid=" + WxConfig.IThelpId));
+                if (!"0".equals(json.getString("errcode"))) { // 如果调用失败
+                    map = postWx(corpid,appsecret,nowDate);
+                }
+            }
             System.out.println(new Date()+"-----从缓存读取access_token："+accessToken);
         } else {
-            String param = "corpid="+corpid+"&corpsecret="+appsecret;
-            String result =  HttpUtil.reqGet(WxConfig.TokenUrl.getValue(), param);
-            System.out.println("----从网络获取到的token返回数据 : " +result);
-            try {
-                JSONObject info = JSONObject.fromObject(result);//实际中这里要改为你自己调用微信接口去获取accessToken和jsapiticket
-                if ("0".equals(info.getString("errcode"))){
-                    //将信息放置缓存中
-                    map.accumulate("time", nowDate + "");
-                    map.accumulate("access_token", String.valueOf(info.get("access_token")));
-                }else{
-                    System.out.println("获取token失败!!!!!!");
-                }
-
-                /**根据需求不同!还可以增加通讯的 token! 或者其他去需要缓存的数据!
-                 *
-                 * map.accumulate("member_token", String.valueOf( HttpUtil.reqGet(TokenUrl, memberParam); );
-                 * */
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            map = postWx(corpid,appsecret,nowDate);
         }
+        return map;
+    }
+
+
+    private static JSONObject postWx(String corpid, String appsecret,Long nowDate){
+        JSONObject map = new JSONObject();
+        String param = "corpid="+corpid+"&corpsecret="+appsecret;
+        String result =  HttpUtil.reqGet(WxConfig.TokenUrl.getValue(), param);
+        System.out.println("----从网络获取到的token返回数据 : " +result);
+        try {
+            JSONObject info = JSONObject.fromObject(result);//实际中这里要改为你自己调用微信接口去获取accessToken和jsapiticket
+            if ("0".equals(info.getString("errcode"))){
+                //将信息放置缓存中
+                map.accumulate("time", nowDate + "");
+                map.accumulate("access_token", String.valueOf(info.get("access_token")));
+            }else{
+                System.out.println("获取token失败!!!!!!");
+            }
+
+            /**根据需求不同!还可以增加通讯的 token! 或者其他去需要缓存的数据!
+             *
+             * map.accumulate("member_token", String.valueOf( HttpUtil.reqGet(TokenUrl, memberParam); );
+             * */
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         return map;
     }
 

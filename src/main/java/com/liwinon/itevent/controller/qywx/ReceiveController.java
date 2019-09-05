@@ -8,6 +8,7 @@ import com.liwinon.itevent.qywx.WxApi;
 import com.liwinon.itevent.util.AesException;
 import com.liwinon.itevent.util.GetMSG;
 import com.liwinon.itevent.util.WXBizMsgCrypt;
+import org.hibernate.exception.DataException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
 import java.net.URLDecoder;
+import java.util.Date;
 
 import static com.liwinon.itevent.qywx.WxConfig.Corpid;
 import static com.liwinon.itevent.qywx.WxConfig.IThelpSecret;
@@ -94,18 +96,7 @@ public class ReceiveController {
 		return "200";
     }
 
-	/**
-	 * 测试token接口, 后续删除
-	 * @return
-	 */
-	@GetMapping("/receive/token")
-	@ResponseBody
-	@PasssToken
-	public String testToken(){
-		String accesstoken = AccessToken.getAccessToken(Corpid.getValue(),IThelpSecret.getValue()).getString("access_token");
 
-		return accesstoken;
-	}
 
 }
 

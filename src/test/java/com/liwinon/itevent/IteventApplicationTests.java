@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,13 +45,11 @@ public class IteventApplicationTests {
 
     @Test
     public void tes(){
-        String echostr = "zRE%2BXwM0DGCwh5z1HL3521Or3ELFpY4dvDT1ERH27a9QRAtzfyorULiHoB5q0K%2BB1KyuZuIdjCezVmK4WA4N3w%3D%3D";
-        try {
-            String echo = URLDecoder.decode(echostr, "utf-8");
-            System.out.println(echo);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        JSONObject json = new JSONObject();
+        json.accumulate("time",new Date().toString());
+        //json.accumulate("time",new Date().toString());  accumulate会使得time对应的值变为JSONArray
+        System.out.println(json);
+        System.out.println((String) json.get("time"));
     }
 
 

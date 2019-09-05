@@ -30,12 +30,13 @@ public class AccessToken {
      * @return
      */
     public static JSONObject getAccessToken(String corpid, String appsecret) {
+        System.out.println(new Date().toString()+"---准备获取token");
         JSONObject map = getMemoryInfo();
         String time = (String) map.get("time");//从缓存中拿数据
         String accessToken = (String) map.get("access_token");//从缓存中拿数据
         Long nowDate = new Date().getTime();
-        if (accessToken != null && time != null && nowDate - Long.parseLong(time) < 6000 * 1000) {
-            if (nowDate - Long.parseLong(time) < 3000 * 1000){  //3000 S 就验证token 的有效性
+        if (accessToken != null && time != null && nowDate - Long.parseLong(time) <= 7200 * 1000) {
+            if (nowDate - Long.parseLong(time) < 3000 * 1000&&nowDate - Long.parseLong(time) > 2800 * 1000){  //3000 S-2500S 就验证token 的有效性
                 JSONObject json = JSONObject.fromObject(HttpUtil.reqGet("https://qyapi.weixin.qq.com/cgi-bin/agent/get",
                         "access_token=" + map.getString("access_token") + "&agentid=" + WxConfig.IThelpId));
                 if (!"0".equals(json.getString("errcode"))) { // 如果调用失败
@@ -59,13 +60,15 @@ public class AccessToken {
             JSONObject info = JSONObject.fromObject(result);//实际中这里要改为你自己调用微信接口去获取accessToken和jsapiticket
             if ("0".equals(info.getString("errcode"))){
                 //将信息放置缓存中
-                map.accumulate("time", nowDate + "");
-                map.accumulate("access_token", String.valueOf(info.get("access_token")));
+                // accumulate()  累积value到这个key下,如果当前已经存在一个value在这个key下那么一个JSONArray将会存储在这个key下来保存所有累积的value。
+                //put会覆盖,已存在的值!!! ,这里用put
+                map.put("time", nowDate + "");
+                map.put("access_token", String.valueOf(info.get("access_token")));
             }else{
                 System.out.println("获取token失败!!!!!!");
             }
 
-            /**根据需求不同!还可以增加通讯的 token! 或者其他去需要缓存的数据!
+            /**根据需求不同!还可以增加通讯的 token! 或者其他需要缓存的数据!
              *
              * map.accumulate("member_token", String.valueOf( HttpUtil.reqGet(TokenUrl, memberParam); );
              * */

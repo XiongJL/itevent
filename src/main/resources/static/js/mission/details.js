@@ -23,15 +23,6 @@ function UuisQmission(uuid){
           	XMLHttpRequest.setRequestHeader("token",token);
           },
           success : function(res){
-          	if(res.code==null){
-          		layer.msg(res.msg, {
-        			  icon: 1
-        			 });
-          	}else if(res.code=="400"){
-          		layer.msg(res.msg, {
-          			  icon: 2
-          			 });
-          	}
           },
           error: function (err) {
           	layer.alert('当前操作失败', {

@@ -37,9 +37,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <button class="layui-btn"  th:onclick="'javascript:UuisQmission('+${start.uuid}+')' "
-                        style="text-align: center;width: auto;" type="button" >提交</button>
+                        </div>							
+                        <a class="layui-btn"  th:href="@{'/itevent/qMission?uuid='+${start.uuid}+'&qyid='+${qywxid}}"
+                        style="text-align: center;width: auto;" type="a" >完成</a>
+                         <!-- th:onclick="UuisQmission([[${start.uuid}]]);" -->
                         <!--折叠卡片结束-->
                     </div>
                 </div>

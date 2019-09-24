@@ -4,6 +4,7 @@ import static com.liwinon.itevent.exception.ResultEnum.ERROR_6;
 
 import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -38,20 +39,20 @@ public class DetailsController {
 		model.addAttribute("qywxid",qywxid);
 		model.addAttribute("personid",map.get("personid"));
 		model.addAttribute("data",map.get("data"));
-		HttpSession session = request.getSession();
-	    String AccessMode = (String)session.getAttribute("AccessMode");
-	    if ("pc".equals(AccessMode)){
-	        return "common/detailspc";
-	    }
+		String userAgent = request.getHeader("user-agent").toLowerCase();
+		System.out.println(userAgent);
+		if(userAgent.indexOf("windows")!=-1) {			
+			return "common/detailspc";
+		}
 		return "common/details";
 	}
 	
 	@GetMapping(value = "/urlqmission")
     @PasssToken
-    @ResponseBody
     public String urlqmission(String qyid, String uuid, HttpServletRequest request,HttpServletResponse res){
+		System.out.println(qyid+"----------"+uuid);
 	        try {
-	            res.sendRedirect(WxConfig.QMissionURL.getValue()+uuid+"&qyid="+qyid);
+	           res.sendRedirect("https://mesqrcode.liwinon.com/itevent/qMission?uuid="+uuid+"&qyid="+qyid);
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }

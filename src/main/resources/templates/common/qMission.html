@@ -82,7 +82,7 @@
             <!--处理中才显示完成,和移交按钮-->
 
             <div th:if="${start.state} == '受理中' or ${start.state} == '处理中'">
-            	<div class="layui-col-xs12 layui-col-xs-offset1" >
+            	<div class="layui-col-xs12 layui-col-xs-offset1" style="margin-left: -50px">
 				    <label class="layui-form-label">备注</label>
 				    <div class="layui-input-block">
 					    	<input   name="remark" id="remark" class="layui-input"  lay-verify="" lay-filter="" style="margin-right: 10px"/>

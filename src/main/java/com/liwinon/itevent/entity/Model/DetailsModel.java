@@ -24,7 +24,7 @@ public class DetailsModel {
 				+ ", type=" + type + ", description=" + description + ", itemid=" + itemid + ", remark=" + remark
 				+ ", adminuser=" + adminuser + ", imgurl=" + Arrays.toString(imgurl) + "]";
 	}
-	public DetailsModel(String Uuid,Date date,String username, String userid, String phone, String state, String type, String description,
+	public DetailsModel(String uuid,Date date,String username, String userid, String phone, String state, String type, String description,
 			String itemid, String remark, String adminuser, String[] imgurl) {
 		this.uuid = uuid;
 		this.date = date;
